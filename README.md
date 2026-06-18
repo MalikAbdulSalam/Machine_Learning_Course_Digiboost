@@ -2,7 +2,7 @@
 
 # 📢📢  Attention Please 📢📢
 ## New Assignment has beed added in "Tasks" folder
-## See in "Tasks/Assignment_1_explore_kaggle_and download_dataset" file
+## See in "Tasks/Assignment_2 and Assignment_3" file
 # #######################################################
 ____________________________________________________________________________________________________________
 
