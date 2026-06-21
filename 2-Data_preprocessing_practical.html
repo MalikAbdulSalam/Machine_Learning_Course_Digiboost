@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ML Practical - CSV Data Preprocessing</title>
+
+<style>
+    body{
+        font-family: Arial, sans-serif;
+        margin: 30px;
+        background:#f4f6f7;
+        line-height:1.7;
+    }
+    h1,h2{
+        color:#2c3e50;
+    }
+    .box{
+        background:white;
+        padding:20px;
+        margin-bottom:20px;
+        border-left:6px solid #3498db;
+        box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    }
+    pre{
+        background:#eee;
+        padding:15px;
+        overflow-x:auto;
+    }
+</style>
+
+</head>
+
+<body>
+
+<h1>Machine Learning Practical - Data Preprocessing from CSV</h1>
+
+<div class="box">
+<h2>1. Create CSV File (data.csv)</h2>
+
+<p>Create a file named <b>data.csv</b> and paste the following data:</p>
+
+<pre>
+Name,Age,Gender,Salary
+Ali,25,Male,50000
+Sara,,Female,60000
+Ahmed,30,Male,
+John,22,Male,45000
+Zara,28,Female,52000
+</pre>
+
+<p><b>Concept:</b> This dataset contains missing values which we will handle.</p>
+</div>
+
+<div class="box">
+<h2>2. Load CSV File in Python</h2>
+
+<pre>
+import pandas as pd
+
+df = pd.read_csv("data.csv")
+
+print(df)
+</pre>
+
+<p><b>Explanation:</b> pandas reads CSV file into a DataFrame (table format).</p>
+</div>
+
+<div class="box">
+<h2>3. Handling Missing Data</h2>
+
+<pre>
+df["Age"].fillna(df["Age"].mean(), inplace=True)
+df["Salary"].fillna(df["Salary"].mean(), inplace=True)
+
+print(df)
+</pre>
+
+<p><b>Concept:</b> Missing values are replaced using mean of column.</p>
+</div>
+
+<div class="box">
+<h2>4. Convert Strings to Numbers</h2>
+
+<pre>
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+
+df["Gender"] = le.fit_transform(df["Gender"])
+
+print(df)
+</pre>
+
+<p><b>Concept:</b> Machine learning only works with numbers, so we convert text into numeric values.</p>
+<p><b>Example:</b> Male → 1, Female → 0</p>
+</div>
+
+<div class="box">
+<h2>5. Fix Data Types</h2>
+
+<pre>
+df["Age"] = df["Age"].astype(int)
+df["Salary"] = df["Salary"].astype(int)
+
+print(df)
+</pre>
+
+<p><b>Concept:</b> Ensures correct numeric format for calculations.</p>
+</div>
+
+<div class="box">
+<h2>6. Feature Scaling (-1 to +1)</h2>
+
+<pre>
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler(feature_range=(-1, 1))
+
+df[["Age", "Salary"]] = scaler.fit_transform(df[["Age", "Salary"]])
+
+print(df)
+</pre>
+
+<p><b>Concept:</b> All values are converted into same range for better model performance.</p>
+</div>
+
+<div class="box">
+<h2>7. Train-Test Split</h2>
+
+<pre>
+from sklearn.model_selection import train_test_split
+
+X = df[["Age", "Gender"]]
+y = df["Salary"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print("Training Data:")
+print(X_train)
+
+print("Testing Data:")
+print(X_test)
+</pre>
+
+<p><b>Concept:</b> Training data is used to train model, testing data is used to evaluate model.</p>
+</div>
+
+<div class="box">
+<h2>8. Complete ML Preprocessing Pipeline</h2>
+
+<pre>
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from sklearn.model_selection import train_test_split
+
+# Load data
+df = pd.read_csv("data.csv")
+
+# Missing values
+df["Age"].fillna(df["Age"].mean(), inplace=True)
+df["Salary"].fillna(df["Salary"].mean(), inplace=True)
+
+# Encoding
+le = LabelEncoder()
+df["Gender"] = le.fit_transform(df["Gender"])
+
+# Convert types
+df["Age"] = df["Age"].astype(int)
+df["Salary"] = df["Salary"].astype(int)
+
+# Scaling
+scaler = MinMaxScaler(feature_range=(-1, 1))
+df[["Age", "Salary"]] = scaler.fit_transform(df[["Age", "Salary"]])
+
+# Split dataset
+X = df[["Age", "Gender"]]
+y = df["Salary"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print(df)
+</pre>
+
+<p><b>Final Output:</b> Clean, processed dataset ready for machine learning model training.</p>
+</div>
+
+</body>
+</html>
