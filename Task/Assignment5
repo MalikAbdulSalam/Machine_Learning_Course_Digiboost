@@ -1,0 +1,4 @@
+Download titanic dataset from kagle website 
+do following preprocessing on dataset
+  (i)  handle missing values
+  (ii)  handle number to strings
