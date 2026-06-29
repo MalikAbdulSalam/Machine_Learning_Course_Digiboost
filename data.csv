@@ -1,0 +1,21 @@
+StudentID,Name,Age,Gender,Math,Physics,Chemistry,English,Attendance,Result
+STU001,Ali Khan,18.02,Male,85.5,78,82,88,95,Pass
+STU002,Sara Ahmed,19,Female,92,90,94,91,98,Pass
+STU003,Usman Tariq,18,Male,65,70,68,72,87,Pass
+STU004,Ayesha Malik,20,Female,55,60,58,62,80,Pass
+STU005,Hassan Raza,19,Male,45,50,42,48,75,Fail
+STU006,Fatima Noor,18,Female,88,84,90,86,96,Pass
+STU007,Bilal Aslam,21,Male,73,76,71,75,89,Pass
+STU008,Zainab Iqbal,20,Female,95,93,97,94,99,Pass
+STU009,Ahmed Ali,19,Male,58,61,59,63,83,Pass
+STU010,Maria Khan,18,Female,81,79,84,87,92,Pass
+STU011,Omar Farooq,22,Male,39,45,41,44,68,Fail
+STU012,Hira Shah,20,Female,77,80,78,82,90,Pass
+STU013,Hamza Butt,19,Male,69,65,72,70,85,Pass
+STU014,Iqra Saleem,18,Female,91,89,93,90,97,Pass
+STU015,Danish Akram,21,Male,52,57,55,60,81,Pass
+STU016,Noor Fatima,19,Female,84,88,86,89,94,Pass
+STU017,Talha Yousaf,20,Male,61,64,60,66,86,Pass
+STU018,Mehak Tariq,18,Female,97,95,98,96,100,Pass
+STU019,Saad Hussain,22,Male,47,43,49,45,72,Fail
+STU020,Anum Javed,19,Female,79.5,81,83,80,91,Pass
