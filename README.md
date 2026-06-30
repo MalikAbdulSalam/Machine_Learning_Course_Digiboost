@@ -15,4 +15,4 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 3 : Data Preprocessing Practical ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_preprocessing_practical.html)
 
-![Project Logo](images/Split_dataset_into_train_test_features_labels.png)
+![Project Logo](images/7-Split_dataset_into_train_test_features_labels.png)
