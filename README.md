@@ -12,3 +12,6 @@ ________________________________________________________________________________
 
 [Lecture 2 : Data Preprocessing ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/1-Day2_AI_Introduction.html)
 
+[Lecture 2 : Data Preprocessing ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_preprocessing_practical.html)
+
+
