@@ -8,6 +8,6 @@ ________________________________________________________________________________
 
 # Machine_Learning_Course_Digiboost
 
-[Lecture 1](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/1-Day2_AI_Introduction.html)
+[Lecture 1 : Introduction ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/1-Day2_AI_Introduction.html)
 
 
