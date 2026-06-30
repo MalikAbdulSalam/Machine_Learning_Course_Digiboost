@@ -8,6 +8,6 @@ ________________________________________________________________________________
 
 # Machine_Learning_Course_Digiboost
 
-## there are 3 types of ML
+[Lecture 1](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/1-Day2_AI_Introduction.html)
 
-### dkfjsdaklfkl
+
