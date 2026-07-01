@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matplotlib Complete Notes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #1a1a2e;
+            line-height: 1.7;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 2.8rem;
+            color: #16213e;
+            text-align: center;
+            border-bottom: 4px solid #e94560;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 2rem;
+            color: #0f3460;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 6px solid #e94560;
+        }
+        h3 {
+            font-size: 1.5rem;
+            color: #1a1a2e;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+        h4 {
+            font-size: 1.2rem;
+            color: #16213e;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+        p {
+            margin-bottom: 12px;
+        }
+        ul, ol {
+            margin: 10px 0 15px 30px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        code {
+            background: #eef2f7;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: #c44569;
+        }
+        pre {
+            background: #1a1a2e;
+            color: #e8e8e8;
+            padding: 18px 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            border-left: 5px solid #e94560;
+        }
+        pre code {
+            background: transparent;
+            color: #e8e8e8;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+        th {
+            background: #16213e;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .note-box {
+            background: #e3f2fd;
+            border-left: 6px solid #2196f3;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .warning-box {
+            background: #ffebee;
+            border-left: 6px solid #f44336;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .success-box {
+            background: #e8f5e9;
+            border-left: 6px solid #4caf50;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .badge {
+            display: inline-block;
+            background: #e94560;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        hr {
+            margin: 40px 0;
+            border: 1px solid #eee;
+        }
+        .toc {
+            background: #f0f4f8;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        .toc a {
+            color: #0f3460;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 10px 4px 0;
+            font-weight: 500;
+        }
+        .toc a:hover {
+            color: #e94560;
+            text-decoration: underline;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 2px solid #eee;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.6rem;
+            }
+            pre {
+                font-size: 0.85rem;
+                padding: 12px 15px;
+            }
+            table {
+                font-size: 0.85rem;
+            }
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>📊 Matplotlib Complete Notes</h1>
+
+    <!-- Table of Contents -->
+    <div class="toc">
+        <strong>📑 Table of Contents</strong><br>
+        <a href="#intro">1. Intro</a>
+        <a href="#getstarted">2. Get Started</a>
+        <a href="#pyplot">3. Pyplot</a>
+        <a href="#plotting">4. Plotting</a>
+        <a href="#markers">5. Markers</a>
+        <a href="#line">6. Line</a>
+        <a href="#labels">7. Labels</a>
+        <a href="#grid">8. Grid</a>
+        <a href="#subplot">9. Subplot</a>
+        <a href="#scatter">10. Scatter</a>
+        <a href="#bars">11. Bars</a>
+        <a href="#histograms">12. Histograms</a>
+        <a href="#pie">13. Pie Charts</a>
+        <a href="#csv">14. CSV &amp; Plotting</a>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="intro">1. Matplotlib Intro</h2>
+    <h3>What is Matplotlib?</h3>
+    <ul>
+        <li><strong>Matplotlib</strong> is a comprehensive Python library for creating static, animated, and interactive visualizations.</li>
+        <li>Created by <strong>John D. Hunter</strong> in 2003.</li>
+        <li>Works well with <strong>NumPy</strong> and <strong>Pandas</strong>.</li>
+        <li>Widely used in data science, machine learning, and scientific research.</li>
+    </ul>
+
+    <h3>Key Features</h3>
+    <ul>
+        <li>Generate plots, histograms, bar charts, scatter plots, etc.</li>
+        <li>Highly customizable (colors, labels, grid, etc.)</li>
+        <li>Supports multiple backends and output formats (PNG, PDF, SVG, etc.)</li>
+        <li>Integration with Jupyter Notebooks and other IDEs</li>
+    </ul>
+
+    <h3>Installation</h3>
+    <pre><code>pip install matplotlib</code></pre>
+
+    <h3>Import Convention</h3>
+    <pre><code>import matplotlib.pyplot as plt
+import numpy as np</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="getstarted">2. Matplotlib Get Started</h2>
+    <h3>Basic Syntax</h3>
+    <pre><code>import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.array([1, 2, 3, 4])
+y = np.array([10, 20, 30, 40])
+
+plt.plot(x, y)
+plt.show()</code></pre>
+
+    <h3>Plotting with Pyplot</h3>
+    <pre><code>plt.plot([1, 2, 3, 4], [1, 4, 9, 16])
+plt.show()</code></pre>
+
+    <div class="note-box">
+        <strong>Key Points:</strong><br>
+        <code>plt.plot()</code> is used to draw lines and markers.<br>
+        <code>plt.show()</code> displays the figure.<br>
+        Without <code>plt.show()</code>, the plot won't appear.
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="pyplot">3. Matplotlib Pyplot</h2>
+    <h3>What is Pyplot?</h3>
+    <ul>
+        <li>Pyplot is a collection of functions in Matplotlib that makes plotting work like MATLAB.</li>
+        <li>It provides a MATLAB-like interface.</li>
+        <li>Each function makes some change to a figure (creates figure, plotting area, plots lines, adds labels, etc.)</li>
+    </ul>
+
+    <h3>Common Pyplot Functions</h3>
+    <pre><code>plt.plot(x, y)          # Line plot
+plt.scatter(x, y)       # Scatter plot
+plt.bar(x, y)           # Bar chart
+plt.hist(data)          # Histogram
+plt.pie(data)           # Pie chart
+
+# Customization
+plt.title("Title")
+plt.xlabel("X Label")
+plt.ylabel("Y Label")
+plt.grid(True)
+plt.legend()
+plt.show()</code></pre>
+
+    <h3>Multiple Plots in One</h3>
+    <pre><code>plt.plot(x, y1, label="Line 1")
+plt.plot(x, y2, label="Line 2")
+plt.legend()
+plt.show()</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="plotting">4. Matplotlib Plotting</h2>
+    <h3>Line Plot</h3>
+    <pre><code>x = np.array([1, 2, 3, 4, 5])
+y = np.array([1, 4, 9, 16, 25])
+
+plt.plot(x, y)
+plt.show()</code></pre>
+
+    <h3>Customizing Line Style</h3>
+    <pre><code>plt.plot(x, y, linestyle='dashed', color='red', linewidth=2)</code></pre>
+
+    <h4>Line Styles</h4>
+    <ul>
+        <li><code>'-'</code> (solid)</li>
+        <li><code>'--'</code> (dashed)</li>
+        <li><code>'-.'</code> (dash-dot)</li>
+        <li><code>':'</code> (dotted)</li>
+    </ul>
+
+    <h4>Colors</h4>
+    <p><code>'r'</code> (red), <code>'g'</code> (green), <code>'b'</code> (blue), <code>'k'</code> (black), <code>'c'</code> (cyan), etc.</p>
+
+    <h3>Multiple Lines</h3>
+    <pre><code>x = np.array([1, 2, 3, 4])
+y1 = np.array([1, 2, 3, 4])
+y2 = np.array([4, 3, 2, 1])
+
+plt.plot(x, y1)
+plt.plot(x, y2)
+plt.show()</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="markers">5. Matplotlib Markers</h2>
+    <h3>What are Markers?</h3>
+    <p>Markers are symbols used to highlight data points on a plot.</p>
+
+    <h3>Syntax</h3>
+    <pre><code>plt.plot(x, y, marker='o')</code></pre>
+
+    <h3>Common Markers</h3>
+    <table>
+        <tr><th>Marker</th><th>Description</th></tr>
+        <tr><td><code>'o'</code></td><td>Circle</td></tr>
+        <tr><td><code>'*'</code></td><td>Star</td></tr>
+        <tr><td><code>'.'</code></td><td>Point</td></tr>
+        <tr><td><code>','</code></td><td>Pixel</td></tr>
+        <tr><td><code>'x'</code></td><td>Cross</td></tr>
+        <tr><td><code>'s'</code></td><td>Square</td></tr>
+        <tr><td><code>'D'</code></td><td>Diamond</td></tr>
+        <tr><td><code>'^'</code></td><td>Triangle (up)</td></tr>
+        <tr><td><code>'v'</code></td><td>Triangle (down)</td></tr>
+        <tr><td><code>'p'</code></td><td>Pentagon</td></tr>
+    </table>
+
+    <h3>Customizing Markers</h3>
+    <pre><code>plt.plot(x, y, marker='o', markersize=10, markerfacecolor='red', markeredgecolor='black')</code></pre>
+
+    <h3>Combining with Line Style</h3>
+    <pre><code>plt.plot(x, y, 'ro--')  # red circles with dashed line
+plt.plot(x, y, 'g-s')   # green squares with solid line</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="line">6. Matplotlib Line</h2>
+    <h3>Line Properties</h3>
+    <pre><code>plt.plot(x, y, 
+         color='red',
+         linewidth=2,
+         linestyle='--',
+         marker='o',
+         markersize=8,
+         label='My Line')</code></pre>
+
+    <h3>Line Styles in Detail</h3>
+    <table>
+        <tr><th>Style</th><th>Code</th></tr>
+        <tr><td>Solid</td><td><code>'solid'</code> or <code>'-'</code></td></tr>
+        <tr><td>Dashed</td><td><code>'dashed'</code> or <code>'--'</code></td></tr>
+        <tr><td>Dash-dot</td><td><code>'dashdot'</code> or <code>'-.'</code></td></tr>
+        <tr><td>Dotted</td><td><code>'dotted'</code> or <code>':'</code></td></tr>
+    </table>
+
+    <h3>Line Colors</h3>
+    <ul>
+        <li>Basic colors: <code>'b'</code>, <code>'g'</code>, <code>'r'</code>, <code>'c'</code>, <code>'m'</code>, <code>'y'</code>, <code>'k'</code>, <code>'w'</code></li>
+        <li>Hex values: <code>'#FF5733'</code></li>
+        <li>RGB tuples: <code>(0.1, 0.2, 0.5)</code></li>
+    </ul>
+
+    <h3>Adding Legend</h3>
+    <pre><code>plt.plot(x, y, label='Line Label')
+plt.legend()
+plt.show()</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="labels">7. Matplotlib Labels</h2>
+    <h3>Adding Labels</h3>
+    <pre><code>plt.xlabel("X-axis Label")
+plt.ylabel("Y-axis Label")
+plt.title("Plot Title")</code></pre>
+
+    <h3>Customizing Labels</h3>
+    <pre><code>plt.xlabel("Time (seconds)", fontsize=14, color='blue')
+plt.ylabel("Temperature (°C)", fontsize=14, color='red')
+plt.title("Temperature Over Time", fontsize=16, fontweight='bold')</code></pre>
+
+    <h3>Adding Text Annotations</h3>
+    <pre><code>plt.text(2, 30, "Maximum", fontsize=12, color='green')</code></pre>
+
+    <h3>Adding Arrow Annotations</h3>
+    <pre><code>plt.annotate('Peak', xy=(3, 40), xytext=(4, 50),
+             arrowprops=dict(facecolor='black', shrink=0.05))</code></pre>
+
+    <h3>Font Properties</h3>
+    <pre><code>plt.xlabel("X Label", fontdict={'family': 'serif', 'size': 14, 'weight': 'bold'})</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="grid">8. Matplotlib Grid</h2>
+    <h3>Adding Grid</h3>
+    <pre><code>plt.grid()</code></pre>
+
+    <h3>Customizing Grid</h3>
+    <pre><code>plt.grid(axis='x')           # Grid only on x-axis
+plt.grid(axis='y')           # Grid only on y-axis
+plt.grid(color='red', linestyle='--', linewidth=0.5)</code></pre>
+
+    <h3>Grid Parameters</h3>
+    <ul>
+        <li><code>axis</code>: <code>'both'</code> (default), <code>'x'</code>, or <code>'y'</code></li>
+        <li><code>color</code>: Grid line color</li>
+        <li><code>linestyle</code>: <code>'-'</code>, <code>'--'</code>, <code>'-.'</code>, <code>':'</code></li>
+        <li><code>linewidth</code>: Thickness of grid lines</li>
+        <li><code>alpha</code>: Transparency (0 to 1)</li>
+    </ul>
+
+    <h3>Example</h3>
+    <pre><code>plt.plot(x, y)
+plt.grid(True, color='gray', linestyle='dotted', alpha=0.5)
+plt.show()</code></pre>
+
+    <h3>Removing Grid</h3>
+    <pre><code>plt.grid(False)</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="subplot">9. Matplotlib Subplot</h2>
+    <h3>What are Subplots?</h3>
+    <ul>
+        <li>Subplots allow you to display multiple plots in one figure.</li>
+        <li>They are arranged in rows and columns.</li>
+    </ul>
+
+    <h3>Basic Syntax</h3>
+    <pre><code>plt.subplot(rows, columns, index)</code></pre>
+
+    <h3>Example: 2x2 Subplots</h3>
+    <pre><code>plt.subplot(2, 2, 1)
+plt.plot(x, y1)
+plt.title("Plot 1")
+
+plt.subplot(2, 2, 2)
+plt.plot(x, y2)
+plt.title("Plot 2")
+
+plt.subplot(2, 2, 3)
+plt.plot(x, y3)
+plt.title("Plot 3")
+
+plt.subplot(2, 2, 4)
+plt.plot(x, y4)
+plt.title("Plot 4")
+
+plt.tight_layout()
+plt.show()</code></pre>
+
+    <h3>Alternative Method: <code>subplots()</code></h3>
+    <pre><code>fig, axes = plt.subplots(2, 2)
+
+axes[0, 0].plot(x, y1)
+axes[0, 1].plot(x, y2)
+axes[1, 0].plot(x, y3)
+axes[1, 1].plot(x, y4)
+
+plt.show()</code></pre>
+
+    <h3>Customizing Subplots</h3>
+    <pre><code>fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+axes[0, 0].set_title("Title 1")
+axes[0, 0].set_xlabel("X Label")
+axes[0, 0].set_ylabel("Y Label")</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="scatter">10. Matplotlib Scatter</h2>
+    <h3>What is Scatter Plot?</h3>
+    <p>A scatter plot shows relationship between two variables using dots.</p>
+
+    <h3>Basic Scatter</h3>
+    <pre><code>x = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+y = np.array([5, 7, 9, 3, 8, 4, 6, 2])
+
+plt.scatter(x, y)
+plt.show()</code></pre>
+
+    <h3>Customizing Scatter</h3>
+    <pre><code>plt.scatter(x, y, 
+            color='red',
+            s=100,
+            marker='o',
+            alpha=0.5,
+            edgecolors='black',
+            linewidth=2)</code></pre>
+
+    <h3>Color Mapping</h3>
+    <pre><code>colors = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+plt.scatter(x, y, c=colors, cmap='viridis')
+plt.colorbar()
+plt.show()</code></pre>
+
+    <h3>Size Mapping</h3>
+    <pre><code>sizes = np.array([10, 20, 30, 40, 50, 60, 70, 80])
+plt.scatter(x, y, s=sizes, alpha=0.5)
+plt.show()</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="bars">11. Matplotlib Bars</h2>
+    <h3>Vertical Bar Chart</h3>
+    <pre><code>x = np.array(["A", "B", "C", "D"])
+y = np.array([3, 7, 5, 9])
+
+plt.bar(x, y)
+plt.show()</code></pre>
+
+    <h3>Customizing Bars</h3>
+    <pre><code>plt.bar(x, y, 
+        color='skyblue',
+        width=0.5,
+        edgecolor='black',
+        linewidth=2)</code></pre>
+
+    <h3>Horizontal Bar Chart</h3>
+    <pre><code>plt.barh(x, y)
+plt.show()</code></pre>
+
+    <h3>Grouped Bars</h3>
+    <pre><code>x = np.array([1, 2, 3, 4])
+y1 = np.array([3, 7, 5, 9])
+y2 = np.array([5, 4, 6, 8])
+
+width = 0.35
+plt.bar(x - width/2, y1, width, label='Group 1')
+plt.bar(x + width/2, y2, width, label='Group 2')
+plt.legend()
+plt.show()</code></pre>
+
+    <h3>Stacked Bars</h3>
+    <pre><code>plt.bar(x, y1, label='Category 1')
+plt.bar(x, y2, bottom=y1, label='Category 2')
+plt.legend()
+plt.show()</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="histograms">12. Matplotlib Histograms</h2>
+    <h3>What is a Histogram?</h3>
+    <ul>
+        <li>A histogram shows the distribution of numerical data.</li>
+        <li>It divides data into bins and counts frequency.</li>
+    </ul>
+
+    <h3>Basic Histogram</h3>
+    <pre><code>data = np.random.randn(1000)
+plt.hist(data)
+plt.show()</code></pre>
+
+    <h3>Customizing Histogram</h3>
+    <pre><code>plt.hist(data, 
+         bins=30,
+         color='skyblue',
+         edgecolor='black',
+         alpha=0.7,
+         density=True)
+plt.show()</code></pre>
+
+    <h3>Multiple Histograms</h3>
+    <pre><code>data1 = np.random.normal(0, 1, 1000)
+data2 = np.random.normal(2, 0.5, 1000)
+
+plt.hist(data1, bins=30, alpha=0.5, label='Data 1')
+plt.hist(data2, bins=30, alpha=0.5, label='Data 2')
+plt.legend()
+plt.show()</code></pre>
+
+    <h3>Customizing Bins</h3>
+    <pre><code>bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+plt.hist(data, bins=bins)
+plt.show()</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="pie">13. Matplotlib Pie Charts</h2>
+    <h3>What is a Pie Chart?</h3>
+    <p>A pie chart shows proportions of a whole as circular slices.</p>
+
+    <h3>Basic Pie Chart</h3>
+    <pre><code>sizes = [30, 25, 20, 15, 10]
+labels = ['A', 'B', 'C', 'D', 'E']
+
+plt.pie(sizes, labels=labels)
+plt.show()</code></pre>
+
+    <h3>Customizing Pie Chart</h3>
+    <pre><code>plt.pie(sizes, 
+        labels=labels,
+        colors=['red', 'blue', 'green', 'orange', 'purple'],
+        startangle=90,
+        explode=(0.1, 0, 0, 0, 0),
+        autopct='%1.1f%%',
+        shadow=True,
+        wedgeprops={'edgecolor': 'black'})
+plt.show()</code></pre>
+
+    <h3>Exploding Slices</h3>
+    <pre><code>explode = [0.1, 0, 0.05, 0, 0]
+plt.pie(sizes, labels=labels, explode=explode)</code></pre>
+
+    <h3>Customizing Labels</h3>
+    <pre><code>plt.pie(sizes, 
+        labels=labels,
+        autopct=lambda p: f'{p:.1f}%',
+        textprops={'fontsize': 12, 'color': 'white'})</code></pre>
+
+    <h3>Donut Chart</h3>
+    <pre><code>plt.pie(sizes, labels=labels, wedgeprops=dict(width=0.3))
+plt.show()</code></pre>
+
+    <!-- ============================================================ -->
+    <h2 id="csv">14. Reading Data from CSV and Plotting</h2>
+    
+    <h3>Why Read from CSV?</h3>
+    <ul>
+        <li>CSV is the most common format for storing tabular data.</li>
+        <li>Allows you to plot real-world datasets.</li>
+        <li>Works seamlessly with Pandas and NumPy.</li>
+    </ul>
+
+    <!-- Method 1: csv module -->
+    <h3>Method 1: Python's Built-in <code>csv</code> Module</h3>
+    <pre><code>import csv
+import matplotlib.pyplot as plt
+
+with open('data.csv', 'r') as file:
+    reader = csv.reader(file)
+    header = next(reader)
+    x = []; y = []
+    for row in reader:
+        x.append(float(row[0]))
+        y.append(float(row[1]))
+
+plt.plot(x, y)
+plt.xlabel(header[0])
+plt.ylabel(header[1])
+plt.title('Data from CSV')
+plt.show()</code></pre>
+
+    <h4>With Headers using DictReader</h4>
+    <pre><code>with open('data.csv', 'r') as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        x.append(float(row['Date']))
+        y.append(float(row['Value']))</code></pre>
+
+    <!-- Method 2: NumPy -->
+    <h3>Method 2: Using NumPy</h3>
+    <pre><code>import numpy as np
+
+data = np.genfromtxt('data.csv', delimiter=',', skip_header=1)
+x = data[:, 0]
+y = data[:, 1]
+
+plt.plot(x, y, 'bo-')
+plt.show()</code></pre>
+
+    <h4>With Column Names</h4>
+    <pre><code>data = np.genfromtxt('data.csv', delimiter=',', names=True)
+x = data['Date']
+y = data['Value']</code></pre>
+
+    <!-- Method 3: Pandas -->
+    <h3>Method 3: Using Pandas (Recommended)</h3>
+    <div class="note-box">
+        <strong>Installation:</strong> <code>pip install pandas</code>
+    </div>
+
+    <pre><code>import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('data.csv')
+print(df.head())
+
+# Plot directly from DataFrame
+df.plot(x='Date', y='Value')
+plt.show()</code></pre>
+
+    <h4>Plotting Specific Columns</h4>
+    <pre><code>plt.plot(df['Date'], df['Value'])
+plt.scatter(df['Date'], df['Value'])
+plt.bar(df['Date'], df['Value'])</code></pre>
+
+    <h4>Multiple Columns</h4>
+    <pre><code>plt.plot(df['Date'], df['Column1'], label='Column 1')
+plt.plot(df['Date'], df['Column2'], label='Column 2')
+plt.legend()
+plt.show()</code></pre>
+
+    <h4>Direct DataFrame Plotting</h4>
+    <pre><code>df.plot(kind='line', x='Date', y='Value')
+df.plot(kind='scatter', x='Date', y='Value')
+df.plot(kind='bar', x='Date', y='Value')
+df.plot(kind='hist', y='Value')
+df.plot(kind='box', y='Value')
+plt.show()</code></pre>
+
+    <!-- Real-World Examples -->
+    <h3>Real-World Examples</h3>
+
+    <h4>Example 1: Weather Data Analysis</h4>
+    <pre><code>df = pd.read_csv('weather.csv')
+df['Date'] = pd.to_datetime(df['Date'])
+
+plt.figure(figsize=(12, 6))
+plt.plot(df['Date'], df['Temperature'], 'r-', label='Temperature')
+plt.plot(df['Date'], df['Humidity'], 'b-', label='Humidity')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.title('Weather Data Analysis')
+plt.legend()
+plt.grid(True)
+plt.show()</code></pre>
+
+    <h4>Example 2: Sales Data Analysis</h4>
+    <pre><code>df = pd.read_csv('sales.csv')
+
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+axes[0, 0].plot(df['Month'], df['Sales'])
+axes[0, 0].set_title('Monthly Sales Trend')
+
+product_sales = df.groupby('Product')['Sales'].sum()
+axes[0, 1].bar(product_sales.index, product_sales.values)
+axes[0, 1].set_title('Sales by Product')
+
+axes[1, 0].pie(df['Sales'], labels=df['Month'], autopct='%1.1f%%')
+axes[1, 0].set_title('Sales Distribution')
+
+axes[1, 1].hist(df['Sales'], bins=10, edgecolor='black')
+axes[1, 1].set_title('Sales Distribution Histogram')
+
+plt.tight_layout()
+plt.show()</code></pre>
+
+    <!-- Handling Different CSV Formats -->
+    <h3>Handling Different CSV Formats</h3>
+
+    <h4>Different Delimiters</h4>
+    <pre><code>df = pd.read_csv('data.tsv', delimiter='\t')
+df = pd.read_csv('data.csv', delimiter=';')
+df = pd.read_csv('data.csv', delimiter='|')</code></pre>
+
+    <h4>Missing Values</h4>
+    <pre><code>df = pd.read_csv('data.csv', na_values=['NA', 'Missing', '-'])
+df = df.dropna()
+df = df.fillna(0)</code></pre>
+
+    <h4>Specific Columns</h4>
+    <pre><code>df = pd.read_csv('data.csv', usecols=['Date', 'Value'])
+df = pd.read_csv('data.csv', names=['Date', 'Value'], skiprows=1)</code></pre>
+
+    <h4>Date Parsing</h4>
+    <pre><code>df = pd.read_csv('data.csv', parse_dates=['Date'])</code></pre>
+
+    <!-- Data Cleaning -->
+    <h3>Data Cleaning and Preparation</h3>
+    <pre><code>df = pd.read_csv('data.csv')
+
+print(df.info())
+print(df.describe())
+
+df = df.drop_duplicates()
+df = df.dropna(subset=['Value'])
+df['Date'] = pd.to_datetime(df['Date'])
+
+df['Month'] = df['Date'].dt.month
+df['Year'] = df['Date'].dt.year
+df['DayOfWeek'] = df['Date'].dt.day_name()
+
+monthly_avg = df.groupby('Month')['Value'].mean()
+
+plt.figure(figsize=(10, 5))
+monthly_avg.plot(kind='bar')
+plt.title('Monthly Average Values')
+plt.show()</code></pre>
+
+    <!-- Saving Plots -->
+    <h3>Saving Plots as Images</h3>
+    <pre><code>plt.savefig('plot.png', dpi=300, bbox_inches='tight')
+plt.savefig('plot.pdf', bbox_inches='tight')
+plt.savefig('plot.svg', bbox_inches='tight')
+
+plt.figure(figsize=(12, 8))
+plt.plot(df['Date'], df['Value'])
+plt.savefig('plot.png', dpi=300, bbox_inches='tight')</code></pre>
+
+    <!-- Complete Example -->
+    <h3>Complete Example: End-to-End CSV to Plot</h3>
+    <pre><code>import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+df = pd.read_csv('sales_data.csv')
+
+print("Data Info:")
+print(df.info())
+print("\nFirst 5 rows:")
+print(df.head())
+
+df['Date'] = pd.to_datetime(df['Date'])
+df['Revenue'] = df['Quantity'] * df['Price']
+df['Month'] = df['Date'].dt.month_name()
+
+fig = plt.figure(figsize=(15, 10))
+
+ax1 = plt.subplot(2, 2, 1)
+monthly_revenue = df.groupby('Date')['Revenue'].sum()
+ax1.plot(monthly_revenue.index, monthly_revenue.values, 'b-o')
+ax1.set_title('Daily Revenue Trend')
+ax1.grid(True)
+
+ax2 = plt.subplot(2, 2, 2)
+product_revenue = df.groupby('Product')['Revenue'].sum().sort_values(ascending=False)
+product_revenue.plot(kind='bar', ax=ax2)
+ax2.set_title('Revenue by Product')
+
+ax3 = plt.subplot(2, 2, 3)
+top_products = df.groupby('Product')['Quantity'].sum().nlargest(5)
+ax3.pie(top_products.values, labels=top_products.index, autopct='%1.1f%%')
+ax3.set_title('Top Products Distribution')
+
+ax4 = plt.subplot(2, 2, 4)
+ax4.scatter(df['Price'], df['Quantity'], alpha=0.5, c='green')
+ax4.set_title('Price vs Quantity')
+
+plt.tight_layout()
+plt.savefig('sales_analysis.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("\nSummary Statistics:")
+print(df[['Revenue', 'Quantity', 'Price']].describe())
+
+df.to_csv('cleaned_sales_data.csv', index=False)</code></pre>
+
+    <!-- CSV Operations Summary -->
+    <h3>Common CSV File Operations Summary</h3>
+    <table>
+        <tr><th>Operation</th><th>Code</th></tr>
+        <tr><td>Read CSV</td><td><code>pd.read_csv('file.csv')</code></td></tr>
+        <tr><td>Read with headers</td><td><code>pd.read_csv('file.csv', header=0)</code></td></tr>
+        <tr><td>Read without headers</td><td><code>pd.read_csv('file.csv', header=None)</code></td></tr>
+        <tr><td>Read specific columns</td><td><code>pd.read_csv('file.csv', usecols=['col1', 'col2'])</code></td></tr>
+        <tr><td>Read with date parsing</td><td><code>pd.read_csv('file.csv', parse_dates=['date_col'])</code></td></tr>
+        <tr><td>Different delimiter</td><td><code>pd.read_csv('file.csv', delimiter='\t')</code></td></tr>
+        <tr><td>Handle missing values</td><td><code>pd.read_csv('file.csv', na_values=['NA'])</code></td></tr>
+        <tr><td>Skip rows</td><td><code>pd.read_csv('file.csv', skiprows=2)</code></td></tr>
+        <tr><td>Read chunks</td><td><code>pd.read_csv('file.csv', chunksize=1000)</code></td></tr>
+        <tr><td>Save to CSV</td><td><code>df.to_csv('output.csv', index=False)</code></td></tr>
+    </table>
+
+    <!-- Performance Tips -->
+    <h3>Performance Tips for Large CSV Files</h3>
+    <pre><code>chunk_size = 10000
+chunks = []
+for chunk in pd.read_csv('large_file.csv', chunksize=chunk_size):
+    processed_chunk = chunk.groupby('Category').sum()
+    chunks.append(processed_chunk)
+
+result = pd.concat(chunks)
+
+df = pd.read_csv('large_file.csv', 
+                 dtype={'Column1': 'float32', 'Column2': 'int32'},
+                 usecols=['Column1', 'Column2', 'Category'])</code></pre>
+
+    <!-- Summary Table -->
+    <h3>Summary Table: CSV Reading Methods</h3>
+    <table>
+        <tr><th>Method</th><th>Pros</th><th>Cons</th><th>When to Use</th></tr>
+        <tr><td><code>csv</code> module</td><td>Built-in, no dependencies</td><td>Manual parsing, slower</td><td>Small files, simple data</td></tr>
+        <tr><td>NumPy</td><td>Fast for numerical data</td><td>Limited to numbers</td><td>Numerical data only</td></tr>
+        <tr><td>Pandas</td><td>Most features, powerful, fast</td><td>External library</td><td>Real-world data analysis</td></tr>
+        <tr><td>Dask</td><td>Handles large datasets</td><td>Learning curve</td><td>Very large datasets</td></tr>
+    </table>
+
+    <!-- Practice Exercise -->
+    <h3>Practice Exercise</h3>
+    <div class="warning-box">
+        <strong>Task:</strong> Create a complete script that:
+        <ol>
+            <li>Reads a CSV file with columns: Date, Product, Sales, Quantity, Price</li>
+            <li>Cleans and prepares the data</li>
+            <li>Creates 4 different visualizations</li>
+            <li>Saves the plots</li>
+            <li>Exports summary statistics</li>
+        </ol>
+    </div>
+
+    <pre><code># Solution template
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Your code here...</code></pre>
+
+    <!-- Summary Table for All Plot Types -->
+    <hr>
+    <h2>Summary Table: Plot Types</h2>
+    <table>
+        <tr><th>Plot Type</th><th>Function</th><th>Use Case</th></tr>
+        <tr><td>Line Plot</td><td><code>plt.plot()</code></td><td>Trend over time</td></tr>
+        <tr><td>Scatter Plot</td><td><code>plt.scatter()</code></td><td>Relationship between variables</td></tr>
+        <tr><td>Bar Chart</td><td><code>plt.bar()</code></td><td>Comparing categories</td></tr>
+        <tr><td>Histogram</td><td><code>plt.hist()</code></td><td>Data distribution</td></tr>
+        <tr><td>Pie Chart</td><td><code>plt.pie()</code></td><td>Proportions of a whole</td></tr>
+        <tr><td>Subplot</td><td><code>plt.subplot()</code></td><td>Multiple plots</td></tr>
+    </table>
+
+    <div class="success-box">
+        <strong>Key Best Practices:</strong><br>
+        ✅ Always add labels and titles<br>
+        ✅ Use legends when plotting multiple data series<br>
+        ✅ Choose appropriate colors and styles<br>
+        ✅ Adjust figure size with <code>plt.figure(figsize=(width, height))</code><br>
+        ✅ Use <code>plt.tight_layout()</code> to avoid overlapping<br>
+        ✅ Save figures with <code>plt.savefig('filename.png', dpi=300)</code>
+    </div>
+
+    <div class="footer">
+        what next?
+
+</div>
+</body>
+</html>
