@@ -1,0 +1,72 @@
+Question 1: Import Matplotlib (10 Marks)
+
+Write a Python program to:
+
+Import the matplotlib.pyplot module.
+Print a message indicating that Matplotlib has been imported successfully.
+____________________________________________________________________________________________________
+Question 2: Basic Line Plot (15 Marks)
+
+Create two lists:
+
+x = [1, 2, 3, 4, 5]
+y = [10, 20, 15, 25, 30]
+
+Plot the data using plt.plot() and display the graph.
+_______________________________________________________________________________________________
+Question 3: Plot Student Marks (15 Marks)
+
+Create the following lists:
+
+subjects = ["Math", "Physics", "Chemistry", "English", "Computer"]
+marks = [85, 78, 92, 70, 88]
+
+Plot the marks using plt.plot().
+
+___________________________________________________________________________________________________
+Question 4: Using Markers (15 Marks)
+
+Plot the following data with markers.
+
+days = [1, 2, 3, 4, 5, 6, 7]
+temperature = [32, 34, 33, 35, 36, 34, 31]
+
+Requirements:
+
+Use marker o
+Display the graph
+
+__________________________________________________________________________________________________________
+Question 5: Different Marker Styles (15 Marks)
+
+Using the same data, create five different graphs, each with a different marker:
+
+o
+*
+s
+^
+D
+
+____________________________________________________________________________________________________________
+Question 6: Line Customization (15 Marks)
+
+Create a line graph and customize it using:
+
+Red color
+Dashed line
+Line width of 3
+
+______________________________________________________________________________________________________________
+Question 7: Compare Different Line Styles (15 Marks)
+
+Plot the following four graphs separately using different line styles:
+
+Solid (-)
+Dashed (--)
+Dotted (:)
+Dash-dot (-.)
+Submission Requirements
+________________________________________________________________________________________________________________
+Submit a single Python file named:
+
+matplotlib_assignment.py
