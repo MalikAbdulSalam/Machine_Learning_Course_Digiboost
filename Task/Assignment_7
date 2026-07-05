@@ -1,0 +1,51 @@
+students = ["Ali", "Ahmed", "Sara", "Ayesha", "Usman"]
+
+marks = [78, 92, 85, 70, 88]
+
+study_hours = [2, 5, 4, 3, 6]
+
+___________________________________________________________________________________________
+Task 1: Create a Bar Chart
+___________________________________________________________________________________________
+
+Requirements
+Import matplotlib.pyplot as plt.
+Create a bar chart showing Student Marks.
+Add:
+Chart title
+X-axis label
+Y-axis label
+Change the bar width to 0.5.
+Display the chart.
+Expected Output
+
+A bar chart showing the marks of each student.
+
+___________________________________________________________________________________________________
+Task 2: Create a Scatter Plot
+___________________________________________________________________________________________________
+Requirements
+Use Study Hours on the X-axis.
+Use Marks on the Y-axis.
+Add:
+Chart title
+X-axis label
+Y-axis label
+Set the marker size to 100.
+Display the chart.
+Expected Output
+
+A scatter plot showing the relationship between study hours and marks.
+
+___________________________________________________________________________________________
+Bonus Task
+___________________________________________________________________________________________
+
+Modify your program to:
+
+Change the marker style.
+Change the marker color.
+Add grid lines.
+Save both charts as images:
+bar_chart.png
+scatter_plot.png
