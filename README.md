@@ -2,7 +2,7 @@
 
 # 📢📢  Attention Please 📢📢
 ## New Assignment has beed added in "Tasks" folder
-## See in "Tasks/Assignment_6" file
+## See in "Tasks/Assignment_7" file
 # #######################################################
 ____________________________________________________________________________________________________________
 
