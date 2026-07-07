@@ -74,7 +74,7 @@ Remove duplicate records.      ( Done )
 3. Convert Date Column
 Convert the Date column into datetime format.      ( Done )
 
-4. Feature Engineering
+4. Feature Engineering  (Skip this part)
 
 Create the following new columns:
 
@@ -82,13 +82,13 @@ Month
 Day
 Day Name
 Total Price (if not already available)
-Revenue
-
+Revenue                                        
+                    
 
 5. Standardize Product Names
 Convert all product line names to uppercase or title case.
-Remove unnecessary leading/trailing spaces.
-
+Remove unnecessary leading/trailing spaces.  ( Done )
+                                                                
 
 6. Detect Outliers
 
@@ -98,7 +98,7 @@ Unit Price
 Quantity
 Revenue
 
-Use the IQR (Interquartile Range) method.
+Use the IQR (Interquartile Range) /  data plloting method.  ( done / IQR we will study in future)
 
 ################################################################################################################
 
@@ -135,7 +135,7 @@ X-axis label
 Y-axis label
 Marker
 Grid
-
+                                      ( Done )
 
 ________________________________________________________________________________________________________________
 Figure 2
@@ -147,7 +147,7 @@ Requirements:
 Different color bars
 Value labels (optional)
 Rotated x-axis labels
-
+                                                ( Done )
 
 ________________________________________________________________________________________________________________
 Figure 3
@@ -159,18 +159,18 @@ Requirements:
 Percentage labels
 Shadow
 Start angle
-
+                                                        ( Done )
 ________________________________________________________________________________________________________________
 Figure 4
 
 Customer Type Distribution (Bar Chart)
-
+                                                            ( Done )
 ________________________________________________________________________________________________________________
 
 Figure 5
 
 Revenue by City (Bar Chart)
-
+                                                              ( Done )
 ________________________________________________________________________________________________________________
 
 Figure 6
@@ -181,14 +181,15 @@ Requirements:
 
 Appropriate number of bins
 Axis labels
-Title
+Title                                                    ( Done )
 
 ________________________________________________________________________________________________________________
 Figure 7
 
 Unit Price Histogram
+                                                  ( Done )
 
-________________________________________________________________________________________________________________
+_______________________________________    _________________________________________________________________________
 
 Figure 8
 
@@ -203,7 +204,7 @@ Requirements:
 
 Title
 Labels
-Grid
+Grid                                            ( Done )
 
 ################################################################################################################
 Part 5 – Report (Bonus: 10 Marks)
@@ -218,7 +219,7 @@ The month with the highest sales.
 Any unusual patterns or outliers observed in the data.
 Three business recommendations based on your analysis.
 Submission Requirements
-
+                                                  (skip)
 
 ################################################################################################################
 Submit the following files:
