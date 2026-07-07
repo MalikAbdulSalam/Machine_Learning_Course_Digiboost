@@ -46,14 +46,14 @@ ________________________________________________________________________________
 
 Part 1 – Data Loading (10 Marks)
 ################################################################################################################
-Import the required Python libraries.
-Load the dataset using Pandas.
-Display the first 10 rows.
-Display the last 10 rows.
-Display the shape of the dataset.
-Display all column names.
-Display data types of all columns.
-Generate descriptive statistics of the dataset.
+Import the required Python libraries.   ( Done )
+Load the dataset using Pandas.          ( Done )
+Display the first 10 rows.                ( Done )
+Display the last 10 rows.                  ( Done )       
+Display the shape of the dataset.     ( Done )
+Display all column names.      ( Done )
+Display data types of all columns. ( Done )
+Generate descriptive statistics of the dataset. ( Done )
 
 ________________________________________________________________________________________________________________
 ################################################################################################################
@@ -65,14 +65,14 @@ Perform the following preprocessing tasks:
 
 1. Check Missing Values
 Identify missing values in each column.
-Handle missing values using an appropriate technique.
+Handle missing values using an appropriate technique.   ( Done )
 
 2. Remove Duplicate Records
 Identify duplicate rows.
-Remove duplicate records.
+Remove duplicate records.      ( Done )
 
 3. Convert Date Column
-Convert the Date column into datetime format.
+Convert the Date column into datetime format.      ( Done )
 
 4. Feature Engineering
 
