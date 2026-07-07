@@ -1,0 +1,229 @@
+Supermarket Sales Data Preprocessing and Visualization
+
+________________________________________________________________________________________________________________
+
+Objective
+
+The objective of this assignment is to learn how to clean, preprocess, analyze, and visualize real-world data using Pandas and Matplotlib. Students will apply various data preprocessing techniques and create meaningful visualizations to gain business insights from a supermarket sales dataset.
+
+________________________________________________________________________________________________________________
+
+Dataset
+
+Download the dataset from Kaggle:
+
+Supermarket Sales Dataset
+
+https://www.kaggle.com/datasets/aungpyaeap/supermarket-sales
+
+________________________________________________________________________________________________________________
+
+
+Dataset Columns
+
+The dataset contains the following columns:
+
+Invoice ID
+Branch
+City
+Customer Type
+Gender
+Product Line
+Unit Price
+Quantity
+Tax 5%
+Total
+Date
+Time
+Payment
+COGS
+Gross Margin Percentage
+Gross Income
+Rating
+
+________________________________________________________________________________________________________________
+################################################################################################################
+
+Part 1 – Data Loading (10 Marks)
+################################################################################################################
+Import the required Python libraries.
+Load the dataset using Pandas.
+Display the first 10 rows.
+Display the last 10 rows.
+Display the shape of the dataset.
+Display all column names.
+Display data types of all columns.
+Generate descriptive statistics of the dataset.
+
+________________________________________________________________________________________________________________
+################################################################################################################
+
+Part 2 – Data Preprocessing (40 Marks)
+################################################################################################################
+
+Perform the following preprocessing tasks:
+
+1. Check Missing Values
+Identify missing values in each column.
+Handle missing values using an appropriate technique.
+
+2. Remove Duplicate Records
+Identify duplicate rows.
+Remove duplicate records.
+
+3. Convert Date Column
+Convert the Date column into datetime format.
+
+4. Feature Engineering
+
+Create the following new columns:
+
+Month
+Day
+Day Name
+Total Price (if not already available)
+Revenue
+
+
+5. Standardize Product Names
+Convert all product line names to uppercase or title case.
+Remove unnecessary leading/trailing spaces.
+
+
+6. Detect Outliers
+
+Detect outliers in the following columns:
+
+Unit Price
+Quantity
+Revenue
+
+Use the IQR (Interquartile Range) method.
+
+################################################################################################################
+
+Part 3 – Data Analysis (20 Marks)
+
+################################################################################################################
+Answer the following questions using Pandas:
+
+Which branch generated the highest revenue?
+Which city has the highest total sales?
+Which product line sold the most items?
+Which payment method is used the most?
+Which customer type generated the highest revenue?
+What is the average customer rating?
+Which month had the highest sales?
+What is the average quantity sold per transaction?
+Which product line has the highest average unit price?
+Display the top 10 transactions based on revenue.
+
+################################################################################################################
+Part 4 – Data Visualization (30 Marks)
+################################################################################################################
+
+Create the following visualizations using Matplotlib.
+
+Figure 1
+
+Monthly Revenue Line Chart
+
+Requirements:
+
+Title
+X-axis label
+Y-axis label
+Marker
+Grid
+
+
+________________________________________________________________________________________________________________
+Figure 2
+
+Sales by Product Line (Bar Chart)
+
+Requirements:
+
+Different color bars
+Value labels (optional)
+Rotated x-axis labels
+
+
+________________________________________________________________________________________________________________
+Figure 3
+
+Payment Method Distribution (Pie Chart)
+
+Requirements:
+
+Percentage labels
+Shadow
+Start angle
+
+________________________________________________________________________________________________________________
+Figure 4
+
+Customer Type Distribution (Bar Chart)
+
+________________________________________________________________________________________________________________
+
+Figure 5
+
+Revenue by City (Bar Chart)
+
+________________________________________________________________________________________________________________
+
+Figure 6
+
+Quantity Histogram
+
+Requirements:
+
+Appropriate number of bins
+Axis labels
+Title
+
+________________________________________________________________________________________________________________
+Figure 7
+
+Unit Price Histogram
+
+________________________________________________________________________________________________________________
+
+Figure 8
+
+Scatter Plot
+
+Plot:
+
+X-axis → Quantity
+Y-axis → Revenue
+
+Requirements:
+
+Title
+Labels
+Grid
+
+################################################################################################################
+Part 5 – Report (Bonus: 10 Marks)
+################################################################################################################
+
+Write a short report (200–300 words) summarizing your findings. Include:
+
+The highest-selling product line.
+The city with the highest revenue.
+The most frequently used payment method.
+The month with the highest sales.
+Any unusual patterns or outliers observed in the data.
+Three business recommendations based on your analysis.
+Submission Requirements
+
+
+################################################################################################################
+Submit the following files:
+
+Python script (.py) or Jupyter Notebook (.ipynb)
+Cleaned dataset (CSV)
+All generated plots (PNG)
+Report (PDF or DOCX)
