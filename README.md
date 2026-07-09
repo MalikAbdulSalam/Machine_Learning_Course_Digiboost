@@ -15,8 +15,12 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 3 : Data Preprocessing Practical ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_preprocessing_practical.html)
 
-[Lecture  : Data Visiuallization ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/8-data_visiuallization.html)
+[Lecture 4 : Data Visiuallization ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/8-data_visiuallization.html)
+
+[Lecture 5 : Linear Regression ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/26-Linear_regression.html)
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
+
+
 
 
