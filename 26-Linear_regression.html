@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Linear Regression Tutorial - Complete</title>
+
+<style>
+
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:#f0f2f5;
+    margin:0;
+    padding:20px;
+    line-height:1.8;
+}
+
+.container{
+    width:92%;
+    max-width:1100px;
+    margin:auto;
+    background:white;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0px 4px 20px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#1a237e;
+    font-size:2.2em;
+    margin-bottom:5px;
+}
+
+h2{
+    color:#0d47a1;
+    border-bottom:3px solid #0d47a1;
+    padding-bottom:8px;
+    margin-top:35px;
+}
+
+h3{
+    color:#1a237e;
+    margin-top:25px;
+}
+
+pre{
+    background:#263238;
+    color:#e0e0e0;
+    padding:18px;
+    border-radius:8px;
+    overflow:auto;
+    font-size:0.95em;
+    box-shadow:inset 0 0 10px rgba(0,0,0,0.3);
+}
+
+code{
+    background:#e8eaf6;
+    padding:2px 8px;
+    border-radius:4px;
+    font-weight:bold;
+    color:#1a237e;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:15px 0;
+}
+
+table,th,td{
+    border:1px solid #bbb;
+}
+
+th{
+    background:#0d47a1;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:10px;
+    text-align:center;
+    background:#fafafa;
+}
+
+tr:nth-child(even) td{
+    background:#f3f4f6;
+}
+
+.note{
+    background:#fff8e1;
+    padding:18px;
+    border-left:6px solid #ff8f00;
+    margin-top:20px;
+    border-radius:4px;
+}
+
+.success{
+    background:#e8f5e9;
+    border-left:6px solid #2e7d32;
+    padding:18px;
+    margin-top:20px;
+    border-radius:4px;
+}
+
+.metric-box{
+    display:inline-block;
+    background:#e3f2fd;
+    padding:12px 20px;
+    margin:8px 10px 8px 0;
+    border-radius:8px;
+    border:1px solid #90caf9;
+    font-weight:bold;
+}
+
+.metric-box span{
+    color:#0d47a1;
+}
+
+img{
+    max-width:100%;
+    border-radius:8px;
+    border:1px solid #ddd;
+    margin:10px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Linear Regression Complete Tutorial</h1>
+<p style="text-align:center; color:#555; font-size:1.1em;">
+    Data Reading · Model Training · Evaluation Metrics · Visualization
+</p>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>Step 1 : Create Dataset (CSV)</h2>
+
+<p>Create a file named <b>student_marks.csv</b> with the following data:</p>
+
+<pre>
+Hours,Marks
+1,35
+2,40
+3,50
+4,55
+5,65
+6,70
+7,80
+8,85
+9,90
+10,95
+</pre>
+
+<div class="note">
+    <b>Note:</b> Hours is the <b>independent variable</b> (X) and Marks is the <b>dependent variable</b> (y).
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>Step 2 : Import Required Libraries</h2>
+
+<pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>Step 3 : Read CSV File</h2>
+
+<pre>
+df = pd.read_csv("student_marks.csv")
+
+print("Dataset shape:", df.shape)
+print("\nFirst 5 rows:")
+print(df.head())
+</pre>
+
+<p><b>Output:</b></p>
+
+<table>
+<tr><th>Hours</th><th>Marks</th></tr>
+<tr><td>1</td><td>35</td></tr>
+<tr><td>2</td><td>40</td></tr>
+<tr><td>3</td><td>50</td></tr>
+<tr><td>4</td><td>55</td></tr>
+<tr><td>5</td><td>65</td></tr>
+</table>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>Step 4 : Separate Features & Target</h2>
+
+<pre>
+X = df[["Hours"]]   # Feature (independent)
+y = df["Marks"]     # Target (dependent)
+
+print("X shape:", X.shape)
+print("y shape:", y.shape)
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>Step 5 : Split into Train & Test Sets</h2>
+
+<pre>
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,      # 20% for testing
+    random_state=42     # reproducible split
+)
+
+print(f"Training set: {X_train.shape[0]} samples")
+print(f"Testing set:  {X_test.shape[0]} samples")
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>Step 6 : Train Linear Regression Model</h2>
+
+<pre>
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+print("Intercept (β₀):", model.intercept_)
+print("Coefficient (β₁):", model.coef_[0])
+
+print(f"\nRegression Equation: Marks = {model.intercept_:.2f} + ({model.coef_[0]:.2f}) × Hours")
+</pre>
+
+<div class="success">
+    <b>Model Trained Successfully!</b><br>
+    The model has learned the relationship between study hours and marks.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>Step 7 : Make Predictions</h2>
+
+<pre>
+y_pred_train = model.predict(X_train)
+y_pred_test = model.predict(X_test)
+
+print("Predictions on test set:", y_pred_test)
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>Step 8 : Loss Function & Model Evaluation</h2>
+
+<h3>What is a Loss Function?</h3>
+
+<p>
+The <b>loss function</b> measures how well the model's predictions match the actual values.
+The goal of training is to <b>minimize</b> this loss.
+</p>
+
+<div class="note">
+    <b>Most Common Loss Function: Mean Squared Error (MSE)</b><br><br>
+    <b>MSE = (1/n) × Σ (y_actual − y_pred)²</b><br><br>
+    It penalizes larger errors more heavily because of the square term.
+</div>
+
+<h3>Evaluation Metrics</h3>
+
+<pre>
+# Calculate metrics
+mse = mean_squared_error(y_test, y_pred_test)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred_test)
+r2 = r2_score(y_test, y_pred_test)
+
+# For training set (to check overfitting)
+mse_train = mean_squared_error(y_train, y_pred_train)
+r2_train = r2_score(y_train, y_pred_train)
+
+print("=" * 50)
+print("MODEL EVALUATION METRICS")
+print("=" * 50)
+print(f"\n Training Set:")
+print(f"   MSE:  {mse_train:.4f}")
+print(f"   R²:   {r2_train:.4f}")
+
+print(f"\n Test Set:")
+print(f"   MSE (Mean Squared Error):   {mse:.4f}")
+print(f"   RMSE (Root MSE):            {rmse:.4f}")
+print(f"   MAE (Mean Absolute Error):  {mae:.4f}")
+print(f"   R² (Coefficient of Determination): {r2:.4f}")
+</pre>
+
+<div class="success">
+    <b> Interpretation of Metrics:</b><br><br>
+    <b>MSE / RMSE:</b> Lower values = better fit. RMSE is in same units as target.<br>
+    <b>MAE:</b> Average absolute error. Easier to interpret.<br>
+    <b>R² (R-Squared):</b> Ranges from 0 to 1. <b>Closer to 1 = better model</b>.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;It represents the proportion of variance explained by the model.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2> Step 9 : Visualizations</h2>
+
+<h3>1. Scatter Plot + Regression Line (Actual Data)</h3>
+
+<pre>
+plt.figure(figsize=(10, 5))
+
+plt.subplot(1, 2, 1)
+plt.scatter(X, y, color="blue", alpha=0.7, label="Actual Data")
+plt.plot(X, model.predict(X), color="red", linewidth=3, label="Regression Line")
+plt.xlabel("Hours Studied")
+plt.ylabel("Marks Scored")
+plt.title("Linear Regression: Hours vs Marks")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+</pre>
+
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Crect width='800' height='400' fill='%23f8f9fa'/%3E%3Ctext x='300' y='200' font-size='20' fill='%23555'%3E Regression Plot (see actual output in Python)%3C/text%3E%3C/svg%3E" alt="Regression Plot">
+
+<h3>2. Predicted vs Actual Plot (Test Set)</h3>
+
+<pre>
+plt.figure(figsize=(8, 6))
+
+plt.scatter(y_test, y_pred_test, color="green", alpha=0.7, label="Predictions")
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 
+         color="red", linestyle="--", linewidth=2, label="Perfect Prediction Line")
+
+plt.xlabel("Actual Marks")
+plt.ylabel("Predicted Marks")
+plt.title("Predicted vs Actual (Test Set)")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Add R² value on plot
+plt.text(0.05, 0.95, f'R² = {r2:.4f}', transform=plt.gca().transAxes,
+         fontsize=12, bbox=dict(facecolor='white', alpha=0.8))
+
+plt.show()
+</pre>
+
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%23f8f9fa'/%3E%3Ctext x='280' y='300' font-size='20' fill='%23555'%3E Predicted vs Actual Plot (see actual output in Python)%3C/text%3E%3C/svg%3E" alt="Predicted vs Actual">
+
+<h3>3. Residual Plot</h3>
+
+<pre>
+residuals = y_test - y_pred_test
+
+plt.figure(figsize=(8, 5))
+
+plt.scatter(y_pred_test, residuals, color="purple", alpha=0.7)
+plt.axhline(y=0, color="red", linestyle="--", linewidth=2)
+plt.xlabel("Predicted Values")
+plt.ylabel("Residuals")
+plt.title("Residual Plot")
+plt.grid(True, alpha=0.3)
+
+plt.show()
+</pre>
+
+<div class="note">
+    <b>🔍 Residual Analysis:</b><br>
+    • Residuals = Actual − Predicted<br>
+    • Ideally, residuals should be randomly scattered around zero.<br>
+    • Patterns in residuals suggest the model might be missing something.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2> Step 10 : Predict for New Data</h2>
+
+<pre>
+# Predict marks for a student who studied 12 hours
+new_hours = [[12]]
+predicted_marks = model.predict(new_hours)
+
+print(f"Predicted marks for 12 hours of study: {predicted_marks[0]:.2f}")
+</pre>
+
+<div class="success">
+    <b> Prediction:</b> A student studying 12 hours is predicted to score approximately <b>{95.5:.2f}</b> marks.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2> Complete Python Code</h2>
+
+<pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+# 1. Read CSV
+df = pd.read_csv("student_marks.csv")
+
+# 2. Separate features and target
+X = df[["Hours"]]
+y = df["Marks"]
+
+# 3. Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# 4. Train model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# 5. Predict
+y_pred_train = model.predict(X_train)
+y_pred_test = model.predict(X_test)
+
+# 6. Evaluation
+mse = mean_squared_error(y_test, y_pred_test)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred_test)
+r2 = r2_score(y_test, y_pred_test)
+
+print(f"MSE:  {mse:.4f}")
+print(f"RMSE: {rmse:.4f}")
+print(f"MAE:  {mae:.4f}")
+print(f"R²:   {r2:.4f}")
+
+# 7. Visualization - Regression Line
+plt.scatter(X, y, color="blue", label="Actual")
+plt.plot(X, model.predict(X), color="red", linewidth=2, label="Regression Line")
+plt.xlabel("Hours")
+plt.ylabel("Marks")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 8. Visualization - Predicted vs Actual
+plt.scatter(y_test, y_pred_test, color="green", alpha=0.7)
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()],
+         color="red", linestyle="--", label="Perfect Prediction")
+plt.xlabel("Actual")
+plt.ylabel("Predicted")
+plt.title(f"Predicted vs Actual (R² = {r2:.4f})")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 9. Predict new value
+new_pred = model.predict([[12]])
+print(f"Predicted marks for 12 hours: {new_pred[0]:.2f}")
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2> Summary Table</h2>
+
+<table>
+<tr>
+    <th>Metric</th>
+    <th>Formula</th>
+    <th>Interpretation</th>
+</tr>
+<tr>
+    <td><b>MSE</b></td>
+    <td>(1/n) Σ (y − ŷ)²</td>
+    <td>Average squared error. Lower is better.</td>
+</tr>
+<tr>
+    <td><b>RMSE</b></td>
+    <td>√(MSE)</td>
+    <td>Same units as target. Lower is better.</td>
+</tr>
+<tr>
+    <td><b>MAE</b></td>
+    <td>(1/n) Σ |y − ŷ|</td>
+    <td>Average absolute error. Easier to interpret.</td>
+</tr>
+<tr>
+    <td><b>R²</b></td>
+    <td>1 − (SS_res / SS_tot)</td>
+    <td>Proportion of variance explained. Closer to 1 = better.</td>
+</tr>
+</table>
+
+<div class="success">
+    <b> Key Takeaways:</b><br>
+    1. Linear Regression finds the best-fit line by minimizing the loss function (MSE).<br>
+    2. R² score indicates how well the model explains the data.<br>
+    3. Always evaluate on a separate test set to check generalization.<br>
+    4. Visualizations help diagnose model performance.
+</div>
+
+<hr>
+
+<p style="text-align:center; color:#777; font-size:0.9em; margin-top:30px;">
+     What next? &amp; Matplotlib
+</p>
+
+</div>
+
+</body>
+</html>
