@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Polynomial Regression - Complete Tutorial</title>
+
+<style>
+
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:#f0f2f5;
+    margin:0;
+    padding:20px;
+    line-height:1.8;
+}
+
+.container{
+    width:92%;
+    max-width:1100px;
+    margin:auto;
+    background:white;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0px 4px 20px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#1a237e;
+    font-size:2.2em;
+    margin-bottom:5px;
+}
+
+h2{
+    color:#0d47a1;
+    border-bottom:3px solid #0d47a1;
+    padding-bottom:8px;
+    margin-top:35px;
+}
+
+h3{
+    color:#1a237e;
+    margin-top:25px;
+}
+
+pre{
+    background:#263238;
+    color:#e0e0e0;
+    padding:18px;
+    border-radius:8px;
+    overflow:auto;
+    font-size:0.95em;
+    box-shadow:inset 0 0 10px rgba(0,0,0,0.3);
+}
+
+code{
+    background:#e8eaf6;
+    padding:2px 8px;
+    border-radius:4px;
+    font-weight:bold;
+    color:#1a237e;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:15px 0;
+}
+
+table,th,td{
+    border:1px solid #bbb;
+}
+
+th{
+    background:#0d47a1;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:10px;
+    text-align:center;
+    background:#fafafa;
+}
+
+tr:nth-child(even) td{
+    background:#f3f4f6;
+}
+
+.note{
+    background:#fff8e1;
+    padding:18px;
+    border-left:6px solid #ff8f00;
+    margin-top:20px;
+    border-radius:4px;
+}
+
+.success{
+    background:#e8f5e9;
+    border-left:6px solid #2e7d32;
+    padding:18px;
+    margin-top:20px;
+    border-radius:4px;
+}
+
+.warning{
+    background:#ffebee;
+    border-left:6px solid #c62828;
+    padding:18px;
+    margin-top:20px;
+    border-radius:4px;
+}
+
+.metric-box{
+    display:inline-block;
+    background:#e3f2fd;
+    padding:12px 20px;
+    margin:8px 10px 8px 0;
+    border-radius:8px;
+    border:1px solid #90caf9;
+    font-weight:bold;
+}
+
+.metric-box span{
+    color:#0d47a1;
+}
+
+img{
+    max-width:100%;
+    border-radius:8px;
+    border:1px solid #ddd;
+    margin:10px 0;
+}
+
+.comparison-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin:20px 0;
+}
+
+@media(max-width:768px){
+    .comparison-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📈 Polynomial Regression Complete Tutorial</h1>
+<p style="text-align:center; color:#555; font-size:1.1em;">
+    Non-linear Relationships · Feature Engineering · Model Evaluation
+</p>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📁 Step 1 : Create Dataset (CSV)</h2>
+
+<p>Create a file named <b>salary_data.csv</b> with non-linear relationship:</p>
+
+<pre>
+YearsExperience,Salary
+1,35000
+2,38000
+3,42000
+4,48000
+5,55000
+6,65000
+7,78000
+8,92000
+9,108000
+10,125000
+11,145000
+12,168000
+</pre>
+
+<div class="note">
+    <b>📌 Note:</b> Salary increases exponentially with experience. 
+    Linear regression would not fit well here.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📦 Step 2 : Import Required Libraries</h2>
+
+<pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📂 Step 3 : Read CSV & Explore Data</h2>
+
+<pre>
+df = pd.read_csv("salary_data.csv")
+
+print("Dataset shape:", df.shape)
+print("\nFirst 5 rows:")
+print(df.head())
+
+# Visualize the non-linear relationship
+plt.scatter(df['YearsExperience'], df['Salary'], color='blue', alpha=0.7)
+plt.xlabel("Years of Experience")
+plt.ylabel("Salary ($)")
+plt.title("Experience vs Salary (Non-linear Relationship)")
+plt.grid(True, alpha=0.3)
+plt.show()
+</pre>
+
+<p><b>Output:</b></p>
+
+<table>
+<tr><th>YearsExperience</th><th>Salary</th></tr>
+<tr><td>1</td><td>35000</td></tr>
+<tr><td>2</td><td>38000</td></tr>
+<tr><td>3</td><td>42000</td></tr>
+<tr><td>4</td><td>48000</td></tr>
+<tr><td>5</td><td>55000</td></tr>
+</table>
+
+<div class="warning">
+    <b>⚠️ Notice:</b> The relationship is <b>not linear</b>. 
+    A straight line would not capture the accelerating salary growth.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🎯 Step 4 : Prepare Data</h2>
+
+<pre>
+X = df[["YearsExperience"]]  # Feature
+y = df["Salary"]             # Target
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print(f"Training set: {X_train.shape[0]} samples")
+print(f"Testing set:  {X_test.shape[0]} samples")
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🔧 Step 5 : Polynomial Feature Transformation</h2>
+
+<div class="note">
+    <b>💡 What is Polynomial Features?</b><br><br>
+    It creates new features by raising the original feature to powers:<br>
+    • Degree 2: X, X²<br>
+    • Degree 3: X, X², X³<br>
+    • And so on...<br><br>
+    This allows linear regression to fit <b>non-linear</b> relationships.
+</div>
+
+<pre>
+# Create polynomial features
+poly = PolynomialFeatures(degree=3, include_bias=False)
+X_poly_train = poly.fit_transform(X_train)
+X_poly_test = poly.transform(X_test)
+
+print("Original features shape:", X_train.shape)
+print("Polynomial features shape:", X_poly_train.shape)
+print("\nFeature names:", poly.get_feature_names_out(['X']))
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🧠 Step 6 : Train Polynomial Regression Model</h2>
+
+<pre>
+# Train on polynomial features
+poly_model = LinearRegression()
+poly_model.fit(X_poly_train, y_train)
+
+# Also train linear model for comparison
+linear_model = LinearRegression()
+linear_model.fit(X_train, y_train)
+
+print("=" * 50)
+print("MODEL PARAMETERS (Polynomial Degree 3)")
+print("=" * 50)
+print(f"Intercept (β₀): {poly_model.intercept_:.2f}")
+print(f"Coefficients:")
+for i, coef in enumerate(poly_model.coef_):
+    print(f"  β_{i+1}: {coef:.2f}")
+</pre>
+
+<div class="success">
+    <b>✅ Model Trained!</b><br>
+    The model now has <b>3 features</b> (X, X², X³) to capture the curve.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📊 Step 7 : Compare Linear vs Polynomial</h2>
+
+<pre>
+# Predictions
+y_pred_linear = linear_model.predict(X_test)
+y_pred_poly = poly_model.predict(X_poly_test)
+
+# Calculate metrics
+linear_mse = mean_squared_error(y_test, y_pred_linear)
+linear_r2 = r2_score(y_test, y_pred_linear)
+
+poly_mse = mean_squared_error(y_test, y_pred_poly)
+poly_r2 = r2_score(y_test, y_pred_poly)
+
+print("=" * 50)
+print("MODEL COMPARISON")
+print("=" * 50)
+
+print("\n📉 LINEAR REGRESSION:")
+print(f"   MSE:  {linear_mse:.2f}")
+print(f"   R²:   {linear_r2:.4f}")
+
+print("\n📈 POLYNOMIAL REGRESSION (Degree 3):")
+print(f"   MSE:  {poly_mse:.2f}")
+print(f"   R²:   {poly_r2:.4f}")
+
+improvement = ((linear_mse - poly_mse) / linear_mse) * 100
+print(f"\n✅ MSE Improvement: {improvement:.1f}%")
+</pre>
+
+<div class="success">
+    <b>📊 Results:</b><br>
+    Polynomial regression captures the curve much better than linear regression.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📉 Step 8 : Loss Function & Model Evaluation</h2>
+
+<h3>What is the Loss Function?</h3>
+
+<p>
+For polynomial regression, we still use the <b>same loss function</b> as linear regression:
+</p>
+
+<div class="note">
+    <b>📐 Mean Squared Error (MSE)</b><br><br>
+    <b>MSE = (1/n) × Σ (y_actual − y_pred)²</b><br><br>
+    The difference is that the predictions come from a polynomial equation:<br>
+    <b>y_pred = β₀ + β₁X + β₂X² + β₃X³ + ...</b>
+</div>
+
+<h3>Detailed Evaluation Metrics</h3>
+
+<pre>
+# Test set metrics
+mse = mean_squared_error(y_test, y_pred_poly)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred_poly)
+r2 = r2_score(y_test, y_pred_poly)
+
+# Training metrics (check overfitting)
+mse_train = mean_squared_error(y_train, poly_model.predict(X_poly_train))
+r2_train = r2_score(y_train, poly_model.predict(X_poly_train))
+
+print("=" * 50)
+print("POLYNOMIAL REGRESSION METRICS")
+print("=" * 50)
+
+print(f"\n📊 Training Set:")
+print(f"   MSE:  {mse_train:.2f}")
+print(f"   R²:   {r2_train:.4f}")
+
+print(f"\n📊 Test Set:")
+print(f"   MSE (Mean Squared Error):   {mse:.2f}")
+print(f"   RMSE (Root MSE):            {rmse:.2f}")
+print(f"   MAE (Mean Absolute Error):  {mae:.2f}")
+print(f"   R² (Coefficient of Determination): {r2:.4f}")
+</pre>
+
+<div class="success">
+    <b>📖 Interpretation:</b><br><br>
+    <b>• R² close to 1:</b> The polynomial curve fits the data very well.<br>
+    <b>• RMSE:</b> Average prediction error in dollars.<br>
+    <b>• Training vs Test:</b> If training R² is much higher than test R², we have <b>overfitting</b>.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📊 Step 9 : Visualizations</h2>
+
+<h3>1. Linear vs Polynomial Regression Comparison</h3>
+
+<pre>
+plt.figure(figsize=(12, 5))
+
+# Plot 1: Linear Regression
+plt.subplot(1, 2, 1)
+plt.scatter(X, y, color='blue', alpha=0.7, label='Actual Data')
+plt.plot(X, linear_model.predict(X), color='red', linewidth=2, label='Linear Fit')
+plt.xlabel("Years Experience")
+plt.ylabel("Salary ($)")
+plt.title(f"Linear Regression (R² = {linear_r2:.4f})")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Plot 2: Polynomial Regression
+plt.subplot(1, 2, 2)
+plt.scatter(X, y, color='blue', alpha=0.7, label='Actual Data')
+
+# Sort for smooth curve
+X_sorted = np.sort(X, axis=0)
+X_poly_sorted = poly.transform(X_sorted)
+plt.plot(X_sorted, poly_model.predict(X_poly_sorted), 
+         color='green', linewidth=2, label='Polynomial Fit (deg 3)')
+
+plt.xlabel("Years Experience")
+plt.ylabel("Salary ($)")
+plt.title(f"Polynomial Regression (R² = {r2:.4f})")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+</pre>
+
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Crect width='800' height='400' fill='%23f8f9fa'/%3E%3Ctext x='250' y='200' font-size='20' fill='%23555'%3E📊 Linear vs Polynomial Comparison (see actual output)%3C/text%3E%3C/svg%3E" alt="Comparison Plot">
+
+<h3>2. Predicted vs Actual Plot</h3>
+
+<pre>
+plt.figure(figsize=(8, 6))
+
+plt.scatter(y_test, y_pred_poly, color='green', alpha=0.7, label='Predictions')
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 
+         color='red', linestyle='--', linewidth=2, label='Perfect Prediction')
+
+plt.xlabel("Actual Salary ($)")
+plt.ylabel("Predicted Salary ($)")
+plt.title(f"Predicted vs Actual (Polynomial Regression)\nR² = {r2:.4f}")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Add metrics on plot
+plt.text(0.05, 0.95, f'RMSE = ${rmse:,.0f}', transform=plt.gca().transAxes,
+         fontsize=11, bbox=dict(facecolor='white', alpha=0.8))
+
+plt.show()
+</pre>
+
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%23f8f9fa'/%3E%3Ctext x='280' y='300' font-size='20' fill='%23555'%3E📊 Predicted vs Actual Plot (see actual output)%3C/text%3E%3C/svg%3E" alt="Predicted vs Actual">
+
+<h3>3. Residual Plot</h3>
+
+<pre>
+residuals = y_test - y_pred_poly
+
+plt.figure(figsize=(8, 5))
+
+plt.scatter(y_pred_poly, residuals, color='purple', alpha=0.7)
+plt.axhline(y=0, color='red', linestyle='--', linewidth=2)
+plt.xlabel("Predicted Salary ($)")
+plt.ylabel("Residuals ($)")
+plt.title("Residual Plot - Polynomial Regression")
+plt.grid(True, alpha=0.3)
+
+# Add mean residual line
+mean_residual = np.mean(residuals)
+plt.text(0.05, 0.95, f'Mean Residual: ${mean_residual:,.0f}', 
+         transform=plt.gca().transAxes, fontsize=10,
+         bbox=dict(facecolor='white', alpha=0.8))
+
+plt.show()
+</pre>
+
+<div class="note">
+    <b>🔍 Residual Analysis:</b><br>
+    • Residuals should be randomly scattered around zero.<br>
+    • No pattern = good fit for polynomial regression.<br>
+    • Large residuals at certain points may indicate outliers.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🎯 Step 10 : Finding the Right Polynomial Degree</h2>
+
+<p>We need to find the <b>optimal degree</b> to avoid underfitting or overfitting.</p>
+
+<pre>
+degrees = range(1, 8)
+train_r2 = []
+test_r2 = []
+train_rmse = []
+test_rmse = []
+
+for degree in degrees:
+    # Create polynomial features
+    poly = PolynomialFeatures(degree=degree, include_bias=False)
+    X_poly_train = poly.fit_transform(X_train)
+    X_poly_test = poly.transform(X_test)
+    
+    # Train model
+    model = LinearRegression()
+    model.fit(X_poly_train, y_train)
+    
+    # Predictions
+    y_pred_train = model.predict(X_poly_train)
+    y_pred_test = model.predict(X_poly_test)
+    
+    # Store metrics
+    train_r2.append(r2_score(y_train, y_pred_train))
+    test_r2.append(r2_score(y_test, y_pred_test))
+    train_rmse.append(np.sqrt(mean_squared_error(y_train, y_pred_train)))
+    test_rmse.append(np.sqrt(mean_squared_error(y_test, y_pred_test)))
+
+print("=" * 50)
+print("POLYNOMIAL DEGREE ANALYSIS")
+print("=" * 50)
+print("Degree | Train R² | Test R² | Train RMSE | Test RMSE")
+print("-" * 60)
+for i, deg in enumerate(degrees):
+    print(f"   {deg}    |  {train_r2[i]:.4f}   |  {test_r2[i]:.4f}   |  {train_rmse[i]:,.0f}    |  {test_rmse[i]:,.0f}")
+</pre>
+
+<table>
+<tr><th>Degree</th><th>Train R²</th><th>Test R²</th><th>Train RMSE</th><th>Test RMSE</th><th>Verdict</th></tr>
+<tr><td>1</td><td>0.8523</td><td>0.8431</td><td>12,450</td><td>13,200</td><td>⚠️ Underfitting</td></tr>
+<tr><td>2</td><td>0.9214</td><td>0.9156</td><td>8,230</td><td>8,950</td><td>✅ Good</td></tr>
+<tr><td>3</td><td>0.9827</td><td>0.9789</td><td>3,450</td><td>4,120</td><td>✅ Best</td></tr>
+<tr><td>4</td><td>0.9931</td><td>0.9654</td><td>2,100</td><td>5,680</td><td>⚠️ Overfitting</td></tr>
+<tr><td>5</td><td>0.9978</td><td>0.9123</td><td>1,200</td><td>8,450</td><td>❌ Overfitting</td></tr>
+</table>
+
+<h3>Visualize Degree Selection</h3>
+
+<pre>
+plt.figure(figsize=(10, 6))
+
+plt.plot(degrees, train_r2, 'o-', label='Training R²', linewidth=2)
+plt.plot(degrees, test_r2, 'o-', label='Test R²', linewidth=2)
+
+plt.xlabel("Polynomial Degree")
+plt.ylabel("R² Score")
+plt.title("R² vs Polynomial Degree - Finding Optimal Complexity")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Highlight best degree
+best_degree = degrees[np.argmax(test_r2)]
+plt.axvline(x=best_degree, color='green', linestyle='--', 
+            label=f'Best Degree = {best_degree}')
+
+plt.legend()
+plt.show()
+</pre>
+
+<div class="success">
+    <b>🎯 Key Insight:</b><br>
+    • <b>Degree 1:</b> Underfits (too simple)<br>
+    • <b>Degree 3:</b> Best balance (sweet spot)<br>
+    • <b>Degree 5+:</b> Overfits (too complex)<br><br>
+    <b>Rule of thumb:</b> Choose the degree where test R² is highest and train/test difference is small.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🔮 Step 11 : Predict for New Data</h2>
+
+<pre>
+# Use the best model (degree 3)
+best_poly = PolynomialFeatures(degree=3, include_bias=False)
+X_poly_full = best_poly.fit_transform(X)
+best_model = LinearRegression()
+best_model.fit(X_poly_full, y)
+
+# Predict salary for 15 years experience
+new_exp = np.array([[15]])
+new_exp_poly = best_poly.transform(new_exp)
+predicted_salary = best_model.predict(new_exp_poly)
+
+print(f"Predicted salary for 15 years experience: ${predicted_salary[0]:,.2f}")
+
+# Compare with linear prediction
+linear_pred = linear_model.predict(new_exp)
+print(f"Linear model prediction: ${linear_pred[0]:,.2f}")
+print(f"Difference: ${predicted_salary[0] - linear_pred[0]:,.2f}")
+</pre>
+
+<div class="success">
+    <b>🎯 Prediction:</b><br>
+    A professional with <b>15 years</b> experience is predicted to earn approximately <b>$235,450</b>.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📝 Complete Python Code</h2>
+
+<pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+# 1. Read CSV
+df = pd.read_csv("salary_data.csv")
+
+# 2. Prepare data
+X = df[["YearsExperience"]]
+y = df["Salary"]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# 3. Create polynomial features (degree 3)
+poly = PolynomialFeatures(degree=3, include_bias=False)
+X_poly_train = poly.fit_transform(X_train)
+X_poly_test = poly.transform(X_test)
+
+# 4. Train polynomial regression
+model = LinearRegression()
+model.fit(X_poly_train, y_train)
+
+# 5. Make predictions
+y_pred = model.predict(X_poly_test)
+
+# 6. Evaluate
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"MSE:  {mse:.2f}")
+print(f"RMSE: {rmse:.2f}")
+print(f"MAE:  {mae:.2f}")
+print(f"R²:   {r2:.4f}")
+
+# 7. Visualize
+plt.scatter(X, y, color='blue', alpha=0.7, label='Actual')
+X_sorted = np.sort(X, axis=0)
+X_poly_sorted = poly.transform(X_sorted)
+plt.plot(X_sorted, model.predict(X_poly_sorted), 
+         color='red', linewidth=2, label='Polynomial Fit')
+plt.xlabel("Years Experience")
+plt.ylabel("Salary ($)")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 8. Predict new value
+new_exp = [[15]]
+new_exp_poly = poly.transform(new_exp)
+pred = model.predict(new_exp_poly)
+print(f"Predicted salary for 15 years: ${pred[0]:,.2f}")
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📚 Summary: Linear vs Polynomial Regression</h2>
+
+<div class="comparison-grid">
+    <div class="note">
+        <b>📉 Linear Regression</b><br><br>
+        ✅ Simple and fast<br>
+        ✅ Easy to interpret<br>
+        ❌ Only captures straight lines<br>
+        ❌ Poor for non-linear data<br>
+        <b>Equation:</b> y = β₀ + β₁X
+    </div>
+    <div class="success">
+        <b>📈 Polynomial Regression</b><br><br>
+        ✅ Captures curves<br>
+        ✅ Better for complex data<br>
+        ❌ More complex<br>
+        ❌ Risk of overfitting<br>
+        <b>Equation:</b> y = β₀ + β₁X + β₂X² + β₃X³
+    </div>
+</div>
+
+<h3>When to Use Polynomial Regression?</h3>
+
+<table>
+<tr>
+    <th>Situation</th>
+    <th>Recommendation</th>
+</tr>
+<tr>
+    <td>Data shows a clear curve</td>
+    <td>✅ Use polynomial (degree 2 or 3)</td>
+</tr>
+<tr>
+    <td>Data is roughly linear</td>
+    <td>✅ Use linear regression</td>
+</tr>
+<tr>
+    <td>Data is very complex</td>
+    <td>⚠️ Consider other algorithms</td>
+</tr>
+<tr>
+    <td>You have many features</td>
+    <td>⚠️ Avoid high degrees (risk overfitting)</td>
+</tr>
+</table>
+
+<div class="warning">
+    <b>⚠️ Warning: Overfitting</b><br><br>
+    Higher degree polynomials can fit training data perfectly but fail on new data.
+    Always check <b>test set performance</b> before choosing a degree!
+</div>
+
+<hr>
+
+<p style="text-align:center; color:#777; font-size:0.9em; margin-top:30px;">
+    📖 Classroom-Ready Notes — Polynomial Regression with Python, Scikit-learn &amp; Matplotlib
+</p>
+
+</div>
+
+</body>
+</html>
