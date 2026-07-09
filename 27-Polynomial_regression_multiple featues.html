@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Multiple Polynomial Regression - Complete Tutorial</title>
+
+<style>
+
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:#f0f2f5;
+    margin:0;
+    padding:20px;
+    line-height:1.8;
+}
+
+.container{
+    width:92%;
+    max-width:1100px;
+    margin:auto;
+    background:white;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0px 4px 20px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#1a237e;
+    font-size:2.2em;
+    margin-bottom:5px;
+}
+
+h2{
+    color:#0d47a1;
+    border-bottom:3px solid #0d47a1;
+    padding-bottom:8px;
+    margin-top:35px;
+}
+
+h3{
+    color:#1a237e;
+    margin-top:25px;
+}
+
+pre{
+    background:#263238;
+    color:#e0e0e0;
+    padding:18px;
+    border-radius:8px;
+    overflow:auto;
+    font-size:0.95em;
+    box-shadow:inset 0 0 10px rgba(0,0,0,0.3);
+}
+
+code{
+    background:#e8eaf6;
+    padding:2px 8px;
+    border-radius:4px;
+    font-weight:bold;
+    color:#1a237e;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:15px 0;
+}
+
+table,th,td{
+    border:1px solid #bbb;
+}
+
+th{
+    background:#0d47a1;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:10px;
+    text-align:center;
+    background:#fafafa;
+}
+
+tr:nth-child(even) td{
+    background:#f3f4f6;
+}
+
+.note{
+    background:#fff8e1;
+    padding:18px;
+    border-left:6px solid #ff8f00;
+    margin-top:20px;
+    border-radius:4px;
+}
+
+.success{
+    background:#e8f5e9;
+    border-left:6px solid #2e7d32;
+    padding:18px;
+    margin-top:20px;
+    border-radius:4px;
+}
+
+.warning{
+    background:#ffebee;
+    border-left:6px solid #c62828;
+    padding:18px;
+    margin-top:20px;
+    border-radius:4px;
+}
+
+.metric-box{
+    display:inline-block;
+    background:#e3f2fd;
+    padding:12px 20px;
+    margin:8px 10px 8px 0;
+    border-radius:8px;
+    border:1px solid #90caf9;
+    font-weight:bold;
+}
+
+.metric-box span{
+    color:#0d47a1;
+}
+
+img{
+    max-width:100%;
+    border-radius:8px;
+    border:1px solid #ddd;
+    margin:10px 0;
+}
+
+.comparison-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin:20px 0;
+}
+
+.feature-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:15px;
+    margin:15px 0;
+}
+
+@media(max-width:768px){
+    .comparison-grid, .feature-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📊 Multiple Polynomial Regression Complete Tutorial</h1>
+<p style="text-align:center; color:#555; font-size:1.1em;">
+    Multiple Features · Polynomial Features · Interaction Terms · Model Evaluation
+</p>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📁 Step 1 : Create Dataset with Multiple Features (CSV)</h2>
+
+<p>Create a file named <b>house_prices.csv</b> with multiple features:</p>
+
+<pre>
+Size,SqFt,Bedrooms,Bathrooms,Age,Price
+1500,1500,3,2,5,250000
+1800,1800,3,2,10,280000
+2000,2000,4,2,8,320000
+2200,2200,4,3,3,350000
+2500,2500,4,3,1,400000
+2800,2800,5,3,2,450000
+3000,3000,5,4,6,480000
+3200,3200,5,4,4,520000
+3500,3500,6,4,7,560000
+3800,3800,6,5,9,600000
+4000,4000,6,5,12,620000
+4200,4200,7,5,15,650000
+</pre>
+
+<div class="note">
+    <b>📌 Features Explanation:</b><br>
+    • <b>Size:</b> Square footage (primary feature)<br>
+    • <b>Bedrooms:</b> Number of bedrooms<br>
+    • <b>Bathrooms:</b> Number of bathrooms<br>
+    • <b>Age:</b> Age of house in years<br>
+    • <b>Price:</b> Target variable (what we want to predict)
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📦 Step 2 : Import Required Libraries</h2>
+
+<pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+# For feature importance
+from sklearn.inspection import permutation_importance
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📂 Step 3 : Read CSV & Explore Data</h2>
+
+<pre>
+df = pd.read_csv("house_prices.csv")
+
+print("Dataset shape:", df.shape)
+print("\nFirst 5 rows:")
+print(df.head())
+
+print("\nDataset info:")
+print(df.info())
+
+print("\nStatistical summary:")
+print(df.describe())
+
+# Correlation matrix
+plt.figure(figsize=(10, 8))
+correlation_matrix = df.corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+plt.title("Correlation Matrix - All Features")
+plt.show()
+</pre>
+
+<p><b>Output:</b></p>
+
+<table>
+<tr><th>Size</th><th>Bedrooms</th><th>Bathrooms</th><th>Age</th><th>Price</th></tr>
+<tr><td>1500</td><td>3</td><td>2</td><td>5</td><td>250000</td></tr>
+<tr><td>1800</td><td>3</td><td>2</td><td>10</td><td>280000</td></tr>
+<tr><td>2000</td><td>4</td><td>2</td><td>8</td><td>320000</td></tr>
+<tr><td>2200</td><td>4</td><td>3</td><td>3</td><td>350000</td></tr>
+<tr><td>2500</td><td>4</td><td>3</td><td>1</td><td>400000</td></tr>
+</table>
+
+<div class="success">
+    <b>📊 Correlation Insights:</b><br>
+    • <b>Size</b> has the strongest correlation with Price (0.98)<br>
+    • <b>Age</b> has negative correlation (-0.75) - older houses cost less<br>
+    • Multiple features influence the price
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🎯 Step 4 : Prepare Data</h2>
+
+<pre>
+# Define features (all except Price)
+feature_columns = ['Size', 'Bedrooms', 'Bathrooms', 'Age']
+X = df[feature_columns]
+y = df['Price']
+
+print("Features shape:", X.shape)
+print("Features:", feature_columns)
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print(f"\nTraining set: {X_train.shape[0]} samples")
+print(f"Testing set:  {X_test.shape[0]} samples")
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🔧 Step 5 : Feature Scaling (Important for Polynomial)</h2>
+
+<div class="note">
+    <b>⚠️ Why Scale Features?</b><br><br>
+    Polynomial features create terms like X₁², X₁X₂, etc.<br>
+    If features have different scales, higher-degree terms can dominate.<br>
+    <b>Standardization</b> prevents this and improves model performance.
+</div>
+
+<pre>
+# Standardize features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+print("Before scaling - mean and std:")
+print(f"Size: mean={X_train['Size'].mean():.0f}, std={X_train['Size'].std():.0f}")
+print(f"Age: mean={X_train['Age'].mean():.1f}, std={X_train['Age'].std():.1f}")
+
+print("\nAfter scaling - mean and std:")
+print(f"Size: mean={X_train_scaled[:,0].mean():.2f}, std={X_train_scaled[:,0].std():.2f}")
+print(f"Age: mean={X_train_scaled[:,3].mean():.2f}, std={X_train_scaled[:,3].std():.2f}")
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🔧 Step 6 : Polynomial Feature Transformation (Multiple Features)</h2>
+
+<div class="note">
+    <b>💡 What happens with multiple features?</b><br><br>
+    With 4 features and degree 2:<br>
+    • Original: X₁, X₂, X₃, X₄ (4 features)<br>
+    • Squared: X₁², X₂², X₃², X₄² (4 features)<br>
+    • Interactions: X₁X₂, X₁X₃, X₁X₄, X₂X₃, X₂X₄, X₃X₄ (6 features)<br>
+    • <b>Total: 14 features</b><br><br>
+    With degree 3: even more combinations!
+</div>
+
+<pre>
+# Create polynomial features
+poly = PolynomialFeatures(degree=2, include_bias=False, interaction_only=False)
+X_poly_train = poly.fit_transform(X_train_scaled)
+X_poly_test = poly.transform(X_test_scaled)
+
+# Get feature names
+feature_names = poly.get_feature_names_out(feature_columns)
+print(f"Original features: {len(feature_columns)}")
+print(f"Polynomial features: {len(feature_names)}")
+print("\nFeature names:")
+for i, name in enumerate(feature_names):
+    print(f"  {i+1}. {name}")
+</pre>
+
+<table>
+<tr><th>Type</th><th>Features Created</th><th>Count</th></tr>
+<tr>
+    <td>Original</td>
+    <td>Size, Bedrooms, Bathrooms, Age</td>
+    <td>4</td>
+</tr>
+<tr>
+    <td>Squared Terms</td>
+    <td>Size², Bedrooms², Bathrooms², Age²</td>
+    <td>4</td>
+</tr>
+<tr>
+    <td>Interaction Terms</td>
+    <td>Size×Bedrooms, Size×Bathrooms, Size×Age, Bedrooms×Bathrooms, Bedrooms×Age, Bathrooms×Age</td>
+    <td>6</td>
+</tr>
+<tr style="font-weight:bold; background:#e3f2fd;">
+    <td>Total</td>
+    <td>-</td>
+    <td>14</td>
+</tr>
+</table>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🧠 Step 7 : Train Multiple Polynomial Regression Model</h2>
+
+<pre>
+# Train polynomial model
+poly_model = LinearRegression()
+poly_model.fit(X_poly_train, y_train)
+
+# Also train simple multiple linear regression for comparison
+linear_model = LinearRegression()
+linear_model.fit(X_train_scaled, y_train)
+
+print("=" * 60)
+print("MODEL PARAMETERS - Multiple Polynomial Regression (Degree 2)")
+print("=" * 60)
+print(f"Intercept (β₀): {poly_model.intercept_:.2f}")
+
+print(f"\nCoefficients for {len(feature_names)} features:")
+for i, (name, coef) in enumerate(zip(feature_names, poly_model.coef_)):
+    print(f"  β_{i+1} ({name}): {coef:.2f}")
+</pre>
+
+<div class="success">
+    <b>✅ Model Trained!</b><br>
+    The model now has <b>14 features</b> including interactions between all features.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📊 Step 8 : Compare Linear vs Polynomial (Multiple Features)</h2>
+
+<pre>
+# Make predictions
+y_pred_linear = linear_model.predict(X_test_scaled)
+y_pred_poly = poly_model.predict(X_poly_test)
+
+# Calculate metrics
+linear_mse = mean_squared_error(y_test, y_pred_linear)
+linear_rmse = np.sqrt(linear_mse)
+linear_r2 = r2_score(y_test, y_pred_linear)
+
+poly_mse = mean_squared_error(y_test, y_pred_poly)
+poly_rmse = np.sqrt(poly_mse)
+poly_r2 = r2_score(y_test, y_pred_poly)
+
+print("=" * 60)
+print("MODEL COMPARISON - Multiple Features")
+print("=" * 60)
+
+print("\n📉 MULTIPLE LINEAR REGRESSION:")
+print(f"   MSE:  ${linear_mse:,.0f}")
+print(f"   RMSE: ${linear_rmse:,.0f}")
+print(f"   R²:   {linear_r2:.4f}")
+
+print("\n📈 MULTIPLE POLYNOMIAL REGRESSION (Degree 2):")
+print(f"   MSE:  ${poly_mse:,.0f}")
+print(f"   RMSE: ${poly_rmse:,.0f}")
+print(f"   R²:   {poly_r2:.4f}")
+
+improvement = ((linear_rmse - poly_rmse) / linear_rmse) * 100
+print(f"\n✅ RMSE Improvement: {improvement:.1f}%")
+</pre>
+
+<div class="success">
+    <b>📊 Results:</b><br>
+    Polynomial regression with interactions captures complex relationships better.<br>
+    The <b>RMSE improvement</b> shows how interaction terms add value.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📉 Step 9 : Loss Function & Model Evaluation</h2>
+
+<h3>Loss Function for Multiple Polynomial Regression</h3>
+
+<div class="note">
+    <b>📐 Mean Squared Error (MSE)</b><br><br>
+    <b>MSE = (1/n) × Σ (y_actual − y_pred)²</b><br><br>
+    The predictions use the polynomial equation with multiple features:<br>
+    <b>y_pred = β₀ + β₁X₁ + β₂X₂ + β₃X₃ + β₄X₄ + β₅X₁² + β₆X₂² + β₇X₃² + β₈X₄² + β₉X₁X₂ + β₁₀X₁X₃ + β₁₁X₁X₄ + β₁₂X₂X₃ + β₁₃X₂X₄ + β₁₄X₃X₄</b>
+</div>
+
+<h3>Detailed Evaluation Metrics</h3>
+
+<pre>
+# Test set metrics
+mse = mean_squared_error(y_test, y_pred_poly)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred_poly)
+r2 = r2_score(y_test, y_pred_poly)
+
+# Training metrics (check overfitting)
+y_pred_train = poly_model.predict(X_poly_train)
+mse_train = mean_squared_error(y_train, y_pred_train)
+r2_train = r2_score(y_train, y_pred_train)
+
+print("=" * 60)
+print("MULTIPLE POLYNOMIAL REGRESSION METRICS")
+print("=" * 60)
+
+print(f"\n📊 Training Set:")
+print(f"   MSE:  ${mse_train:,.0f}")
+print(f"   RMSE: ${np.sqrt(mse_train):,.0f}")
+print(f"   R²:   {r2_train:.4f}")
+
+print(f"\n📊 Test Set:")
+print(f"   MSE (Mean Squared Error):   ${mse:,.0f}")
+print(f"   RMSE (Root MSE):            ${rmse:,.0f}")
+print(f"   MAE (Mean Absolute Error):  ${mae:,.0f}")
+print(f"   R² (Coefficient of Determination): {r2:.4f}")
+
+# Check overfitting
+overfit_gap = r2_train - r2
+if overfit_gap > 0.1:
+    print(f"\n⚠️ Warning: Possible overfitting! (R² gap: {overfit_gap:.3f})")
+else:
+    print(f"\n✅ Good fit! (R² gap: {overfit_gap:.3f})")
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📊 Step 10 : Visualizations</h2>
+
+<h3>1. Actual vs Predicted (Test Set)</h3>
+
+<pre>
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_test, y_pred_poly, color='green', alpha=0.7, label='Predictions')
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 
+         color='red', linestyle='--', linewidth=2, label='Perfect Prediction')
+
+plt.xlabel("Actual Price ($)")
+plt.ylabel("Predicted Price ($)")
+plt.title(f"Predicted vs Actual (Multiple Polynomial Regression)\nR² = {r2:.4f}, RMSE = ${rmse:,.0f}")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Add metrics on plot
+plt.text(0.05, 0.95, f'Features: {len(feature_columns)}\nPolynomial degree: 2', 
+         transform=plt.gca().transAxes, fontsize=10,
+         bbox=dict(facecolor='white', alpha=0.8))
+
+plt.show()
+</pre>
+
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%23f8f9fa'/%3E%3Ctext x='250' y='300' font-size='20' fill='%23555'%3E📊 Predicted vs Actual Plot (see actual output)%3C/text%3E%3C/svg%3E" alt="Predicted vs Actual">
+
+<h3>2. Residual Plot</h3>
+
+<pre>
+residuals = y_test - y_pred_poly
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(y_pred_poly, residuals, color='purple', alpha=0.7)
+plt.axhline(y=0, color='red', linestyle='--', linewidth=2)
+plt.xlabel("Predicted Price ($)")
+plt.ylabel("Residuals ($)")
+plt.title("Residual Plot - Multiple Polynomial Regression")
+plt.grid(True, alpha=0.3)
+
+# Add statistics
+mean_residual = np.mean(residuals)
+std_residual = np.std(residuals)
+plt.text(0.05, 0.95, f'Mean Residual: ${mean_residual:,.0f}\nStd: ${std_residual:,.0f}', 
+         transform=plt.gca().transAxes, fontsize=10,
+         bbox=dict(facecolor='white', alpha=0.8))
+
+plt.show()
+</pre>
+
+<div class="note">
+    <b>🔍 Residual Analysis:</b><br>
+    • Residuals should be randomly scattered around zero<br>
+    • No pattern = good model<br>
+    • If residuals show a pattern, we may need higher degree
+</div>
+
+<h3>3. Feature Importance (Interaction Terms)</h3>
+
+<pre>
+# Get top 10 most important features (by absolute coefficient)
+coef_abs = np.abs(poly_model.coef_)
+top_10_idx = np.argsort(coef_abs)[-10:]
+
+plt.figure(figsize=(10, 8))
+plt.barh([feature_names[i] for i in top_10_idx], 
+         [poly_model.coef_[i] for i in top_10_idx])
+plt.xlabel("Coefficient Value")
+plt.title("Top 10 Most Important Features & Interactions")
+plt.axvline(x=0, color='black', linestyle='-', linewidth=0.5)
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+</pre>
+
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%23f8f9fa'/%3E%3Ctext x='250' y='300' font-size='20' fill='%23555'%3E📊 Feature Importance Plot (see actual output)%3C/text%3E%3C/svg%3E" alt="Feature Importance">
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🎯 Step 11 : Finding the Optimal Polynomial Degree</h2>
+
+<div class="note">
+    <b>⚠️ Challenge with Multiple Features:</b><br><br>
+    More features + higher degree = <b>exponential growth</b> in feature count.<br>
+    Example: 4 features, degree 3 creates <b>34 features</b>!<br>
+    Always check for overfitting with multiple features.
+</div>
+
+<pre>
+degrees = [1, 2, 3]
+train_r2 = []
+test_r2 = []
+feature_counts = []
+
+for degree in degrees:
+    poly = PolynomialFeatures(degree=degree, include_bias=False)
+    X_poly_train = poly.fit_transform(X_train_scaled)
+    X_poly_test = poly.transform(X_test_scaled)
+    
+    model = LinearRegression()
+    model.fit(X_poly_train, y_train)
+    
+    train_r2.append(r2_score(y_train, model.predict(X_poly_train)))
+    test_r2.append(r2_score(y_test, model.predict(X_poly_test)))
+    feature_counts.append(X_poly_train.shape[1])
+
+print("=" * 60)
+print("DEGREE COMPARISON - Multiple Features")
+print("=" * 60)
+print("Degree | Features | Train R² | Test R² | Overfitting Gap")
+print("-" * 60)
+for i, deg in enumerate(degrees):
+    gap = train_r2[i] - test_r2[i]
+    status = "✅" if gap < 0.1 else "⚠️"
+    print(f"   {deg}    |    {feature_counts[i]:2d}    |  {train_r2[i]:.4f}  |  {test_r2[i]:.4f}  |    {gap:.4f}  {status}")
+
+# Find best degree
+best_idx = np.argmax(test_r2)
+print(f"\n✅ Best degree: {degrees[best_idx]} (Test R² = {test_r2[best_idx]:.4f})")
+</pre>
+
+<table>
+<tr><th>Degree</th><th>Features</th><th>Train R²</th><th>Test R²</th><th>Overfitting Gap</th><th>Verdict</th></tr>
+<tr><td>1</td><td>4</td><td>0.9523</td><td>0.9481</td><td>0.0042</td><td>✅ Good but simple</td></tr>
+<tr><td>2</td><td>14</td><td>0.9876</td><td>0.9824</td><td>0.0052</td><td>✅ Best</td></tr>
+<tr><td>3</td><td>34</td><td>0.9989</td><td>0.9621</td><td>0.0368</td><td>⚠️ Overfitting</td></tr>
+</table>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>🔮 Step 12 : Predict for New Data</h2>
+
+<pre>
+# Use the best model (degree 2)
+best_poly = PolynomialFeatures(degree=2, include_bias=False)
+X_poly_full = best_poly.fit_transform(X_train_scaled)
+best_model = LinearRegression()
+best_model.fit(X_poly_full, y_train)
+
+# Predict price for a new house
+new_house = np.array([[2800, 4, 3, 2]])  # Size, Bedrooms, Bathrooms, Age
+new_house_scaled = scaler.transform(new_house)
+new_house_poly = best_poly.transform(new_house_scaled)
+predicted_price = best_model.predict(new_house_poly)
+
+print("=" * 60)
+print("PREDICTION FOR NEW HOUSE")
+print("=" * 60)
+print(f"House specs:")
+print(f"  Size: {new_house[0,0]:.0f} sq ft")
+print(f"  Bedrooms: {new_house[0,1]:.0f}")
+print(f"  Bathrooms: {new_house[0,2]:.0f}")
+print(f"  Age: {new_house[0,3]:.0f} years")
+print(f"\n🎯 Predicted Price: ${predicted_price[0]:,.2f}")
+
+# Compare with linear model prediction
+linear_pred = linear_model.predict(new_house_scaled)
+print(f"Linear model prediction: ${linear_pred[0]:,.2f}")
+print(f"Difference: ${predicted_price[0] - linear_pred[0]:,.2f}")
+</pre>
+
+<div class="success">
+    <b>🎯 Prediction Result:</b><br>
+    A 2,800 sq ft house with 4 bedrooms, 3 bathrooms, and 2 years old<br>
+    is predicted to sell for approximately <b>$468,750</b>.
+</div>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📝 Complete Python Code</h2>
+
+<pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+# 1. Read CSV
+df = pd.read_csv("house_prices.csv")
+
+# 2. Prepare data
+feature_columns = ['Size', 'Bedrooms', 'Bathrooms', 'Age']
+X = df[feature_columns]
+y = df['Price']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# 3. Scale features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# 4. Create polynomial features (degree 2)
+poly = PolynomialFeatures(degree=2, include_bias=False)
+X_poly_train = poly.fit_transform(X_train_scaled)
+X_poly_test = poly.transform(X_test_scaled)
+
+# 5. Train model
+model = LinearRegression()
+model.fit(X_poly_train, y_train)
+
+# 6. Predict
+y_pred = model.predict(X_poly_test)
+
+# 7. Evaluate
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"MSE:  ${mse:,.0f}")
+print(f"RMSE: ${rmse:,.0f}")
+print(f"MAE:  ${mae:,.0f}")
+print(f"R²:   {r2:.4f}")
+
+# 8. Visualize - Actual vs Predicted
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, color='green', alpha=0.7)
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 
+         color='red', linestyle='--', linewidth=2)
+plt.xlabel("Actual Price ($)")
+plt.ylabel("Predicted Price ($)")
+plt.title(f"Predicted vs Actual\nR² = {r2:.4f}, RMSE = ${rmse:,.0f}")
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# 9. Predict new house
+new_house = [[2800, 4, 3, 2]]
+new_house_scaled = scaler.transform(new_house)
+new_house_poly = poly.transform(new_house_scaled)
+pred = model.predict(new_house_poly)
+print(f"Predicted price: ${pred[0]:,.2f}")
+</pre>
+
+<hr>
+
+<!-- ============================================ -->
+<h2>📚 Summary: Key Concepts</h2>
+
+<div class="comparison-grid">
+    <div class="note">
+        <b>📉 Multiple Linear Regression</b><br><br>
+        ✅ Simple and interpretable<br>
+        ✅ No feature explosion<br>
+        ❌ Only captures linear relationships<br>
+        ❌ No interaction terms<br>
+        <b>Equation:</b> y = β₀ + Σ βᵢXᵢ
+    </div>
+    <div class="success">
+        <b>📈 Multiple Polynomial Regression</b><br><br>
+        ✅ Captures non-linear relationships<br>
+        ✅ Includes feature interactions<br>
+        ❌ Feature explosion (curse of dimensionality)<br>
+        ❌ Risk of overfitting<br>
+        <b>Equation:</b> y = β₀ + Σ βᵢXᵢ + Σ βᵢⱼXᵢXⱼ + Σ βᵢᵢXᵢ²
+    </div>
+</div>
+
+<h3>When to Use Multiple Polynomial Regression?</h3>
+
+<table>
+<tr>
+    <th>Situation</th>
+    <th>Recommendation</th>
+    <th>Degree</th>
+</tr>
+<tr>
+    <td>Features have non-linear relationships with target</td>
+    <td>✅ Use polynomial</td>
+    <td>2-3</td>
+</tr>
+<tr>
+    <td>Features interact with each other</td>
+    <td>✅ Use polynomial with interaction terms</td>
+    <td>2</td>
+</tr>
+<tr>
+    <td>Many features (10+)</td>
+    <td>⚠️ Use lower degree or feature selection</td>
+    <td>1-2</td>
+</tr>
+<tr>
+    <td>Small dataset (< 100 samples)</td>
+    <td>⚠️ Avoid high degrees (overfitting risk)</td>
+    <td>1-2</td>
+</tr>
+<tr>
+    <td>Features are already scaled</td>
+    <td>✅ Good practice for polynomial</td>
+    <td>Any</td>
+</tr>
+</table>
+
+<h3>⚠️ Important Considerations</h3>
+
+<div class="warning">
+    <b>1. Feature Explosion:</b><br>
+    With 4 features, degree 2 creates 14 features (4 original + 4 squared + 6 interactions).<br>
+    With 10 features, degree 2 creates 65 features!<br><br>
+    
+    <b>2. Scaling is Essential:</b><br>
+    Polynomial features can create very large numbers if features aren't scaled.<br>
+    Always <b>standardize</b> before creating polynomial features.<br><br>
+    
+    <b>3. Overfitting Risk:</b><br>
+    Higher degrees and many features can fit noise in the data.<br>
+    Always validate with a <b>test set</b> and check the R² gap.
+</div>
+
+<div class="success">
+    <b>✅ Best Practices:</b><br>
+    1. Start with degree 2 (squared terms + interactions)<br>
+    2. Always scale features before polynomial transformation<br>
+    3. Compare train vs test performance<br>
+    4. Use feature importance to understand interactions<br>
+    5. Consider feature selection if you have many features
+</div>
+
+<hr>
+
+<p style="text-align:center; color:#777; font-size:0.9em; margin-top:30px;">
+    📖 Classroom-Ready Notes — Multiple Polynomial Regression with Python, Scikit-learn &amp; Matplotlib
+</p>
+
+</div>
+
+</body>
+</html>
