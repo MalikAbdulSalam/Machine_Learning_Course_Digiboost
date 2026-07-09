@@ -21,8 +21,7 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 6 : Polynomial Regression  single feature](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/27-Polynomial_regression_one_feature.html)
 
-[Lecture 7 : Polynomial Regression  Multiple features ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/27-Polynomial_regression_multiple_featues.html
-)
+[Lecture 7 : Polynomial Regression  Multiple features ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/27-Polynomial_regression_multiple_featues.html)
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
