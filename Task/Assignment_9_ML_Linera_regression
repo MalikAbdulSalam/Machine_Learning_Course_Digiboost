@@ -1,0 +1,19 @@
+ See datasets from this link
+
+https://www.geeksforgeeks.org/machine-learning/dataset-for-linear-regression/
+
+____________________________________________________________________________
+
+Download dataset named "6. Fish Market Dataset"
+
+
+Feature columns are
+ Weight	Length1	Length2	Length3	Heigh
+
+Label column 
+Width
+
+
+___________________________________________________________________________
+
+Apply preprocessing and linear Regression
