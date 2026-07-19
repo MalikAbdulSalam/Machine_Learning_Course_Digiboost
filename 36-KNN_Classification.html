@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-Nearest Neighbors (KNN) Classification Tutorial</title>
+
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background:#f4f7fb;
+            margin:0;
+            padding:20px;
+            line-height:1.7;
+        }
+
+        .container{
+            max-width:1000px;
+            margin:auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 0 15px rgba(0,0,0,0.15);
+        }
+
+        h1{
+            text-align:center;
+            color:#0d47a1;
+        }
+
+        h2{
+            color:#1565c0;
+            border-left:6px solid #1565c0;
+            padding-left:10px;
+            margin-top:35px;
+        }
+
+        p{
+            text-align:justify;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:15px;
+        }
+
+        table, th, td{
+            border:1px solid #999;
+        }
+
+        th{
+            background:#1976d2;
+            color:white;
+            padding:10px;
+        }
+
+        td{
+            padding:10px;
+            text-align:center;
+        }
+
+        pre{
+            background:#272822;
+            color:#f8f8f2;
+            padding:15px;
+            overflow:auto;
+            border-radius:8px;
+        }
+
+        code{
+            font-family:Consolas;
+        }
+
+        .note{
+            background:#fff3cd;
+            border-left:6px solid orange;
+            padding:15px;
+            margin-top:20px;
+        }
+
+        .success{
+            background:#e8f5e9;
+            border-left:6px solid green;
+            padding:15px;
+            margin-top:20px;
+        }
+
+        ul li{
+            margin-bottom:8px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>K-Nearest Neighbors (KNN) Classification</h1>
+
+<p>
+K-Nearest Neighbors (KNN) is a <b>Supervised Machine Learning Algorithm</b> used for
+<b>classification</b> and <b>regression</b>. It predicts the class of a new data point
+by looking at the classes of its nearest neighbors.
+</p>
+
+<hr>
+
+<h2>What is KNN?</h2>
+
+<p>
+Suppose you have a new student and want to decide whether the student belongs to
+Class A or Class B.
+</p>
+
+<p>
+Instead of creating a mathematical equation, KNN simply looks at the
+<b>K nearest students</b> and assigns the new student to the class that appears most frequently.
+</p>
+
+<div class="success">
+<b>Simple Definition:</b><br>
+KNN classifies a new data point based on the majority class of its K nearest neighbors.
+</div>
+
+<hr>
+
+<h2>How KNN Works</h2>
+
+<ol>
+    <li>Choose the value of <b>K</b>.</li>
+    <li>Calculate the distance from the new point to every training sample.</li>
+    <li>Select the K nearest neighbors.</li>
+    <li>Count how many neighbors belong to each class.</li>
+    <li>The class with the highest votes becomes the prediction.</li>
+</ol>
+
+<hr>
+
+<h2>Example Dataset</h2>
+
+<table>
+<tr>
+<th>Height (cm)</th>
+<th>Weight (kg)</th>
+<th>Class</th>
+</tr>
+
+<tr>
+<td>160</td>
+<td>55</td>
+<td>A</td>
+</tr>
+
+<tr>
+<td>165</td>
+<td>60</td>
+<td>A</td>
+</tr>
+
+<tr>
+<td>170</td>
+<td>65</td>
+<td>B</td>
+</tr>
+
+<tr>
+<td>175</td>
+<td>70</td>
+<td>B</td>
+</tr>
+
+</table>
+
+<br>
+
+Suppose the new person has:
+
+<ul>
+<li>Height = <b>168 cm</b></li>
+<li>Weight = <b>63 kg</b></li>
+</ul>
+
+For <b>K = 3</b>, the nearest neighbors are:
+
+<table>
+
+<tr>
+<th>Neighbor</th>
+<th>Class</th>
+</tr>
+
+<tr>
+<td>(165,60)</td>
+<td>A</td>
+</tr>
+
+<tr>
+<td>(170,65)</td>
+<td>B</td>
+</tr>
+
+<tr>
+<td>(160,55)</td>
+<td>A</td>
+</tr>
+
+</table>
+
+<br>
+
+<b>Votes:</b>
+
+<ul>
+<li>Class A = 2 Votes</li>
+<li>Class B = 1 Vote</li>
+</ul>
+
+<div class="success">
+Prediction = <b>Class A</b>
+</div>
+
+<hr>
+
+<h2>Choosing the Value of K</h2>
+
+<table>
+
+<tr>
+<th>K Value</th>
+<th>Behavior</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Very sensitive to noise (Overfitting)</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Commonly used and balanced</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>More stable predictions</td>
+</tr>
+
+<tr>
+<td>Large K</td>
+<td>Can underfit the data</td>
+</tr>
+
+</table>
+
+<div class="note">
+Usually an odd value of K (3,5,7...) is chosen to avoid ties in binary classification.
+</div>
+
+<hr>
+
+<h2>Distance Formula (Euclidean Distance)</h2>
+
+<p>KNN commonly uses Euclidean Distance.</p>
+
+<pre>
+Distance = √((x₂ − x₁)² + (y₂ − y₁)²)
+</pre>
+
+Example:
+
+<pre>
+Point A = (160,55)
+
+Point B = (168,63)
+
+Distance =
+√((168-160)² + (63-55)²)
+
+= √(8² + 8²)
+
+= √128
+
+≈ 11.31
+</pre>
+
+<hr>
+
+<h2>Advantages</h2>
+
+<ul>
+<li>Very easy to understand.</li>
+<li>No training phase.</li>
+<li>Works well for small datasets.</li>
+<li>Can solve multi-class classification.</li>
+<li>Simple implementation.</li>
+</ul>
+
+<hr>
+
+<h2>Disadvantages</h2>
+
+<ul>
+<li>Slow for large datasets.</li>
+<li>Requires feature scaling.</li>
+<li>Sensitive to noisy data.</li>
+<li>Choosing K is important.</li>
+<li>Memory intensive because all training data is stored.</li>
+</ul>
+
+<hr>
+
+<h2>Python Example</h2>
+
+<pre><code>
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+data = {
+    "Height":[160,165,170,175,180,185],
+    "Weight":[55,60,65,70,75,80],
+    "Class":[0,0,0,1,1,1]
+}
+
+df = pd.DataFrame(data)
+
+X = df[["Height","Weight"]]
+y = df["Class"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+scaler = StandardScaler()
+
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+knn = KNeighborsClassifier(n_neighbors=3)
+
+knn.fit(X_train, y_train)
+
+y_pred = knn.predict(X_test)
+
+print("Prediction:", y_pred)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</code></pre>
+
+<hr>
+
+<h2>Real-Life Applications</h2>
+
+<ul>
+<li>Face Recognition</li>
+<li>Handwriting Recognition</li>
+<li>Email Spam Detection</li>
+<li>Medical Disease Classification</li>
+<li>Recommendation Systems</li>
+<li>Image Classification</li>
+<li>Customer Segmentation</li>
+<li>Fraud Detection</li>
+</ul>
+
+<hr>
+
+<h2>Summary</h2>
+
+<table>
+
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>Algorithm Type</td>
+<td>Supervised Learning</td>
+</tr>
+
+<tr>
+<td>Used For</td>
+<td>Classification & Regression</td>
+</tr>
+
+<tr>
+<td>Training</td>
+<td>No Explicit Training</td>
+</tr>
+
+<tr>
+<td>Main Idea</td>
+<td>Nearest Neighbor Voting</td>
+</tr>
+
+<tr>
+<td>Distance Metric</td>
+<td>Euclidean Distance</td>
+</tr>
+
+<tr>
+<td>Best For</td>
+<td>Small and Medium Datasets</td>
+</tr>
+
+</table>
+
+<br>
+
+<div class="success">
+<b>One-Line Definition:</b><br><br>
+
+KNN predicts the class of a new data point by looking at its
+<b>K nearest neighbors</b> and selecting the class with the
+<b>majority vote</b>.
+</div>
+
+</div>
+
+</body>
+</html>
