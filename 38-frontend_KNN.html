@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✨ KNN Classifier Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255,255,255,0.06) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.1;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .shape:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      background: #fff;
+      top: -100px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      background: #fff;
+      bottom: -50px;
+      left: -50px;
+      animation-delay: -5s;
+    }
+
+    .shape:nth-child(3) {
+      width: 150px;
+      height: 150px;
+      background: #fff;
+      top: 50%;
+      left: 50%;
+      animation-delay: -10s;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 3.5rem;
+      padding: 3rem;
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 40px 100px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .header h1 {
+      font-weight: 800;
+      font-size: 2rem;
+      color: white;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+      letter-spacing: -0.02em;
+    }
+
+    .header h1 span {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .status-badge {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 0.5rem 1.2rem;
+      border-radius: 2rem;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .subhead {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 2.5rem;
+      padding: 1rem 1.5rem;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 1.5rem;
+      border-left: 4px solid #f093fb;
+      font-weight: 400;
+      font-size: 0.95rem;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .subhead i {
+      color: #f093fb;
+      font-size: 1.2rem;
+    }
+
+    .subhead .highlight {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      padding: 0.2rem 0.8rem;
+      border-radius: 1rem;
+      color: white;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    /* Dataset Preview */
+    .dataset-preview {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 2rem;
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .dataset-preview:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.01);
+    }
+
+    .dataset-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .dataset-header h3 {
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .dataset-header h3 i {
+      color: #f093fb;
+    }
+
+    .dataset-badge {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .grid-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem;
+      color: white;
+    }
+
+    .grid-header {
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .grid-item {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    }
+
+    .grid-item:last-child {
+      border-bottom: none;
+    }
+
+    .badge-class {
+      display: inline-block;
+      padding: 0.15rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .badge-class.class1 {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      color: white;
+    }
+
+    .badge-class.class0 {
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      color: white;
+    }
+
+    /* Prediction Area */
+    .prediction-area {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 2rem;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      margin-bottom: 1.5rem;
+    }
+
+    .prediction-area h3 {
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .prediction-area h3 i {
+      color: #f093fb;
+    }
+
+    .input-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: flex-end;
+    }
+
+    .input-field {
+      flex: 1 1 180px;
+      min-width: 150px;
+    }
+
+    .input-field label {
+      display: block;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .input-field .input-wrapper {
+      position: relative;
+    }
+
+    .input-field .input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.9rem;
+    }
+
+    .input-field input {
+      width: 100%;
+      padding: 0.9rem 1rem 0.9rem 2.8rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1.5rem;
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      outline: none;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .input-field input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+      font-weight: 400;
+    }
+
+    .input-field input:focus {
+      border-color: #f093fb;
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 4px rgba(240, 147, 251, 0.15);
+      transform: scale(1.02);
+    }
+
+    .input-field input:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-predict {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border: none;
+      padding: 0.9rem 2.5rem;
+      border-radius: 3rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      flex: 0 0 auto;
+    }
+
+    .btn-predict i {
+      font-size: 1rem;
+    }
+
+    .btn-predict:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(245, 87, 108, 0.4);
+    }
+
+    .btn-predict:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* Result Box */
+    .result-box {
+      margin-top: 2rem;
+      padding: 1.5rem 2rem;
+      border-radius: 2rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+      transition: all 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(240, 147, 251, 0.1) 0%, transparent 70%);
+      animation: shimmer 5s infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
+    }
+
+    .result-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-value {
+      font-weight: 800;
+      font-size: 2.5rem;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-class-badge {
+      font-weight: 700;
+      padding: 0.4rem 1.5rem;
+      border-radius: 3rem;
+      font-size: 0.9rem;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
+    }
+
+    .result-class-badge.class0 {
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      color: white;
+      box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .result-class-badge.class1 {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      color: white;
+      box-shadow: 0 5px 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .result-class-badge.waiting {
+      background: rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .result-detail {
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 400;
+      font-size: 0.85rem;
+      margin-left: auto;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .result-detail i {
+      color: #f093fb;
+    }
+
+    /* Footer */
+    .footer-note {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.8rem;
+    }
+
+    .footer-note .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .footer-note a {
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .footer-note a:hover {
+      color: rgba(255, 255, 255, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .footer-note i {
+      color: #f093fb;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .card {
+        padding: 1.5rem;
+        border-radius: 2rem;
+      }
+
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .logo-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.5rem;
+      }
+
+      .input-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-predict {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .result-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .result-detail {
+        margin-left: 0;
+      }
+
+      .grid-table {
+        font-size: 0.8rem;
+        gap: 0.3rem;
+      }
+
+      .status-badge {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.8rem;
+      }
+
+      .subhead {
+        font-size: 0.85rem;
+        padding: 0.8rem 1rem;
+      }
+
+      .result-value {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 1rem;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header h1 {
+        font-size: 1.3rem;
+      }
+
+      .dataset-preview {
+        padding: 1rem;
+      }
+
+      .prediction-area {
+        padding: 1rem;
+      }
+
+      .grid-table {
+        font-size: 0.7rem;
+      }
+
+      .input-field input {
+        padding: 0.7rem 1rem 0.7rem 2.5rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating background shapes -->
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <div class="card">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <div class="logo-icon">
+          <i class="fas fa-brain"></i>
+        </div>
+        <h1>KNN <span>Classifier</span></h1>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        Model Ready
+      </div>
+    </div>
+
+    <div class="subhead">
+      <i class="fas fa-robot"></i>
+      <span>Height & Weight · 2‑class prediction</span>
+      <span class="highlight">k=3</span>
+      <span>StandardScaler</span>
+      <i class="fas fa-arrow-right" style="margin-left: auto; opacity: 0.5;"></i>
+      <span style="opacity: 0.6;">6 training samples</span>
+    </div>
+
+    <!-- Dataset Preview -->
+    <div class="dataset-preview">
+      <div class="dataset-header">
+        <h3><i class="fas fa-table"></i> Training Dataset</h3>
+        <span class="dataset-badge"><i class="far fa-clock"></i> Pre-loaded</span>
+      </div>
+      <div class="grid-table">
+        <div class="grid-header">Height (cm)</div>
+        <div class="grid-header">Weight (kg)</div>
+        <div class="grid-header">Class</div>
+
+        <div class="grid-item">160</div>
+        <div class="grid-item">55</div>
+        <div class="grid-item"><span class="badge-class class0">0</span></div>
+
+        <div class="grid-item">165</div>
+        <div class="grid-item">60</div>
+        <div class="grid-item"><span class="badge-class class0">0</span></div>
+
+        <div class="grid-item">170</div>
+        <div class="grid-item">65</div>
+        <div class="grid-item"><span class="badge-class class0">0</span></div>
+
+        <div class="grid-item">175</div>
+        <div class="grid-item">70</div>
+        <div class="grid-item"><span class="badge-class class1">1</span></div>
+
+        <div class="grid-item">180</div>
+        <div class="grid-item">75</div>
+        <div class="grid-item"><span class="badge-class class1">1</span></div>
+
+        <div class="grid-item">185</div>
+        <div class="grid-item">80</div>
+        <div class="grid-item"><span class="badge-class class1">1</span></div>
+      </div>
+    </div>
+
+    <!-- Prediction Area -->
+    <div class="prediction-area">
+      <h3><i class="fas fa-wand-magic-sparkles"></i> Predict New Sample</h3>
+      <div class="input-group">
+        <div class="input-field">
+          <label for="heightInput"><i class="fas fa-arrow-up"></i> Height (cm)</label>
+          <div class="input-wrapper">
+            <i class="fas fa-ruler-vertical input-icon"></i>
+            <input type="number" id="heightInput" placeholder="e.g. 172" step="0.1" value="172">
+          </div>
+        </div>
+        <div class="input-field">
+          <label for="weightInput"><i class="fas fa-weight-scale"></i> Weight (kg)</label>
+          <div class="input-wrapper">
+            <i class="fas fa-weight input-icon"></i>
+            <input type="number" id="weightInput" placeholder="e.g. 68" step="0.1" value="68">
+          </div>
+        </div>
+        <button class="btn-predict" id="predictBtn">
+          <i class="fas fa-rocket"></i> Predict
+        </button>
+      </div>
+
+      <!-- Result Display -->
+      <div class="result-box" id="resultBox">
+        <span class="result-label"><i class="fas fa-bullseye"></i> Prediction</span>
+        <span class="result-value" id="predictionValue">—</span>
+        <span class="result-class-badge waiting" id="classBadge">Ready</span>
+        <span class="result-detail" id="detailInfo">
+          <i class="fas fa-arrows-up-down"></i> k=3 · scaled
+        </span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-note">
+      <span>
+        <i class="fas fa-code"></i> Built with scikit‑learn KNN
+      </span>
+      <div class="footer-links">
+        <a href="#"><i class="fab fa-github"></i> Source</a>
+        <a href="#"><i class="fas fa-chart-line"></i> Accuracy</a>
+        <span><i class="fas fa-database"></i> StandardScaler</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Training data (same as Python)
+      const trainData = [
+        { height: 160, weight: 55, class: 0 },
+        { height: 165, weight: 60, class: 0 },
+        { height: 170, weight: 65, class: 0 },
+        { height: 175, weight: 70, class: 1 },
+        { height: 180, weight: 75, class: 1 },
+        { height: 185, weight: 80, class: 1 }
+      ];
+
+      // Compute mean & std for StandardScaler
+      function computeScaler(data, key) {
+        const values = data.map(d => d[key]);
+        const mean = values.reduce((a, b) => a + b, 0) / values.length;
+        const variance = values.reduce((a, b) => a + (b - mean) ** 2, 0) / values.length;
+        const std = Math.sqrt(variance);
+        return { mean, std };
+      }
+
+      const heightStats = computeScaler(trainData, 'height');
+      const weightStats = computeScaler(trainData, 'weight');
+
+      function scaleValue(value, stats) {
+        return (value - stats.mean) / stats.std;
+      }
+
+      // KNN predict (k=3)
+      function predictKNN(height, weight, k = 3) {
+        const scaledHeight = scaleValue(height, heightStats);
+        const scaledWeight = scaleValue(weight, weightStats);
+
+        const distances = trainData.map(item => {
+          const scaledH = scaleValue(item.height, heightStats);
+          const scaledW = scaleValue(item.weight, weightStats);
+          const dist = Math.sqrt((scaledHeight - scaledH) ** 2 + (scaledWeight - scaledW) ** 2);
+          return { dist, class: item.class };
+        });
+
+        distances.sort((a, b) => a.dist - b.dist);
+        const kNearest = distances.slice(0, k);
+
+        const classCount = { 0: 0, 1: 0 };
+        kNearest.forEach(item => classCount[item.class]++);
+        const predictedClass = classCount[0] >= classCount[1] ? 0 : 1;
+
+        return {
+          predictedClass,
+          scaledFeatures: [scaledHeight, scaledWeight],
+          neighbors: kNearest
+        };
+      }
+
+      // UI Elements
+      const heightInput = document.getElementById('heightInput');
+      const weightInput = document.getElementById('weightInput');
+      const predictBtn = document.getElementById('predictBtn');
+      const predictionValue = document.getElementById('predictionValue');
+      const classBadge = document.getElementById('classBadge');
+      const detailInfo = document.getElementById('detailInfo');
+
+      function updatePrediction() {
+        let height = parseFloat(heightInput.value);
+        let weight = parseFloat(weightInput.value);
+
+        if (isNaN(height) || isNaN(weight)) {
+          predictionValue.textContent = '⚠️';
+          classBadge.textContent = 'Invalid Input';
+          classBadge.className = 'result-class-badge waiting';
+          detailInfo.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Enter valid numbers';
+          return;
+        }
+
+        // Clamp values
+        if (height < 100) height = 100;
+        if (height > 220) height = 220;
+        if (weight < 30) weight = 30;
+        if (weight > 130) weight = 130;
+
+        const result = predictKNN(height, weight, 3);
+        const pred = result.predictedClass;
+
+        // Update UI with animation
+        predictionValue.textContent = pred;
+        classBadge.textContent = `Class ${pred}`;
+        classBadge.className = `result-class-badge ${pred === 0 ? 'class0' : 'class1'}`;
+
+        const [scH, scW] = result.scaledFeatures;
+        detailInfo.innerHTML = `<i class="fas fa-arrows-up-down"></i> scaled [${scH.toFixed(2)}, ${scW.toFixed(2)}] · k=3`;
+      }
+
+      // Event listeners
+      predictBtn.addEventListener('click', updatePrediction);
+      heightInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') updatePrediction(); });
+      weightInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') updatePrediction(); });
+
+      // Initial prediction on load
+      window.addEventListener('load', () => {
+        heightInput.value = 172;
+        weightInput.value = 68;
+        updatePrediction();
+      });
+    })();
+  </script>
+</body>
+</html>
