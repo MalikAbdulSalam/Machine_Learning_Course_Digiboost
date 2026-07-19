@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ML Types: Regression · Classification · Clustering</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f4f7fb;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            line-height: 1.5;
+            color: #0b1c2f;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            padding: 2.5rem 2.8rem;
+            box-shadow: 0 20px 40px -12px rgba(0, 20, 40, 0.2);
+            transition: 0.2s;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .subhead {
+            font-size: 1.05rem;
+            color: #2c3f58;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1.2rem;
+            background: #f0f6ff;
+            border-radius: 0 14px 14px 0;
+            padding: 0.7rem 1.2rem;
+            margin-bottom: 2rem;
+            font-weight: 450;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .comparison-table thead {
+            background: #0d1f33;
+            color: white;
+        }
+
+        .comparison-table th {
+            padding: 1rem 1rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 1rem 1rem;
+            background: #ffffff;
+            border-bottom: 1px solid #e9edf3;
+        }
+
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tbody tr:hover td {
+            background: #f8faff;
+        }
+
+        .badge-ml {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            background: #dbeafe;
+            color: #1e4b8b;
+        }
+
+        .badge-sup {
+            background: #d1e7ff;
+            color: #0047ab;
+        }
+
+        .badge-unsup {
+            background: #e6d9ff;
+            color: #5b2b9c;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 2.3rem 0 0.8rem 0;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title .emoji-bg {
+            background: #eef3fa;
+            padding: 0.2rem 0.7rem;
+            border-radius: 60px;
+            font-size: 1.2rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.8rem;
+            margin: 1.2rem 0 2rem 0;
+        }
+
+        .ml-card {
+            background: #fafcff;
+            border-radius: 20px;
+            padding: 1.5rem 1.5rem 1.8rem;
+            border: 1px solid #e3eaf2;
+            transition: 0.15s;
+        }
+
+        .ml-card:hover {
+            border-color: #b8ccf0;
+            background: #f6faff;
+        }
+
+        .ml-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-card .tag {
+            font-size: 0.7rem;
+            background: #d4e2f7;
+            padding: 0.1rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 500;
+            color: #1f3d6b;
+            margin-left: 6px;
+        }
+
+        .ml-card ul {
+            list-style: none;
+            margin-top: 0.8rem;
+        }
+
+        .ml-card li {
+            padding: 0.3rem 0 0.3rem 1.4rem;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') left center no-repeat;
+            background-size: 14px;
+        }
+
+        .example-box {
+            background: #f1f6fd;
+            border-radius: 14px;
+            padding: 1rem 1.4rem;
+            margin: 0.8rem 0 0.3rem 0;
+            border-left: 4px solid #3b82f6;
+            font-size: 0.95rem;
+        }
+
+        .example-box strong {
+            color: #0b2d53;
+        }
+
+        .highlight-output {
+            background: #0d1a2b;
+            color: #d6e3ff;
+            padding: 0.25rem 0.9rem;
+            border-radius: 40px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-top: 0.35rem;
+        }
+
+        .real-life {
+            background: #edf3fa;
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            margin: 2.2rem 0 1.8rem 0;
+            border: 1px solid #d6e2f0;
+        }
+
+        .real-life h3 {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.6rem;
+        }
+
+        .real-life ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .real-life li {
+            background: white;
+            padding: 0.4rem 1.2rem 0.4rem 1.2rem;
+            border-radius: 40px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            border: 1px solid #dae3ef;
+            font-size: 0.95rem;
+        }
+
+        .remember-box {
+            background: #0d1f33;
+            color: #e3edfc;
+            padding: 1.2rem 1.8rem;
+            border-radius: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.8rem 1.5rem;
+            margin: 1.8rem 0 0.5rem 0;
+        }
+
+        .remember-box span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-box .pill {
+            background: #2a4160;
+            padding: 0.25rem 0.9rem;
+            border-radius: 60px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .summary {
+            background: #eef3fa;
+            padding: 1rem 1.8rem;
+            border-radius: 18px;
+            margin-top: 1.2rem;
+            border: 1px solid #d8e2ef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 2rem;
+        }
+
+        .summary strong {
+            font-weight: 600;
+            color: #0b1e33;
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 1.5rem; }
+            h1 { font-size: 1.7rem; }
+            .comparison-table th, .comparison-table td { padding: 0.8rem 0.7rem; font-size: 0.85rem; }
+            .card-grid { grid-template-columns: 1fr; }
+            .remember-box { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>
+        <span>📊 Regression · Classification · Clustering</span>
+        <span style="font-size:0.9rem; font-weight:400; background:#eef3fa; padding:0.1rem 1rem; border-radius:60px; color:#1f3f62;">ML problem types</span>
+    </h1>
+    <div class="subhead">
+        Three core approaches in Machine Learning — each solves a different kind of problem.
+    </div>
+
+    <!-- Comparison table -->
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Regression</th>
+                <th>Classification</th>
+                <th>Clustering</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Purpose</strong></td>
+                <td>Predict a <strong>number</strong></td>
+                <td>Predict a <strong>category / class</strong></td>
+                <td>Group similar data <strong>without labels</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Output</strong></td>
+                <td>Continuous value</td>
+                <td>Discrete label</td>
+                <td>Clusters (groups)</td>
+            </tr>
+            <tr>
+                <td><strong>Learning Type</strong></td>
+                <td><span class="badge-ml badge-sup">Supervised</span></td>
+                <td><span class="badge-ml badge-sup">Supervised</span></td>
+                <td><span class="badge-ml badge-unsup">Unsupervised</span></td>
+            </tr>
+            <tr>
+                <td><strong>Example</strong></td>
+                <td>House price = $250,000</td>
+                <td>Email = Spam / Not Spam</td>
+                <td>Group customers into 3 segments</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- 3 cards: Regression, Classification, Clustering -->
+    <div class="card-grid">
+        <!-- Regression -->
+        <div class="ml-card">
+            <h3>📈 Regression <span class="tag">Supervised</span></h3>
+            <p style="color:#1f3a57; margin-bottom: 0.2rem;">Used when the output is a <strong>number</strong>.<br />The model learns from labeled data.</p>
+            <ul>
+                <li>Predict house price</li>
+                <li>Predict student marks</li>
+                <li>Predict tomorrow's temperature</li>
+            </ul>
+            <div class="example-box">
+                <strong>Output:</strong><br />
+                <span class="highlight-output">House Price = $325,000</span>
+            </div>
+        </div>
+
+        <!-- Classification -->
+        <div class="ml-card">
+            <h3>🏷️ Classification <span class="tag">Supervised</span></h3>
+            <p style="color:#1f3a57; margin-bottom: 0.2rem;">Used when the output is a <strong>category (class)</strong>.<br />The model learns from labeled data.</p>
+            <ul>
+                <li>Spam or Not Spam</li>
+                <li>Disease or No Disease</li>
+                <li>Cat or Dog · Pass or Fail</li>
+            </ul>
+            <div class="example-box">
+                <strong>Output:</strong><br />
+                <span class="highlight-output">Email = Spam</span>
+            </div>
+        </div>
+
+        <!-- Clustering -->
+        <div class="ml-card">
+            <h3>🔮 Clustering <span class="tag" style="background:#dac6f5; color:#3f1f7a;">Unsupervised</span></h3>
+            <p style="color:#1f3a57; margin-bottom: 0.2rem;">Used when there are <strong>no labels</strong>.<br />The model finds groups of similar data automatically.</p>
+            <ul>
+                <li>Customer segmentation</li>
+                <li>Group similar news articles</li>
+                <li>Organize photos by similar faces</li>
+            </ul>
+            <div class="example-box">
+                <strong>Output:</strong><br />
+                <span class="highlight-output">Cluster 1 → Young Customers</span><br />
+                <span class="highlight-output" style="background:#1a2d48;">Cluster 2 → Middle-aged</span><br />
+                <span class="highlight-output" style="background:#233b5c;">Cluster 3 → Senior</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-life example: School -->
+    <div class="real-life">
+        <h3>🏫 Simple Real-Life Example — <span style="font-weight:400;">Imagine a school</span></h3>
+        <ul>
+            <li><strong>Regression</strong> → Predict a student's marks <span style="background:#eef3fa; padding:0.1rem 0.7rem; border-radius:30px;">85.5</span></li>
+            <li><strong>Classification</strong> → Predict whether the student will <strong>Pass</strong> or <strong>Fail</strong></li>
+            <li><strong>Clustering</strong> → Automatically group students into <em>High Performers</em>, <em>Average</em>, and <em>Weak</em> based on their data</li>
+        </ul>
+    </div>
+
+    <!-- Easy way to remember -->
+    <div class="remember-box">
+        <span>🧠 <strong>Easy Way to Remember</strong></span>
+        <span><span class="pill">📊 Regression</span> = Predict a Number <span style="color:#90b4e0;">(Price, Salary, Temperature)</span></span>
+        <span><span class="pill">🏷️ Classification</span> = Predict a Category <span style="color:#90b4e0;">(Yes/No, Cat/Dog, Spam)</span></span>
+        <span><span class="pill">🔮 Clustering</span> = Find Similar Groups <span style="color:#90b4e0;">(No labels required)</span></span>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+        <span><strong>✅ Regression</strong> → Numerical prediction</span>
+        <span><strong>✅ Classification</strong> → Category prediction</span>
+        <span><strong>✅ Clustering</strong> → Automatic grouping of similar data</span>
+    </div>
+
+    <div style="margin-top: 1.2rem; font-size:0.85rem; color:#3e5a79; border-top:1px solid #e1eaf3; padding-top:0.8rem; display: flex; gap: 1.8rem; flex-wrap: wrap;">
+        <span>⚡ Supervised: uses labeled data</span>
+        <span>⚡ Unsupervised: finds hidden patterns</span>
+        <span>🧩 scikit-learn · TensorFlow · PyTorch</span>
+    </div>
+
+</div>
+</body>
+</html>
