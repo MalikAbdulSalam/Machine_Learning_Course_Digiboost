@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Regression Metrics · R² · MAE · MSE · RMSE · Adjusted R²</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f8fe;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            color: #0b1c2f;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            padding: 2.5rem 2.8rem;
+            box-shadow: 0 20px 40px -12px rgba(0, 20, 40, 0.18);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0.2rem;
+        }
+
+        .subhead {
+            font-size: 1.05rem;
+            color: #1f3d62;
+            background: #edf4fd;
+            padding: 0.6rem 1.3rem;
+            border-radius: 0 14px 14px 0;
+            border-left: 4px solid #2563eb;
+            margin-bottom: 2rem;
+        }
+
+        /* ----- table style ----- */
+        .table-wrap {
+            overflow-x: auto;
+            margin-bottom: 2.5rem;
+            border-radius: 18px;
+            border: 1px solid #e6edf6;
+        }
+
+        .metric-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            background: white;
+        }
+
+        .metric-table thead {
+            background: #0d1f33;
+            color: white;
+        }
+
+        .metric-table th {
+            padding: 1rem 1rem;
+            font-weight: 600;
+            text-align: left;
+            letter-spacing: 0.2px;
+        }
+
+        .metric-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid #eef2f8;
+            background: white;
+        }
+
+        .metric-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .metric-table tbody tr:hover td {
+            background: #fafcff;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.75rem;
+            border-radius: 30px;
+            background: #dbeafe;
+            color: #1e4b8b;
+        }
+
+        .badge-green {
+            background: #d1fae5;
+            color: #0b5e42;
+        }
+
+        .highlight-better {
+            background: #eef6ff;
+            padding: 0.05rem 0.5rem;
+            border-radius: 20px;
+            font-weight: 500;
+            color: #0751b3;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 2rem 0 0.8rem 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .metric-block {
+            background: #fafdff;
+            border-radius: 20px;
+            padding: 1.4rem 1.8rem;
+            margin: 1.4rem 0;
+            border: 1px solid #e4ecf6;
+        }
+
+        .metric-block h3 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.2rem;
+        }
+
+        .metric-block .formula {
+            background: #0d1a2b;
+            color: #cbdffc;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin: 0.25rem 0 0.4rem 0;
+        }
+
+        .example-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.2rem;
+            background: #f1f6fe;
+            padding: 0.8rem 1.2rem;
+            border-radius: 14px;
+            margin: 0.6rem 0;
+        }
+
+        .example-grid .item {
+            background: white;
+            padding: 0.1rem 0.9rem;
+            border-radius: 30px;
+            border: 1px solid #dde6f2;
+            font-size: 0.9rem;
+        }
+
+        .interpret {
+            background: #f0f5fc;
+            padding: 0.6rem 1.2rem;
+            border-radius: 14px;
+            margin-top: 0.5rem;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.8rem;
+            margin: 1.2rem 0 1.8rem 0;
+        }
+
+        .simple-card {
+            background: #f8faff;
+            border-radius: 20px;
+            padding: 1.2rem 1.6rem 1.6rem;
+            border: 1px solid #e2ecf7;
+        }
+
+        .simple-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-compare {
+            background: #0d1f33;
+            color: #e8f0fc;
+            border-radius: 20px;
+            padding: 1.2rem 1.8rem;
+            margin: 1.8rem 0 1rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem 2rem;
+            align-items: center;
+        }
+
+        .quick-compare .pill {
+            background: #233e60;
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .summary-box {
+            background: #eef4fb;
+            border-radius: 18px;
+            padding: 1.2rem 1.8rem;
+            margin-top: 1.5rem;
+            border: 1px solid #d6e2f0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 2rem;
+        }
+
+        .summary-box strong {
+            color: #0d2542;
+        }
+
+        @media (max-width: 720px) {
+            .container { padding: 1.5rem; }
+            h1 { font-size: 1.6rem; }
+            .two-col { grid-template-columns: 1fr; }
+            .metric-table th, .metric-table td { padding: 0.7rem 0.6rem; font-size: 0.82rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>
+        <span>📊 Regression Metrics</span>
+        <span style="font-size:0.9rem; font-weight:400; background:#e8effa; padding:0.1rem 1rem; border-radius:60px; color:#1a3d62;">R² · MAE · MSE · RMSE · Adjusted R²</span>
+    </h1>
+    <div class="subhead">
+        Common evaluation metrics used in regression models — explained with examples and simple language.
+    </div>
+
+    <!-- Main comparison table -->
+    <div class="table-wrap">
+        <table class="metric-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Full Name</th>
+                    <th>Meaning</th>
+                    <th>Better Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>R²</strong></td>
+                    <td>R-Squared (Coefficient of Determination)</td>
+                    <td>Measures how well the model explains the variation in the data.</td>
+                    <td><span class="highlight-better">Closer to 1</span></td>
+                </tr>
+                <tr>
+                    <td><strong>MAE</strong></td>
+                    <td>Mean Absolute Error</td>
+                    <td>Average of the absolute prediction errors.</td>
+                    <td><span class="highlight-better">Closer to 0</span></td>
+                </tr>
+                <tr>
+                    <td><strong>MSE</strong></td>
+                    <td>Mean Squared Error</td>
+                    <td>Average of the squared prediction errors. Penalizes large errors more heavily.</td>
+                    <td><span class="highlight-better">Closer to 0</span></td>
+                </tr>
+                <tr>
+                    <td><strong>RMSE</strong></td>
+                    <td>Root Mean Squared Error</td>
+                    <td>Square root of MSE. Error is in the same unit as the target variable.</td>
+                    <td><span class="highlight-better">Closer to 0</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Adjusted R²</strong></td>
+                    <td>Adjusted R-Squared</td>
+                    <td>Similar to R² but penalizes adding unnecessary features.</td>
+                    <td><span class="highlight-better">Closer to 1</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 1. R² -->
+    <div class="metric-block">
+        <h3>1. R² (R-Squared) <span class="badge">Goodness of fit</span></h3>
+        <p style="margin-bottom:0.25rem;">Measures how much of the variation in the target variable is explained by the model. <strong>Range: 0 to 1</strong> (can be negative for very poor models).</p>
+        <div class="example-grid">
+            <span class="item">R² = 0.95 → Model explains 95% of the data variation.</span>
+            <span class="item">R² = 0.60 → Model explains 60% of the variation.</span>
+        </div>
+        <div class="interpret">
+            <strong>Interpretation</strong><br />
+            1.0 = Perfect prediction &nbsp;·&nbsp; 0.8–1.0 = Excellent &nbsp;·&nbsp; 0.6–0.8 = Good &nbsp;·&nbsp; &lt;0.5 = Weak model
+        </div>
+        <div style="margin-top:0.8rem; background:#ecf3fb; padding:0.6rem 1.2rem; border-radius:14px;">
+            <span style="font-weight:500;">🧠 Simple language:</span> “My model explains this much of the data.” <br />
+            <span style="background:#0d1a2b; color:#d2e2ff; padding:0.1rem 0.8rem; border-radius:30px; font-size:0.85rem;">R² = 0.90 → Model understands 90% of the data.</span>
+        </div>
+    </div>
+
+    <!-- 2. MAE -->
+    <div class="metric-block">
+        <h3>2. MAE (Mean Absolute Error) <span class="badge">Average error</span></h3>
+        <p>Average of the absolute differences between actual and predicted values. Treats all errors equally.</p>
+        <div class="formula">MAE = (1/n) · Σ |y − ŷ|</div>
+        <div style="background:#f2f8ff; border-radius:14px; padding:0.7rem 1.2rem; margin:0.4rem 0;">
+            <strong>Example:</strong><br />
+            Actual: 100, 120, 150 &nbsp;·&nbsp; Predicted: 95, 125, 145 &nbsp;·&nbsp; Errors: 5, 5, 5 <br />
+            <span class="highlight-better">MAE = (5+5+5) / 3 = 5</span>
+        </div>
+        <div class="interpret">
+            <strong>Interpretation:</strong> On average, predictions are 5 units away from the true values.
+        </div>
+        <div style="margin-top:0.6rem; background:#ecf3fb; padding:0.5rem 1.2rem; border-radius:14px;">
+            🗣️ <strong>Simple:</strong> “On average, how many units am I wrong?” &nbsp;—&nbsp; Lower is better.
+        </div>
+    </div>
+
+    <!-- 3. MSE -->
+    <div class="metric-block">
+        <h3>3. MSE (Mean Squared Error) <span class="badge">Penalizes large errors</span></h3>
+        <p>Squares each error before averaging. Large errors have a much bigger impact.</p>
+        <div class="formula">MSE = (1/n) · Σ (y − ŷ)²</div>
+        <div style="background:#f2f8ff; border-radius:14px; padding:0.7rem 1.2rem; margin:0.4rem 0;">
+            <strong>Example:</strong> Errors: 5, 5, 10 &nbsp;→&nbsp; Squared: 25, 25, 100 <br />
+            <span class="highlight-better">MSE = (25+25+100) / 3 = 50</span>
+        </div>
+        <div class="interpret">
+            <strong>Use when:</strong> You want to strongly penalize large prediction mistakes.
+        </div>
+        <div style="margin-top:0.6rem; background:#ecf3fb; padding:0.5rem 1.2rem; border-radius:14px;">
+            🗣️ <strong>Simple:</strong> “How bad are my mistakes, especially big ones?” &nbsp;—&nbsp; Lower is better.
+        </div>
+    </div>
+
+    <!-- 4. RMSE -->
+    <div class="metric-block">
+        <h3>4. RMSE (Root Mean Squared Error) <span class="badge">Same unit as target</span></h3>
+        <p>Square root of MSE. Easier to understand because it's in the same units as the target.</p>
+        <div class="formula">RMSE = √MSE</div>
+        <div style="background:#f2f8ff; border-radius:14px; padding:0.7rem 1.2rem; margin:0.4rem 0;">
+            <strong>Example:</strong> MSE = 50 &nbsp;→&nbsp; <span class="highlight-better">RMSE = √50 ≈ 7.07</span>
+        </div>
+        <div style="margin-top:0.6rem; background:#ecf3fb; padding:0.5rem 1.2rem; border-radius:14px;">
+            🗣️ <strong>Simple:</strong> “Average mistake in the original units.” &nbsp;—&nbsp; Lower is better.
+        </div>
+    </div>
+
+    <!-- 5. Adjusted R² -->
+    <div class="metric-block">
+        <h3>5. Adjusted R² <span class="badge">Penalizes extra features</span></h3>
+        <p>Unlike R², Adjusted R² decreases if you add unnecessary features. R² always stays the same or increases when new features are added.<br />
+        Adjusted R² only increases if the new feature genuinely improves the model.</p>
+        <div style="background:#f2f8ff; border-radius:14px; padding:0.6rem 1.2rem; margin:0.5rem 0;">
+            ✅ <strong>Better metric for multiple linear regression</strong> — helps identify whether adding more features is really beneficial.
+        </div>
+        <div style="margin-top:0.6rem; background:#ecf3fb; padding:0.5rem 1.2rem; border-radius:14px;">
+            🗣️ <strong>Simple:</strong> “Is adding more features actually helping?” &nbsp;—&nbsp; Higher is better.
+        </div>
+    </div>
+
+    <!-- Quick comparison table (compact) -->
+    <h2 style="margin:2rem 0 0.8rem 0; font-size:1.5rem;">⚡ Quick Comparison</h2>
+    <div class="table-wrap">
+        <table class="metric-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Measures</th>
+                    <th>Sensitive to Large Errors?</th>
+                    <th>Best Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>R²</strong></td><td>Goodness of fit</td><td>No</td><td>1</td></tr>
+                <tr><td><strong>Adjusted R²</strong></td><td>Goodness of fit (penalizes extra features)</td><td>No</td><td>1</td></tr>
+                <tr><td><strong>MAE</strong></td><td>Average absolute error</td><td>No</td><td>0</td></tr>
+                <tr><td><strong>MSE</strong></td><td>Average squared error</td><td>Yes</td><td>0</td></tr>
+                <tr><td><strong>RMSE</strong></td><td>Average error (same units as target)</td><td>Yes</td><td>0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Which metric to use? -->
+    <div style="background:#edf4fd; border-radius:20px; padding:1.2rem 1.8rem; margin:1.8rem 0;">
+        <h4 style="font-size:1.2rem; margin-bottom:0.4rem;">🧭 Which metric should you use?</h4>
+        <ul style="list-style:none; display:flex; flex-wrap:wrap; gap:0.2rem 1.8rem; margin-top:0.3rem;">
+            <li>✅ <strong>R²</strong> → How well the model fits the data.</li>
+            <li>✅ <strong>MAE</strong> → Average prediction error (easy to interpret).</li>
+            <li>✅ <strong>MSE</strong> → Penalize large errors more heavily.</li>
+            <li>✅ <strong>RMSE</strong> → Error in the original units (most commonly reported).</li>
+            <li>✅ <strong>Adjusted R²</strong> → Compare multiple regression models with different numbers of features.</li>
+        </ul>
+    </div>
+
+    <!-- Easy way to remember -->
+    <div class="quick-compare">
+        <span style="font-weight:600;">🎯 Easy Way to Remember</span>
+        <span><span class="pill">R²</span> How good is my model? (Higher is better)</span>
+        <span><span class="pill">MAE</span> How much am I wrong on average? (Lower is better)</span>
+        <span><span class="pill">MSE</span> How bad are my mistakes, especially big ones? (Lower is better)</span>
+        <span><span class="pill">RMSE</span> Average error in original units (Lower is better)</span>
+        <span><span class="pill">Adjusted R²</span> Is adding more features actually helping? (Higher is better)</span>
+    </div>
+
+    <!-- One-line summary -->
+    <div class="summary-box">
+        <span><strong>📌 R²</strong> = Model performance score.</span>
+        <span><strong>📌 MAE</strong> = Average mistake.</span>
+        <span><strong>📌 MSE</strong> = Average squared mistake (penalizes big errors).</span>
+        <span><strong>📌 RMSE</strong> = Average mistake in the original units.</span>
+        <span><strong>📌 Adjusted R²</strong> = Fair performance score when comparing models with different numbers of features.</span>
+    </div>
+
+    <!-- Simple version (in plain language) -->
+    <div style="margin-top:2rem; border-top:2px dashed #d4e0ef; padding-top:1.5rem;">
+        <h2 style="font-size:1.4rem; font-weight:600; margin-bottom:0.8rem;">🧑‍🏫 In simple language</h2>
+        <div class="two-col">
+            <div class="simple-card">
+                <h4>📈 R²</h4>
+                <p><strong>How well the model understands the data.</strong> Best value: <span class="highlight-better">Close to 1</span></p>
+                <div style="background:#e6effa; padding:0.4rem 0.9rem; border-radius:12px; font-size:0.9rem;">“My model explains this much of the data.”</div>
+            </div>
+            <div class="simple-card">
+                <h4>📉 MAE</h4>
+                <p><strong>Average prediction mistake.</strong> Best value: <span class="highlight-better">Close to 0</span></p>
+                <div style="background:#e6effa; padding:0.4rem 0.9rem; border-radius:12px; font-size:0.9rem;">“On average, how many units am I wrong?”</div>
+            </div>
+            <div class="simple-card">
+                <h4>⚠️ MSE</h4>
+                <p><strong>Average squared mistake</strong> (big mistakes punished more). Best value: <span class="highlight-better">Close to 0</span></p>
+                <div style="background:#e6effa; padding:0.4rem 0.9rem; border-radius:12px; font-size:0.9rem;">“Big errors have a huge effect.”</div>
+            </div>
+            <div class="simple-card">
+                <h4>📏 RMSE</h4>
+                <p><strong>Average mistake in the original unit.</strong> Best value: <span class="highlight-better">Close to 0</span></p>
+                <div style="background:#e6effa; padding:0.4rem 0.9rem; border-radius:12px; font-size:0.9rem;">“Same unit as the target — easy to understand.”</div>
+            </div>
+            <div class="simple-card" style="grid-column: 1 / -1;">
+                <h4>⚖️ Adjusted R²</h4>
+                <p><strong>Like R², but doesn't reward unnecessary features.</strong> Best value: <span class="highlight-better">Close to 1</span></p>
+                <div style="background:#e6effa; padding:0.4rem 0.9rem; border-radius:12px; font-size:0.9rem;">“Does adding more features actually help?”</div>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top:1.2rem; font-size:0.85rem; color:#3e5a79; border-top:1px solid #dee9f5; padding-top:0.8rem; display:flex; flex-wrap:wrap; gap:1.2rem;">
+        <span>📊 Used in sklearn.metrics &amp; statsmodels</span>
+        <span>🧠 R², MAE, MSE, RMSE, Adj. R²</span>
+    </div>
+</div>
+</body>
+</html>
