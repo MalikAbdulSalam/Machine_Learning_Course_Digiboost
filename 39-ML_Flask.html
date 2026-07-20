@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Flask Tutorial · Bootstrap 5</title>
+    <!-- Bootstrap 5 + Icons + Prism.js -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        /* Dark / Light theme variables */
+        :root {
+            --bg-body: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-color: #212529;
+            --border-color: #dee2e6;
+            --code-bg: #f5f5f5;
+        }
+        [data-bs-theme="dark"] {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --text-color: #e9ecef;
+            --border-color: #343a40;
+            --code-bg: #2d2d2d;
+        }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        .card, .accordion-item, .list-group-item {
+            background-color: var(--bg-card);
+            color: var(--text-color);
+            border-color: var(--border-color);
+        }
+        .accordion-button {
+            background-color: var(--bg-card);
+            color: var(--text-color);
+        }
+        .accordion-button:not(.collapsed) {
+            background-color: var(--bg-card);
+            color: var(--text-color);
+        }
+        .border-bottom {
+            border-bottom-color: var(--border-color) !important;
+        }
+        .bg-soft-primary {
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+        .diagram-box {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .nav-pills .nav-link {
+            color: var(--text-color);
+        }
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        pre[class*="language-"] {
+            border-radius: 0.75rem;
+            background: var(--code-bg) !important;
+        }
+        .toc-sticky {
+            position: sticky;
+            top: 1rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        .badge-exercise {
+            background-color: #6c757d;
+        }
+        .list-group-item {
+            background-color: var(--bg-card);
+            color: var(--text-color);
+        }
+        .quiz-option:hover {
+            background-color: rgba(13, 110, 253, 0.08);
+            cursor: pointer;
+        }
+        .section-divider {
+            border-top: 2px dashed var(--border-color);
+            margin: 2.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#"><i class="bi bi-flask me-2"></i>Flask Masterclass</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#toc">Contents</a></li>
+                <li class="nav-item"><a class="nav-link" href="#theory">Theory</a></li>
+                <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                <li class="nav-item"><a class="nav-link" href="#quiz">Quiz</a></li>
+                <li class="nav-item">
+                    <span class="nav-link theme-toggle" id="themeToggle" title="Toggle theme">
+                        <i class="bi bi-moon-fill" id="themeIcon"></i>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="container my-4">
+    <div class="row">
+        <!-- SIDEBAR - Table of Contents -->
+        <div class="col-lg-3 d-none d-lg-block">
+            <div class="toc-sticky">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white fw-bold">
+                        <i class="bi bi-list-ul me-2"></i>Table of Contents
+                    </div>
+                    <div class="list-group list-group-flush" id="toc">
+                        <a href="#intro" class="list-group-item list-group-item-action">📖 Introduction</a>
+                        <a href="#why-flask" class="list-group-item list-group-item-action">💡 Why Flask?</a>
+                        <a href="#install" class="list-group-item list-group-item-action">⚙️ Installing Flask</a>
+                        <a href="#first-app" class="list-group-item list-group-item-action">🚀 First Flask App</a>
+                        <a href="#routes" class="list-group-item list-group-item-action">🧭 Routes & Dynamic</a>
+                        <a href="#templates" class="list-group-item list-group-item-action">📑 Templates & Jinja</a>
+                        <a href="#static" class="list-group-item list-group-item-action">🎨 Static Files</a>
+                        <a href="#forms" class="list-group-item list-group-item-action">📮 Forms (GET/POST)</a>
+                        <a href="#rest" class="list-group-item list-group-item-action">📡 REST APIs</a>
+                        <a href="#ml" class="list-group-item list-group-item-action">🤖 Flask + ML</a>
+                        <a href="#project" class="list-group-item list-group-item-action">🚀 Student Result Predictor</a>
+                        <a href="#best-practices" class="list-group-item list-group-item-action">✅ Best Practices</a>
+                        <a href="#errors" class="list-group-item list-group-item-action">⚠️ Common Errors</a>
+                        <a href="#exercises" class="list-group-item list-group-item-action">🎯 Exercises</a>
+                        <a href="#quiz" class="list-group-item list-group-item-action">❓ Quiz</a>
+                        <a href="#assignment" class="list-group-item list-group-item-action">📝 Assignment</a>
+                        <a href="#interview" class="list-group-item list-group-item-action">💼 Interview Qs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT COLUMN -->
+        <div class="col-lg-9">
+
+            <!-- ========== INTRO ========== -->
+            <section id="intro" class="mb-5">
+                <h1 class="display-5 fw-bold"><i class="bi bi-flask text-primary me-2"></i>Introduction to Flask</h1>
+                <p class="lead">Flask is a lightweight WSGI web application framework in Python. It’s designed to make getting started quick and easy, with the ability to scale up to complex applications.</p>
+                <div class="diagram-box mt-3">
+                    <h5><i class="bi bi-diagram-3 me-2"></i>Client → Server → Flask → Browser</h5>
+                    <div class="row text-center g-2">
+                        <div class="col-3"><span class="badge bg-secondary p-2">🌐 Browser</span></div>
+                        <div class="col-1">➡️</div>
+                        <div class="col-3"><span class="badge bg-primary p-2">🖥️ Flask Server</span></div>
+                        <div class="col-1">⬅️</div>
+                        <div class="col-3"><span class="badge bg-success p-2">📄 HTML/JSON</span></div>
+                    </div>
+                    <p class="mt-2 small text-muted">Client sends request → Flask processes → returns response (HTML/JSON)</p>
+                </div>
+                <div class="alert alert-info mt-3"><i class="bi bi-lightbulb"></i> <strong>Important:</strong> Flask is a micro-framework, but it’s powerful. It doesn’t force a particular project structure.</div>
+            </section>
+
+            <!-- ========== WHY FLASK ========== -->
+            <section id="why-flask" class="mb-5">
+                <h2><i class="bi bi-question-circle text-primary me-2"></i>Why Flask?</h2>
+                <ul class="list-group">
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Minimalistic and easy to learn.</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Built-in development server and debugger.</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Integrated support for unit testing.</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>RESTful request dispatching.</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Large ecosystem of extensions.</li>
+                </ul>
+            </section>
+
+            <!-- ========== INSTALL ========== -->
+            <section id="install" class="mb-5">
+                <h2><i class="bi bi-download text-primary me-2"></i>Installing Flask</h2>
+                <pre><code class="language-bash">pip install flask</code></pre>
+                <div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> Use a virtual environment to avoid conflicts.</div>
+            </section>
+
+            <!-- ========== FIRST APP ========== -->
+            <section id="first-app" class="mb-5">
+                <h2><i class="bi bi-file-code text-primary me-2"></i>First Flask Application</h2>
+                <pre><code class="language-python">from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return 'Hello, Flask!'
+
+if __name__ == '__main__':
+    app.run(debug=True)</code></pre>
+                <h5 class="mt-3">Understanding Every Line</h5>
+                <ul class="list-group">
+                    <li class="list-group-item"><code>Flask(__name__)</code> – creates the app instance.</li>
+                    <li class="list-group-item"><code>@app.route('/')</code> – decorator that maps URL to function.</li>
+                    <li class="list-group-item"><code>hello()</code> – view function that returns a response.</li>
+                    <li class="list-group-item"><code>app.run(debug=True)</code> – runs the server with auto-reload.</li>
+                </ul>
+            </section>
+
+            <!-- ========== ROUTES ========== -->
+            <section id="routes" class="mb-5">
+                <h2><i class="bi bi-signpost-2 text-primary me-2"></i>Flask Routes & Dynamic Routes</h2>
+                <pre><code class="language-python">@app.route('/user/&lt;name&gt;')
+def user(name):
+    return f'Hello, {name}!'
+
+@app.route('/post/&lt;int:post_id&gt;')
+def post(post_id):
+    return f'Post ID: {post_id}'</code></pre>
+                <p><span class="badge bg-info">Dynamic</span> Use <code>&lt;type:variable&gt;</code> to capture values from the URL.</p>
+            </section>
+
+            <!-- ========== TEMPLATES ========== -->
+            <section id="templates" class="mb-5">
+                <h2><i class="bi bi-layout-text-window text-primary me-2"></i>HTML Templates & Jinja2</h2>
+                <pre><code class="language-python">from flask import render_template
+
+@app.route('/hello/&lt;name&gt;')
+def hello_name(name):
+    return render_template('hello.html', name=name)</code></pre>
+                <pre><code class="language-html">&lt;!-- templates/hello.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello {{ name }}!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                <h5>Jinja2 Variables, Loops & Conditions</h5>
+                <pre><code class="language-html">{{ name }}        <!-- variable -->
+{% for item in items %} {{ item }} {% endfor %}
+{% if user %} Welcome {{ user }} {% endif %}</code></pre>
+            </section>
+
+            <!-- ========== STATIC ========== -->
+            <section id="static" class="mb-5">
+                <h2><i class="bi bi-file-earmark-image text-primary me-2"></i>Static Files (CSS, JS, Images)</h2>
+                <pre><code class="language-html">&lt;link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"&gt;
+&lt;img src="{{ url_for('static', filename='logo.png') }}"&gt;</code></pre>
+                <p>Place static files in the <code>static/</code> folder.</p>
+            </section>
+
+            <!-- ========== FORMS ========== -->
+            <section id="forms" class="mb-5">
+                <h2><i class="bi bi-ui-radios text-primary me-2"></i>Forms (GET & POST)</h2>
+                <pre><code class="language-python">from flask import request
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        return f'Welcome {username}'
+    return render_template('login.html')</code></pre>
+                <div class="alert alert-info"><i class="bi bi-request"></i> <code>request</code> object contains all client data.</div>
+            </section>
+
+            <!-- ========== REST ========== -->
+            <section id="rest" class="mb-5">
+                <h2><i class="bi bi-hdd-stack text-primary me-2"></i>JSON and REST APIs</h2>
+                <pre><code class="language-python">from flask import jsonify
+
+@app.route('/api/data')
+def api_data():
+    return jsonify({'name': 'Flask', 'version': '2.3'})</code></pre>
+                <p>Use <code>jsonify()</code> to return JSON responses. Flask makes building REST APIs a breeze.</p>
+            </section>
+
+            <!-- ========== ML ========== -->
+            <section id="ml" class="mb-5">
+                <h2><i class="bi bi-cpu text-primary me-2"></i>Connecting Flask with Machine Learning Models</h2>
+                <pre><code class="language-python">import joblib
+model = joblib.load('model.pkl')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json()
+    prediction = model.predict([data['features']])
+    return jsonify({'prediction': prediction.tolist()})</code></pre>
+                <p>Load your model once and use it inside route handlers.</p>
+            </section>
+
+            <!-- ========== PROJECT ========== -->
+            <section id="project" class="mb-5">
+                <h2><i class="bi bi-trophy text-primary me-2"></i>Student Result Predictor (Mini Project)</h2>
+                <p><strong>Complete Student Result Predictor Project</strong> – a Flask app that predicts student grades based on study hours.</p>
+                <pre><code class="language-python"># app.py
+from flask import Flask, render_template, request, jsonify
+import joblib
+import numpy as np
+
+app = Flask(__name__)
+model = joblib.load('student_model.pkl')  # trained model
+
+@app.route('/')
+def index():
+    return render_template('predict.html')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    hours = float(request.form['hours'])
+    prediction = model.predict([[hours]])
+    return render_template('result.html', hours=hours, result=prediction[0])
+
+if __name__ == '__main__':
+    app.run(debug=True)</code></pre>
+                <p>Build a simple linear regression model with <code>sklearn</code>, save it, and serve predictions via Flask.</p>
+                <div class="bg-soft-primary p-3 rounded">
+                    <i class="bi bi-star-fill text-warning"></i> <strong>Mini Project idea:</strong> Add a form to input hours, display predicted score.
+                </div>
+            </section>
+
+            <!-- ========== BEST PRACTICES ========== -->
+            <section id="best-practices" class="mb-5">
+                <h2><i class="bi bi-check2-all text-primary me-2"></i>Best Practices</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">Use environment variables for configuration.</li>
+                    <li class="list-group-item">Organize routes with Blueprints.</li>
+                    <li class="list-group-item">Always handle errors gracefully.</li>
+                    <li class="list-group-item">Keep business logic separate from routes.</li>
+                </ul>
+            </section>
+
+            <!-- ========== ERRORS ========== -->
+            <section id="errors" class="mb-5">
+                <h2><i class="bi bi-exclamation-triangle text-primary me-2"></i>Common Errors & Solutions</h2>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>ImportError:</strong> Flask not installed → run <code>pip install flask</code></li>
+                    <li class="list-group-item"><strong>404 Not Found:</strong> route not defined → check URL and decorator</li>
+                    <li class="list-group-item"><strong>500 Internal Server:</strong> bug in code → use <code>debug=True</code> to trace</li>
+                </ul>
+            </section>
+
+            <!-- ========== EXERCISES ========== -->
+            <section id="exercises" class="mb-5">
+                <h2><i class="bi bi-dumbbell text-primary me-2"></i>Practice Exercises</h2>
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item">Create a Flask app that displays "Hello, World!" on the homepage.</li>
+                    <li class="list-group-item">Add a dynamic route that greets the user by name.</li>
+                    <li class="list-group-item">Create a form that takes a number and returns its square.</li>
+                    <li class="list-group-item">Build a simple API that returns a JSON list of your favorite movies.</li>
+                </ol>
+            </section>
+
+            <!-- ========== QUIZ ========== -->
+            <section id="quiz" class="mb-5">
+                <h2><i class="bi bi-puzzle text-primary me-2"></i>Quiz</h2>
+                <div class="accordion" id="quizAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
+                                Q1: Which decorator is used to define a route in Flask?
+                            </button>
+                        </h2>
+                        <div id="q1" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                <div class="list-group">
+                                    <div class="list-group-item quiz-option">@app.get</div>
+                                    <div class="list-group-item quiz-option bg-success text-white">@app.route</div>
+                                    <div class="list-group-item quiz-option">@app.url</div>
+                                    <div class="list-group-item quiz-option">@flask.route</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
+                                Q2: How do you capture a variable from the URL?
+                            </button>
+                        </h2>
+                        <div id="q2" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                <div class="list-group">
+                                    <div class="list-group-item quiz-option bg-success text-white">&lt;variable&gt;</div>
+                                    <div class="list-group-item quiz-option">{variable}</div>
+                                    <div class="list-group-item quiz-option">[variable]</div>
+                                    <div class="list-group-item quiz-option">(variable)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3">
+                                Q3: Which function is used to render an HTML template?
+                            </button>
+                        </h2>
+                        <div id="q3" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                <div class="list-group">
+                                    <div class="list-group-item quiz-option">render()</div>
+                                    <div class="list-group-item quiz-option bg-success text-white">render_template()</div>
+                                    <div class="list-group-item quiz-option">template()</div>
+                                    <div class="list-group-item quiz-option">get_template()</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== ASSIGNMENT ========== -->
+            <section id="assignment" class="mb-5">
+                <h2><i class="bi bi-file-earmark-text text-primary me-2"></i>Assignment</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <h5>📝 Student Result Predictor with ML</h5>
+                        <p><strong>Task:</strong> Build a Flask app that:</p>
+                        <ul>
+                            <li>Has a form to input study hours and previous score.</li>
+                            <li>Uses a pre-trained ML model (or train a simple one) to predict exam score.</li>
+                            <li>Displays the result on a new page.</li>
+                            <li>Adds a REST API endpoint that accepts JSON and returns prediction.</li>
+                        </ul>
+                        <p><span class="badge bg-primary">Submit</span> A link to your GitHub repo with the complete project.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========== INTERVIEW ========== -->
+            <section id="interview" class="mb-5">
+                <h2><i class="bi bi-chat-dots text-primary me-2"></i>Interview Questions</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">What is Flask and how does it differ from Django?</li>
+                    <li class="list-group-item">Explain the request-response cycle in Flask.</li>
+                    <li class="list-group-item">How do you handle sessions in Flask?</li>
+                    <li class="list-group-item">What are Flask blueprints and why are they useful?</li>
+                    <li class="list-group-item">How to deploy a Flask application?</li>
+                </ul>
+            </section>
+
+            <!-- DIVIDER -->
+            <div class="section-divider"></div>
+            <p class="text-center text-muted small">🎉 Flask Masterclass – Complete Tutorial. Happy coding!</p>
+        </div>
+    </div>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer class="bg-primary text-white py-3 mt-5">
+    <div class="container text-center">
+        <span>Flask Tutorial · Built with Bootstrap 5 · Dark/Light theme</span>
+    </div>
+</footer>
+
+<!-- ========== SCRIPTS ========== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script>
+    // Dark/Light theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const html = document.documentElement;
+
+    // Check stored theme
+    let currentTheme = localStorage.getItem('bsTheme') || 'light';
+    html.setAttribute('data-bs-theme', currentTheme);
+    updateIcon(currentTheme);
+
+    themeToggle.addEventListener('click', () => {
+        let newTheme = html.getAttribute('data-bs-theme') === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-bs-theme', newTheme);
+        localStorage.setItem('bsTheme', newTheme);
+        updateIcon(newTheme);
+    });
+
+    function updateIcon(theme) {
+        if (theme === 'dark') {
+            themeIcon.className = 'bi bi-sun-fill';
+        } else {
+            themeIcon.className = 'bi bi-moon-fill';
+        }
+    }
+
+    // Smooth scroll for TOC links
+    document.querySelectorAll('#toc a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+</script>
+</body>
+</html>

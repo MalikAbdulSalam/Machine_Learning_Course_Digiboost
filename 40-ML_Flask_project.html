@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Predictor · Simple Project</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding: 30px 20px;
+            color: #1a1a2e;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #4361ee;
+            border-bottom: 3px solid #4361ee;
+            padding-bottom: 12px;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+        h2 {
+            color: #2d3748;
+            margin: 30px 0 15px 0;
+            font-size: 20px;
+            border-left: 4px solid #4361ee;
+            padding-left: 12px;
+        }
+        .tree {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .folder { color: #f9e2af; }
+        .file { color: #a6e3a1; }
+        .indent1 { padding-left: 20px; }
+        .indent2 { padding-left: 40px; }
+        .indent3 { padding-left: 60px; }
+        .code {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 16px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-x: auto;
+            margin: 10px 0 20px 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .code .kw { color: #cba6f7; }
+        .code .str { color: #a6e3a1; }
+        .code .cmt { color: #6c7086; }
+        .code .func { color: #89b4fa; }
+        .code .num { color: #fab387; }
+        .badge {
+            display: inline-block;
+            background: #4361ee;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 2px 0;
+        }
+        .badge-green { background: #2ecc71; }
+        .badge-orange { background: #f39c12; }
+        .card {
+            background: #f8f9fc;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin: 12px 0;
+            border-left: 4px solid #4361ee;
+        }
+        hr { margin: 30px 0; border: 1px dashed #ddd; }
+        .btn {
+            display: inline-block;
+            background: #4361ee;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+        .btn:hover { background: #3651d4; transform: scale(1.02); }
+        .note {
+            background: #fff3cd;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 10px 0;
+        }
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; }
+            .container { padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>📘 Student Result Predictor · Flask Project</h1>
+    <p style="font-size: 16px; color: #4a5568; margin-bottom: 20px;">
+        A simple Flask app that predicts exam scores based on study hours using a trained ML model.
+        Complete file structure included.
+    </p>
+    <p>
+        <span class="badge">Flask</span>
+        <span class="badge badge-green">ML</span>
+        <span class="badge badge-orange">Jinja2</span>
+        <span class="badge">Bootstrap</span>
+    </p>
+
+    <!-- ===== FILE HIERARCHY ===== -->
+    <h2>📁 Complete File Hierarchy</h2>
+    <div class="tree">
+        student_result_predictor/<br>
+        <span class="indent1"><span class="folder">├── app/</span></span><br>
+        <span class="indent2"><span class="folder">│   ├── static/</span></span><br>
+        <span class="indent3">│   │   └── <span class="file">style.css</span></span><br>
+        <span class="indent2"><span class="folder">│   ├── templates/</span></span><br>
+        <span class="indent3">│   │   ├── <span class="file">base.html</span></span><br>
+        <span class="indent3">│   │   ├── <span class="file">index.html</span></span><br>
+        <span class="indent3">│   │   ├── <span class="file">result.html</span></span><br>
+        <span class="indent3">│   │   └── <span class="file">error.html</span></span><br>
+        <span class="indent1">│   ├── <span class="file">__init__.py</span></span><br>
+        <span class="indent1">│   ├── <span class="file">routes.py</span></span><br>
+        <span class="indent1">│   └── <span class="file">model.py</span></span><br>
+        <span class="indent1"><span class="folder">├── models/</span></span><br>
+        <span class="indent2">│   └── <span class="file">student_model.pkl</span></span><br>
+        <span class="indent1"><span class="folder">├── notebooks/</span></span><br>
+        <span class="indent2">│   └── <span class="file">train_model.ipynb</span></span><br>
+        <span class="indent1">├── <span class="file">requirements.txt</span></span><br>
+        <span class="indent1">└── <span class="file">run.py</span></span>
+    </div>
+
+    <!-- ===== RUN.PY ===== -->
+    <h2>🚀 run.py (Start the App)</h2>
+    <div class="code"><span class="kw">from</span> app <span class="kw">import</span> create_app
+
+app = create_app()
+
+<span class="kw">if</span> __name__ == <span class="str">'__main__'</span>:
+    app.run(debug=<span class="kw">True</span>, port=<span class="num">5000</span>)</div>
+
+    <!-- ===== APP/__INIT__.PY ===== -->
+    <h2>📄 app/__init__.py</h2>
+    <div class="code"><span class="kw">from</span> flask <span class="kw">import</span> Flask
+
+<span class="kw">def</span> <span class="func">create_app</span>():
+    app = Flask(__name__)
+    
+    <span class="kw">from</span> . <span class="kw">import</span> routes
+    <span class="kw">return</span> app</div>
+
+    <!-- ===== ROUTES.PY ===== -->
+    <h2>🧭 app/routes.py (Main Logic)</h2>
+    <div class="code"><span class="kw">from</span> flask <span class="kw">import</span> render_template, request, jsonify
+<span class="kw">from</span> .model <span class="kw">import</span> predict_score
+<span class="kw">from</span> . <span class="kw">import</span> app
+
+@app.route(<span class="str">'/'</span>, methods=[<span class="str">'GET'</span>, <span class="str">'POST'</span>])
+<span class="kw">def</span> <span class="func">index</span>():
+    <span class="kw">if</span> request.method == <span class="str">'POST'</span>:
+        <span class="kw">try</span>:
+            hours = float(request.form[<span class="str">'hours'</span>])
+            result = predict_score(hours)
+            <span class="kw">return</span> render_template(<span class="str">'result.html'</span>, hours=hours, result=result)
+        <span class="kw">except</span> Exception <span class="kw">as</span> e:
+            <span class="kw">return</span> render_template(<span class="str">'error.html'</span>, error=<span class="str">str</span>(e))
+    <span class="kw">return</span> render_template(<span class="str">'index.html'</span>)
+
+@app.route(<span class="str">'/api/predict'</span>, methods=[<span class="str">'POST'</span>])
+<span class="kw">def</span> <span class="func">api_predict</span>():
+    data = request.get_json()
+    hours = data.get(<span class="str">'hours'</span>)
+    <span class="kw">if</span> hours <span class="kw">is</span> <span class="kw">None</span>:
+        <span class="kw">return</span> jsonify({<span class="str">'error'</span>: <span class="str">'Missing hours'</span>}), <span class="num">400</span>
+    pred = predict_score(<span class="kw">float</span>(hours))
+    <span class="kw">return</span> jsonify({<span class="str">'prediction'</span>: pred, <span class="str">'hours'</span>: hours})</div>
+
+    <!-- ===== MODEL.PY ===== -->
+    <h2>🧠 app/model.py (Load Model)</h2>
+    <div class="code"><span class="kw">import</span> joblib
+<span class="kw">import</span> os
+
+model_path = os.path.join(os.path.dirname(__file__), <span class="str">'..'</span>, <span class="str">'models'</span>, <span class="str">'student_model.pkl'</span>)
+model = joblib.load(model_path)
+
+<span class="kw">def</span> <span class="func">predict_score</span>(hours):
+    <span class="cmt"># Simple linear regression: score = 10 + 5*hours</span>
+    <span class="kw">if</span> hours < <span class="num">0</span> <span class="kw">or</span> hours > <span class="num">24</span>:
+        <span class="kw">raise</span> ValueError(<span class="str">"Hours must be 0-24"</span>)
+    <span class="kw">return</span> round(model.predict([[hours]])[<span class="num">0</span>], <span class="num">2</span>)</div>
+
+    <!-- ===== TRAINING ===== -->
+    <h2>📓 notebooks/train_model.ipynb</h2>
+    <div class="code"><span class="cmt"># Train a simple linear regression model</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LinearRegression
+<span class="kw">import</span> joblib
+
+<span class="cmt"># Generate synthetic data: score = 10 + 5*hours + noise</span>
+np.random.seed(<span class="num">42</span>)
+hours = np.random.uniform(<span class="num">1</span>, <span class="num">10</span>, <span class="num">200</span>).reshape(-<span class="num">1</span>, <span class="num">1</span>)
+scores = <span class="num">10</span> + <span class="num">5</span> * hours + np.random.normal(<span class="num">0</span>, <span class="num">2</span>, hours.shape)
+
+model = LinearRegression()
+model.fit(hours, scores)
+
+<span class="cmt"># Save the model</span>
+joblib.dump(model, <span class="str">'../models/student_model.pkl'</span>)
+<span class="cmt"># Expected: coef ≈ 5, intercept ≈ 10</span></div>
+
+    <!-- ===== TEMPLATES ===== -->
+    <h2>📑 Templates</h2>
+    <div class="grid">
+        <div>
+            <h4 style="font-size: 15px; margin-bottom: 5px;">templates/base.html</h4>
+            <div class="code" style="font-size: 12px; max-height: 200px; overflow-y: auto;">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Student Predictor&lt;/title&gt;
+    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container mt-5"&gt;
+        {% block content %}{% endblock %}
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+        </div>
+        <div>
+            <h4 style="font-size: 15px; margin-bottom: 5px;">templates/index.html</h4>
+            <div class="code" style="font-size: 12px; max-height: 200px; overflow-y: auto;">{% raw %}{% extends "base.html" %}
+{% block content %}
+&lt;div class="card p-4 shadow"&gt;
+    &lt;h3&gt;📊 Predict Exam Score&lt;/h3&gt;
+    &lt;form method="POST"&gt;
+        &lt;label&gt;Study Hours:&lt;/label&gt;
+        &lt;input type="number" step="0.1" name="hours" class="form-control" required&gt;
+        &lt;button class="btn btn-primary mt-3"&gt;Predict&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+{% endblock %}{% endraw %}</div>
+        </div>
+        <div>
+            <h4 style="font-size: 15px; margin-bottom: 5px;">templates/result.html</h4>
+            <div class="code" style="font-size: 12px; max-height: 150px; overflow-y: auto;">{% raw %}{% extends "base.html" %}
+{% block content %}
+&lt;div class="card p-4 shadow text-center"&gt;
+    &lt;h3&gt;✅ Prediction Result&lt;/h3&gt;
+    &lt;p&gt;For {{ hours }} hours:&lt;/p&gt;
+    &lt;h1 class="text-primary"&gt;{{ result }}%&lt;/h1&gt;
+    &lt;a href="/" class="btn btn-secondary"&gt;⬅ Back&lt;/a&gt;
+&lt;/div&gt;
+{% endblock %}{% endraw %}</div>
+        </div>
+        <div>
+            <h4 style="font-size: 15px; margin-bottom: 5px;">templates/error.html</h4>
+            <div class="code" style="font-size: 12px; max-height: 150px; overflow-y: auto;">{% raw %}{% extends "base.html" %}
+{% block content %}
+&lt;div class="card p-4 shadow text-center border-danger"&gt;
+    &lt;h3 class="text-danger"&gt;⚠️ Error&lt;/h3&gt;
+    &lt;p&gt;{{ error }}&lt;/p&gt;
+    &lt;a href="/" class="btn btn-secondary"&gt;⬅ Back&lt;/a&gt;
+&lt;/div&gt;
+{% endblock %}{% endraw %}</div>
+        </div>
+    </div>
+
+    <!-- ===== REQUIREMENTS ===== -->
+    <h2>📦 requirements.txt</h2>
+    <div class="code">Flask==2.3.3
+joblib==1.3.2
+numpy==1.24.3
+scikit-learn==1.3.0</div>
+
+    <!-- ===== STATIC CSS ===== -->
+    <h2>🎨 static/style.css (Optional)</h2>
+    <div class="code">body {
+    background: #f8f9fa;
+}
+.card {
+    border-radius: 16px;
+    border: none;
+}</div>
+
+    <!-- ===== HOW TO RUN ===== -->
+    <h2>⚡ How to Run</h2>
+    <div class="card">
+        <p><strong>1.</strong> Create the folder structure above.</p>
+        <p><strong>2.</strong> Copy each file content into the correct file.</p>
+        <p><strong>3.</strong> Install dependencies:</p>
+        <div class="code" style="background: #2d2d2d; color: #fff; padding: 8px 14px;">pip install -r requirements.txt</div>
+        <p><strong>4.</strong> Train the model (run the notebook or just use the code above):</p>
+        <div class="code" style="background: #2d2d2d; color: #fff; padding: 8px 14px;">python -c "import numpy as np; from sklearn.linear_model import LinearRegression; import joblib; np.random.seed(42); hours = np.random.uniform(1,10,200).reshape(-1,1); scores = 10 + 5*hours + np.random.normal(0,2,hours.shape); model = LinearRegression().fit(hours,scores); joblib.dump(model, 'models/student_model.pkl')"</div>
+        <p><strong>5.</strong> Run the app:</p>
+        <div class="code" style="background: #2d2d2d; color: #fff; padding: 8px 14px;">python run.py</div>
+        <p><strong>6.</strong> Open <code>http://localhost:5000</code> in your browser.</p>
+        <p><strong>7.</strong> Test the API:</p>
+        <div class="code" style="background: #2d2d2d; color: #fff; padding: 8px 14px;">curl -X POST -H "Content-Type: application/json" -d '{"hours":5.5}' http://localhost:5000/api/predict</div>
+    </div>
+
+    <!-- ===== NOTES ===== -->
+    <div class="note">
+        <strong>💡 Simple & Complete:</strong> This project includes everything — a trained model, web UI, REST API, and full file structure. Just copy, paste, and run!
+    </div>
+
+    <hr>
+
+    <div style="text-align: center; padding: 10px 0;">
+        <p style="color: #6c757d; font-size: 14px;">Student Result Predictor · Flask + ML · Complete Project</p>
+        <button class="btn" onclick="alert('All files are listed above. Copy them to create your project!')">📥 Download Files (Copy & Paste)</button>
+    </div>
+
+</div>
+</body>
+</html>
