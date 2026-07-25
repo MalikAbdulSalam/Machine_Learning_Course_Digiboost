@@ -35,7 +35,7 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 13 : Flak API ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/39-ML_Flask.html)
 
-[Lecture 13 : Flak API ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/40-ML_Flask_project.html)
+[Lecture 13 : Example of Flak API ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/40-ML_Flask_project.html)
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
