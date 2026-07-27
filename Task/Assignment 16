@@ -1,1 +1,155 @@
-implement Classification model with frontend
+Assignment: Build a Machine Learning Classification Front-End
+Objective
+
+Design and develop a user-friendly front-end application that allows users to upload any CSV dataset, automatically preprocess the data, download the preprocessed dataset, select a machine learning classification algorithm, train the model, and evaluate its performance.
+
+Functional Requirements
+1. CSV File Upload
+Provide a Browse button to upload a CSV file.
+Display the uploaded file name.
+Load the dataset into the application.
+2. Dynamic Data Preprocessing
+
+Implement a "Dynamic Preprocessing" button that automatically handles datasets with different structures and column names.
+
+The preprocessing should automatically:
+
+Detect numerical and categorical columns.
+Handle missing values.
+Encode categorical features.
+Scale numerical features when required.
+Remove duplicate rows.
+Handle outliers (if applicable).
+Separate input features (X) and target column (y).
+Split data into training and testing datasets.
+Perform all preprocessing without hardcoding any column names.
+
+The application should work with any classification CSV dataset regardless of the number or names of its columns.
+
+3. Download Preprocessed Dataset
+
+Provide a "Download Preprocessed Data" button.
+
+After preprocessing, users should be able to:
+
+Download the cleaned and transformed dataset as a new CSV file.
+Preserve all preprocessing changes (encoding, scaling, missing value handling, etc.).
+Save the processed file with an appropriate filename (e.g., preprocessed_data.csv).
+4. Classifier Selection
+
+Provide a dropdown list containing at least 10 classification algorithms.
+
+Include the following classifiers:
+
+Logistic Regression
+K-Nearest Neighbors (KNN)
+Decision Tree
+Random Forest
+Support Vector Machine (SVM)
+Naive Bayes
+Gradient Boosting
+AdaBoost
+Extra Trees Classifier
+XGBoost
+
+Bonus Classifiers (Extra Credit):
+
+LightGBM
+CatBoost
+HistGradientBoosting
+Bagging Classifier
+Voting Classifier
+Stacking Classifier
+Ridge Classifier
+Passive Aggressive Classifier
+SGD Classifier
+Gaussian Process Classifier
+5. Model Training
+
+Provide a Train Model button that:
+
+Trains the selected classifier.
+Displays a progress/status message.
+6. Model Evaluation
+
+Display the following evaluation metrics:
+
+Accuracy
+Precision
+Recall
+F1-Score
+Confusion Matrix
+Classification Report
+7. Prediction (Optional Bonus)
+
+Allow users to:
+
+Enter new sample values manually, or
+Upload a separate CSV file for prediction.
+
+Display the predicted class labels.
+
+User Interface Requirements
+
+The interface should contain:
+
+Browse CSV Button
+Selected File Name
+Dynamic Preprocessing Button
+Download Preprocessed Data Button
+Classifier Dropdown
+Train Model Button
+Evaluate Model Button
+Prediction Section (Bonus)
+Results Panel
+Confusion Matrix Display
+Classification Report Display
+Expected Workflow
+Upload a CSV dataset.
+Click Dynamic Preprocessing.
+Review the processed data.
+Click Download Preprocessed Data to save the cleaned dataset.
+Select a classifier.
+Train the model.
+Evaluate the model.
+View performance metrics.
+(Bonus) Predict new data.
+Submission Requirements
+
+Submit:
+
+Complete source code.
+Well-commented code.
+Sample datasets used for testing.
+Screenshots of the application.
+A short report explaining:
+Preprocessing techniques applied.
+Selected classifier.
+Model performance.
+Challenges encountered.
+Evaluation Rubric
+Criteria	Marks
+CSV Upload	10
+Dynamic Preprocessing	20
+Download Preprocessed Dataset	10
+Classifier Selection	15
+Model Training	10
+Evaluation Metrics	15
+User Interface	10
+Code Quality	5
+Documentation	5
+Total	100
+Bonus Marks (+20)
+
+Additional marks will be awarded for implementing:
+
+More than 10 classifiers.
+Automatic target column detection.
+Feature importance visualization.
+Hyperparameter tuning.
+ROC Curve.
+Precision-Recall Curve.
+Cross-validation.
+Model comparison chart.
+Saving and loading trained models.
+Attractive and responsive user interface.
