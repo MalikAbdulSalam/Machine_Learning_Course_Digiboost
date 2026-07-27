@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Machine Learning Notes - Confusion Matrix</title>
+
+<style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+    margin:40px;
+    line-height:1.8;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#0B5394;
+}
+
+h2{
+    color:#006400;
+    border-bottom:2px solid #ddd;
+    padding-bottom:5px;
+}
+
+h3{
+    color:#8B0000;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+table,th,td{
+    border:1px solid gray;
+}
+
+th{
+    background:#0B5394;
+    color:white;
+}
+
+th,td{
+    padding:12px;
+    text-align:center;
+}
+
+pre{
+    background:#272822;
+    color:#f8f8f2;
+    padding:15px;
+    overflow:auto;
+    border-radius:5px;
+}
+
+.note{
+    background:#FFF8DC;
+    border-left:6px solid orange;
+    padding:15px;
+    margin:20px 0;
+}
+
+.example{
+    background:#E8F5E9;
+    border-left:6px solid green;
+    padding:15px;
+    margin:20px 0;
+}
+
+.definition{
+    background:#E3F2FD;
+    border-left:6px solid #2196F3;
+    padding:15px;
+    margin:20px 0;
+}
+
+.code-title{
+    background:#006400;
+    color:white;
+    padding:10px;
+    margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Machine Learning Notes</h1>
+<h1>Confusion Matrix</h1>
+
+<hr>
+
+<h2>Learning Objectives</h2>
+
+<ul>
+
+<li>Understand what a Confusion Matrix is.</li>
+
+<li>Learn the four possible prediction outcomes.</li>
+
+<li>Create a Confusion Matrix using Scikit-Learn.</li>
+
+<li>Interpret the results.</li>
+
+<li>Understand why accuracy alone is not always enough.</li>
+
+</ul>
+
+<hr>
+
+<h2>What is a Confusion Matrix?</h2>
+
+<div class="definition">
+
+A <b>Confusion Matrix</b> is a table used to evaluate the performance of a
+classification model.
+
+It compares the <b>Actual Values</b> with the <b>Predicted Values</b> and
+shows how many predictions are correct and how many are incorrect.
+
+</div>
+
+<hr>
+
+<h2>Structure of Confusion Matrix</h2>
+
+<table>
+
+<tr>
+<th></th>
+<th colspan="2">Predicted Class</th>
+</tr>
+
+<tr>
+<th>Actual Class</th>
+<th>Positive (1)</th>
+<th>Negative (0)</th>
+</tr>
+
+<tr>
+<th>Positive (1)</th>
+<td><b>True Positive (TP)</b></td>
+<td><b>False Negative (FN)</b></td>
+</tr>
+
+<tr>
+<th>Negative (0)</th>
+<td><b>False Positive (FP)</b></td>
+<td><b>True Negative (TN)</b></td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Meaning of Each Term</h2>
+
+<table>
+
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+
+<tr>
+<td>True Positive (TP)</td>
+<td>Model predicted Positive and it is actually Positive.</td>
+</tr>
+
+<tr>
+<td>True Negative (TN)</td>
+<td>Model predicted Negative and it is actually Negative.</td>
+</tr>
+
+<tr>
+<td>False Positive (FP)</td>
+<td>Model predicted Positive but it is actually Negative.</td>
+</tr>
+
+<tr>
+<td>False Negative (FN)</td>
+<td>Model predicted Negative but it is actually Positive.</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Real-Life Example</h2>
+
+<div class="example">
+
+Suppose a machine learning model predicts whether a student will pass an exam.
+
+<b>Positive (1)</b> → Student Passes
+
+<b>Negative (0)</b> → Student Fails
+
+</div>
+
+<table>
+
+<tr>
+<th>Student</th>
+<th>Actual</th>
+<th>Predicted</th>
+</tr>
+
+<tr><td>Ali</td><td>Pass</td><td>Pass</td></tr>
+<tr><td>Ahmed</td><td>Fail</td><td>Fail</td></tr>
+<tr><td>Sara</td><td>Pass</td><td>Pass</td></tr>
+<tr><td>Zain</td><td>Fail</td><td>Pass</td></tr>
+<tr><td>Ayesha</td><td>Pass</td><td>Fail</td></tr>
+
+</table>
+
+<hr>
+
+<h2>Confusion Matrix for the Above Example</h2>
+
+<table>
+
+<tr>
+<th></th>
+<th colspan="2">Predicted</th>
+</tr>
+
+<tr>
+<th>Actual</th>
+<th>Pass</th>
+<th>Fail</th>
+</tr>
+
+<tr>
+<th>Pass</th>
+<td>2 (TP)</td>
+<td>1 (FN)</td>
+</tr>
+
+<tr>
+<th>Fail</th>
+<td>1 (FP)</td>
+<td>1 (TN)</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Python Example</h2>
+
+<div class="code-title">
+
+Python Code
+
+</div>
+
+<pre>
+from sklearn.metrics import confusion_matrix
+
+# Actual Labels
+y_test = [1,0,1,0,1]
+
+# Predicted Labels
+y_pred = [1,0,1,1,0]
+
+cm = confusion_matrix(y_test, y_pred)
+
+print(cm)
+</pre>
+
+<hr>
+
+<h2>Output</h2>
+
+<pre>
+[[1 1]
+ [1 2]]
+</pre>
+
+The output is arranged as:
+
+<pre>
+[[TN FP]
+ [FN TP]]
+</pre>
+
+Therefore,
+
+<ul>
+
+<li>TN = 1</li>
+
+<li>FP = 1</li>
+
+<li>FN = 1</li>
+
+<li>TP = 2</li>
+
+</ul>
+
+<hr>
+
+<h2>Visual Representation</h2>
+
+<table>
+
+<tr>
+<th></th>
+<th colspan="2">Predicted</th>
+</tr>
+
+<tr>
+<th>Actual</th>
+<th>0</th>
+<th>1</th>
+</tr>
+
+<tr>
+<th>0</th>
+<td style="background:#C8E6C9;">TN = 1</td>
+<td style="background:#FFCDD2;">FP = 1</td>
+</tr>
+
+<tr>
+<th>1</th>
+<td style="background:#FFCDD2;">FN = 1</td>
+<td style="background:#C8E6C9;">TP = 2</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Confusion Matrix Using Your Classifier</h2>
+
+<div class="code-title">
+
+Python Code
+
+</div>
+
+<pre>
+from sklearn.metrics import confusion_matrix
+
+cm = confusion_matrix(y_test, y_pred)
+
+print(cm)
+</pre>
+
+<hr>
+
+<h2>Display Confusion Matrix</h2>
+
+<div class="code-title">
+
+Python Code
+
+</div>
+
+<pre>
+from sklearn.metrics import ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+
+disp = ConfusionMatrixDisplay(
+    confusion_matrix=cm
+)
+
+disp.plot(cmap="Blues")
+
+plt.show()
+</pre>
+
+<hr>
+
+<h2>Example with KNN</h2>
+
+<div class="code-title">
+
+Python Code
+
+</div>
+
+<pre>
+knn.fit(X_train, y_train)
+
+y_pred = knn.predict(X_test)
+
+from sklearn.metrics import confusion_matrix
+
+cm = confusion_matrix(y_test, y_pred)
+
+print(cm)
+</pre>
+
+<hr>
+
+<h2>Why is Confusion Matrix Important?</h2>
+
+<ul>
+
+<li>Shows correct predictions.</li>
+
+<li>Shows incorrect predictions.</li>
+
+<li>Identifies False Positives and False Negatives.</li>
+
+<li>Helps compare different classification models.</li>
+
+<li>Forms the basis for Precision, Recall, and F1-Score.</li>
+
+</ul>
+
+<hr>
+
+<h2>Advantages</h2>
+
+<ul>
+
+<li>Easy to understand.</li>
+
+<li>Works for binary and multiclass classification.</li>
+
+<li>Provides detailed model evaluation.</li>
+
+<li>Useful for medical diagnosis, fraud detection, spam filtering, and many other applications.</li>
+
+</ul>
+
+<hr>
+
+<h2>Summary</h2>
+
+<ul>
+
+<li>A Confusion Matrix compares actual and predicted labels.</li>
+
+<li>It contains four values: TP, TN, FP, and FN.</li>
+
+<li>It provides much more information than accuracy alone.</li>
+
+<li>Scikit-Learn provides the <code>confusion_matrix()</code> function to generate it.</li>
+
+<li>Confusion matrices are the foundation for computing Precision, Recall, and F1-Score.</li>
+
+</ul>
+
+</div>
+
+</body>
+</html>
