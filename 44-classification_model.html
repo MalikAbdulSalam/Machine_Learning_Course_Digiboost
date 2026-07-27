@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top 10 Classification Models in Machine Learning</title>
+
+<style>
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#f4f4f4;
+    margin:40px;
+    line-height:1.6;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#0B5394;
+}
+
+h2{
+    color:#006400;
+    border-bottom:2px solid #ddd;
+    padding-bottom:5px;
+}
+
+pre{
+    background:#272822;
+    color:#f8f8f2;
+    padding:15px;
+    overflow:auto;
+    border-radius:6px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+table,th,td{
+    border:1px solid #999;
+}
+
+th{
+    background:#0B5394;
+    color:white;
+}
+
+th,td{
+    padding:10px;
+    text-align:left;
+}
+
+.note{
+    background:#fff3cd;
+    padding:15px;
+    border-left:5px solid orange;
+    margin:20px 0;
+}
+
+.code-title{
+    background:#006400;
+    color:white;
+    padding:10px;
+    margin-top:25px;
+    border-radius:5px 5px 0 0;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Top 10 Classification Models in Machine Learning</h1>
+
+<p>
+You have already implemented the complete workflow for one classifier
+(<b>K-Nearest Neighbors - KNN</b>).
+To implement the remaining classifiers, keep the preprocessing steps exactly
+the same and only replace the machine learning model.
+</p>
+
+<h2>Machine Learning Workflow</h2>
+
+<ol>
+<li>Load Data</li>
+<li>Split Data into Training and Testing Sets</li>
+<li>Scale Features</li>
+<li>Train the Model</li>
+<li>Predict</li>
+<li>Evaluate Accuracy</li>
+<li>Predict New Data</li>
+</ol>
+
+<div class="note">
+<b>Important:</b> Steps 1–3 remain exactly the same for every classifier.
+Only the classifier model changes.
+</div>
+
+<hr>
+
+<h2>1. Logistic Regression</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>2. Decision Tree</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.tree import DecisionTreeClassifier
+
+model = DecisionTreeClassifier(random_state=42)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>3. Random Forest</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.ensemble import RandomForestClassifier
+
+model = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>4. Support Vector Machine (SVM)</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.svm import SVC
+
+model = SVC(kernel='linear')
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>5. Gaussian Naive Bayes</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.naive_bayes import GaussianNB
+
+model = GaussianNB()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>6. Gradient Boosting</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.ensemble import GradientBoostingClassifier
+
+model = GradientBoostingClassifier(
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>7. AdaBoost</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.ensemble import AdaBoostClassifier
+
+model = AdaBoostClassifier(
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>8. Extra Trees</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.ensemble import ExtraTreesClassifier
+
+model = ExtraTreesClassifier(
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>9. Ridge Classifier</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.linear_model import RidgeClassifier
+
+model = RidgeClassifier()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>10. Multi-Layer Perceptron (MLP)</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.neural_network import MLPClassifier
+
+model = MLPClassifier(
+    hidden_layer_sizes=(10,),
+    max_iter=1000,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>Your Existing K-Nearest Neighbors (KNN)</h2>
+
+<div class="code-title">Python Code</div>
+
+<pre>
+from sklearn.neighbors import KNeighborsClassifier
+
+model = KNeighborsClassifier(
+    n_neighbors=3
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+</pre>
+
+<hr>
+
+<h2>Recommended Classification Models</h2>
+
+<table>
+
+<tr>
+<th>No.</th>
+<th>Classifier</th>
+<th>Import Statement</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Logistic Regression</td>
+<td>LogisticRegression</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>K-Nearest Neighbors (KNN)</td>
+<td>KNeighborsClassifier</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Decision Tree</td>
+<td>DecisionTreeClassifier</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Random Forest</td>
+<td>RandomForestClassifier</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>Support Vector Machine (SVM)</td>
+<td>SVC</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>Gaussian Naive Bayes</td>
+<td>GaussianNB</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>Gradient Boosting</td>
+<td>GradientBoostingClassifier</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>AdaBoost</td>
+<td>AdaBoostClassifier</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>Extra Trees</td>
+<td>ExtraTreesClassifier</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>Multi-Layer Perceptron (MLP)</td>
+<td>MLPClassifier</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Summary</h2>
+
+<ul>
+<li>Use the same dataset for all classifiers.</li>
+<li>Keep preprocessing (splitting and scaling) unchanged.</li>
+<li>Replace only the classifier model.</li>
+<li>Train using <code>model.fit()</code>.</li>
+<li>Predict using <code>model.predict()</code>.</li>
+<li>Evaluate using <code>accuracy_score()</code>.</li>
+<li>Compare the accuracy of different classifiers to select the best-performing model.</li>
+</ul>
+
+</div>
+
+</body>
+</html>
