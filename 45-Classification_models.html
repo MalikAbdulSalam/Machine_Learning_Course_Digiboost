@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top 10 Classification Models in Machine Learning (Python)</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f8;
+    margin:40px;
+    line-height:1.6;
+}
+.container{
+    max-width:1100px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+h1{
+    color:#0B5394;
+    text-align:center;
+}
+h2{
+    color:#006400;
+    border-bottom:2px solid #ddd;
+    padding-bottom:5px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:20px 0;
+}
+table,th,td{
+    border:1px solid #999;
+}
+th{
+    background:#0B5394;
+    color:white;
+}
+th,td{
+    padding:10px;
+    text-align:left;
+}
+pre{
+    background:#272822;
+    color:#f8f8f2;
+    padding:15px;
+    border-radius:6px;
+    overflow:auto;
+}
+.code-title{
+    background:#006400;
+    color:white;
+    padding:8px;
+    margin-top:20px;
+    border-radius:5px 5px 0 0;
+}
+.note{
+    background:#fff3cd;
+    padding:15px;
+    border-left:5px solid orange;
+    margin:20px 0;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Top 10 Classification Models in Machine Learning</h1>
+
+<p>
+After splitting the dataset and applying feature scaling, you can train different
+classification algorithms. The training process remains almost identical.
+Only the classifier changes.
+</p>
+
+<h2>Workflow</h2>
+
+<ol>
+<li>Load Dataset</li>
+<li>Create DataFrame</li>
+<li>Select Features (X) and Target (y)</li>
+<li>Split Training and Testing Data</li>
+<li>Scale Features</li>
+<li>Create Classification Model</li>
+<li>Train the Model</li>
+<li>Predict Test Data</li>
+<li>Calculate Accuracy</li>
+<li>Predict New Data</li>
+</ol>
+
+<hr>
+
+<h2>Top 10 Classification Models</h2>
+
+<table>
+
+<tr>
+<th>No</th>
+<th>Classifier</th>
+<th>Python Class</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Logistic Regression</td>
+<td>LogisticRegression()</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>K-Nearest Neighbors</td>
+<td>KNeighborsClassifier()</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Decision Tree</td>
+<td>DecisionTreeClassifier()</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Random Forest</td>
+<td>RandomForestClassifier()</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>Support Vector Machine</td>
+<td>SVC()</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>Gaussian Naive Bayes</td>
+<td>GaussianNB()</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>Gradient Boosting</td>
+<td>GradientBoostingClassifier()</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>AdaBoost</td>
+<td>AdaBoostClassifier()</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>Extra Trees</td>
+<td>ExtraTreesClassifier()</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>Multi-Layer Perceptron</td>
+<td>MLPClassifier()</td>
+</tr>
+
+</table>
+
+<div class="note">
+<b>Important:</b> The preprocessing steps (train-test split and feature scaling)
+remain the same for every classifier. Only the machine learning model changes.
+</div>
+
+<hr>
+
+<h2>Python Code (Compare All Classifiers)</h2>
+
+<div class="code-title">
+Python
+</div>
+
+<pre>
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import (
+    RandomForestClassifier,
+    GradientBoostingClassifier,
+    AdaBoostClassifier,
+    ExtraTreesClassifier
+)
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import accuracy_score
+
+models = {
+
+    "Logistic Regression":
+        LogisticRegression(),
+
+    "KNN":
+        KNeighborsClassifier(n_neighbors=3),
+
+    "Decision Tree":
+        DecisionTreeClassifier(random_state=42),
+
+    "Random Forest":
+        RandomForestClassifier(random_state=42),
+
+    "Support Vector Machine":
+        SVC(kernel="linear"),
+
+    "Gaussian Naive Bayes":
+        GaussianNB(),
+
+    "Gradient Boosting":
+        GradientBoostingClassifier(random_state=42),
+
+    "AdaBoost":
+        AdaBoostClassifier(random_state=42),
+
+    "Extra Trees":
+        ExtraTreesClassifier(random_state=42),
+
+    "Multi Layer Perceptron":
+        MLPClassifier(max_iter=1000,
+                      random_state=42)
+}
+
+for name, model in models.items():
+
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+
+    accuracy = accuracy_score(y_test, y_pred)
+
+    print(f"{name:30} Accuracy : {accuracy:.2f}")
+</pre>
+
+<hr>
+
+<h2>Explanation</h2>
+
+<table>
+
+<tr>
+<th>Step</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>Create Model</td>
+<td>Select the machine learning classifier.</td>
+</tr>
+
+<tr>
+<td>model.fit()</td>
+<td>Train the classifier using the training dataset.</td>
+</tr>
+
+<tr>
+<td>model.predict()</td>
+<td>Predict labels for the testing dataset.</td>
+</tr>
+
+<tr>
+<td>accuracy_score()</td>
+<td>Calculate the prediction accuracy.</td>
+</tr>
+
+<tr>
+<td>Loop</td>
+<td>Automatically trains and evaluates all classifiers.</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Advantages of Using a Dictionary</h2>
+
+<ul>
+<li>Write less code.</li>
+<li>Easy to compare multiple algorithms.</li>
+<li>Add or remove classifiers quickly.</li>
+<li>Suitable for experimentation and model selection.</li>
+<li>Professional coding practice.</li>
+</ul>
+
+<hr>
+
+<h2>Expected Output</h2>
+
+<pre>
+Logistic Regression          Accuracy : 1.00
+KNN                          Accuracy : 1.00
+Decision Tree                Accuracy : 1.00
+Random Forest                Accuracy : 1.00
+Support Vector Machine       Accuracy : 1.00
+Gaussian Naive Bayes         Accuracy : 1.00
+Gradient Boosting            Accuracy : 1.00
+AdaBoost                     Accuracy : 1.00
+Extra Trees                  Accuracy : 1.00
+Multi Layer Perceptron       Accuracy : 1.00
+</pre>
+
+<p>
+The actual accuracy values depend on your dataset. For larger, real-world datasets,
+different classifiers often achieve different levels of performance.
+</p>
+
+</div>
+
+</body>
+</html>
