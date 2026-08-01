@@ -1,0 +1,200 @@
+Industrial Standard Assignment
+Course: Python Data Visualization using Matplotlib
+Assignment Title: Sales & Business Data Visualization Dashboard
+Difficulty Level: Intermediate to Advanced
+
+Assignment Objective
+In this assignment, students will apply all the fundamental concepts of Matplotlib to create professional-quality business charts from real-world datasets. The goal is to understand how companies visualize data for analysis and decision-making.
+Students must use the following Matplotlib topics:
+Matplotlib Introduction 
+Getting Started 
+Pyplot 
+Plotting 
+Markers 
+Line Styles 
+Labels 
+Grid 
+Subplots 
+Scatter Plot 
+
+Scenario
+You have recently joined a software company as a Junior Data Analyst.
+The management has provided sales data and asked you to create visual reports that help them understand sales trends, customer behavior, and business performance.
+Your task is to build multiple charts using Matplotlib.
+
+Dataset
+Create a CSV file named sales_data.csv
+Month	Sales	Profit	Customers	Advertisement
+Jan	12000	2500	110	1200
+Feb	15000	3200	130	1500
+Mar	18000	4000	145	1700
+Apr	21000	5000	160	1800
+May	24000	6200	175	2100
+Jun	27000	7100	190	2400
+Jul	26000	6800	185	2300
+Aug	30000	7900	210	2600
+Sep	32000	8500	225	2800
+Oct	35000	9200	240	3000
+Nov	37000	9800	255	3200
+Dec	40000	11000	275	3500
+
+Tasks
+Task 1 – Import Libraries
+Import
+pandas 
+matplotlib.pyplot 
+Read the CSV file.
+
+Task 2 – Simple Line Plot
+Create a line graph showing
+X-axis → Month 
+Y-axis → Sales 
+Requirements
+Blue line 
+Circle markers 
+Line width = 3 
+Title 
+X label 
+Y label 
+Grid enabled 
+
+Task 3 – Plot with Different Marker Styles
+Plot the Profit values using
+Red color 
+Square marker 
+Dashed line 
+
+Task 4 – Multiple Line Plot
+Display
+Sales 
+Profit 
+on the same graph.
+Requirements
+Different colors 
+Different markers 
+Legend 
+Grid 
+
+Task 5 – Scatter Plot
+Create a scatter plot
+X-axis
+Advertisement Cost
+Y-axis
+Sales
+Requirements
+Marker size should depend on Customers. 
+Different color for points. 
+Add title and labels. 
+
+Task 6 – Subplots
+Create a dashboard having 2 rows and 2 columns
+Plot 1
+Sales Trend
+
+Plot 2
+Profit Trend
+
+Plot 3
+Customers Trend
+
+Plot 4
+Advertisement Trend
+Every graph should have
+Title 
+Grid 
+Labels 
+Marker 
+
+Task 7 – Customize Graph
+Modify the Sales graph by adding
+Green line 
+Diamond markers 
+Grid 
+Font size = 15 
+Figure size = (12,6) 
+
+Task 8 – Compare Two Variables
+Plot Sales and Customers together.
+Use
+Two different colors 
+Legend 
+Grid 
+Write three observations.
+Example
+Sales increase every month. 
+Customers and Sales have a positive relationship. 
+December has the highest sales. 
+
+Task 9 – Business Analysis
+Answer the following questions.
+1.Which month has maximum sales? 
+2.Which month has maximum profit? 
+3.Does advertisement increase sales? 
+4.Is customer growth related to sales growth? 
+5.Which quarter performed the best? 
+
+Task 10 – Mini Dashboard
+Create one figure containing 4 subplots
+Include
+Sales Line Plot 
+Profit Line Plot 
+Advertisement Scatter Plot 
+Customers Line Plot 
+The dashboard should look neat and professional.
+
+Bonus Challenge (+20 Marks)
+Add
+Different marker styles 
+Different line styles 
+Background color 
+Figure title using suptitle() 
+Save the dashboard as 
+dashboard.png
+
+Expected Folder Structure
+Matplotlib_Assignment/
+
+│── sales_data.csv
+│── assignment.py
+│── dashboard.png
+│── report.pdf
+
+Report (PDF)
+Students must submit a report containing
+Introduction 
+Objective 
+Dataset Description 
+Screenshots of every graph 
+Observations 
+Conclusion 
+
+Submission Requirements
+Submit
+Python Source Code 
+CSV Dataset 
+Dashboard Image 
+PDF Report 
+
+Evaluation Rubric (100 Marks)
+Criteria	Marks
+Importing Dataset	5
+Line Plot	10
+Marker Usage	10
+Labels & Titles	10
+Grid Usage	5
+Scatter Plot	15
+Subplots	20
+Dashboard Design	10
+Business Analysis	10
+Code Quality & Comments	5
+
+Learning Outcomes
+After completing this assignment, students will be able to:
+Load datasets using Pandas. 
+Create professional line charts. 
+Customize markers and line styles. 
+Add titles, labels, legends, and grids. 
+Create scatter plots for relationship analysis. 
+Build multi-chart dashboards using subplots. 
+Interpret business data using visualizations. 
+Produce industry-style analytical reports suitable for business presentations. 
