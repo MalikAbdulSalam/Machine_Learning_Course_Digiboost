@@ -1,0 +1,189 @@
+Assignment: Data Preprocessing Based on Column Types
+Course: Machine Learning
+Topic: Data Preprocessing Based on Column Types
+Total Marks: 30
+Submission: Python (.ipynb) + Report (PDF/Word)
+Objective
+
+The objective of this assignment is to understand different types of dataset columns and apply appropriate preprocessing techniques using Python and Pandas.
+
+Dataset
+
+You may use any CSV dataset containing:
+
+Continuous numerical columns
+Discrete numerical columns
+Nominal categorical columns
+Ordinal categorical columns
+Boolean columns
+
+Example datasets:
+
+Titanic Dataset
+Employee Dataset
+Student Dataset
+Customer Dataset
+Task 1: Identify Column Types (5 Marks)
+
+Load the dataset and identify each column as one of the following:
+
+Column Name	Type
+Age	Continuous Numerical
+Salary	Continuous Numerical
+Gender	Nominal
+Education	Ordinal
+Purchased	Boolean
+Task 2: Continuous Numerical Columns (5 Marks)
+
+Perform preprocessing on all continuous numerical columns.
+
+Required Tasks
+Detect missing values.
+Fill missing values using:
+Mean
+Median
+Detect outliers.
+Handle outliers using any suitable method.
+Apply feature scaling.
+Compare Min-Max Scaling and Standardization.
+Questions
+Which columns are continuous?
+Which missing value technique did you use?
+Why did you choose Mean or Median?
+Which scaling method worked better?
+Task 3: Discrete Numerical Columns (4 Marks)
+
+Perform preprocessing on discrete numerical columns.
+
+Required Tasks
+Detect missing values.
+Fill missing values.
+Detect invalid values.
+Check for outliers.
+Apply scaling if necessary.
+Questions
+Which columns are discrete?
+Are there any invalid values?
+Did you apply scaling? Why?
+Task 4: Nominal Categorical Columns (5 Marks)
+
+Perform preprocessing on nominal categorical columns.
+
+Required Tasks
+Find missing values.
+Fill missing values using Mode.
+Apply One-Hot Encoding.
+Merge rare categories (if needed).
+Questions
+Which columns are nominal?
+Why is One-Hot Encoding preferred?
+What problem occurs if Label Encoding is applied to nominal data?
+Task 5: Ordinal Categorical Columns (4 Marks)
+
+Perform preprocessing on ordinal columns.
+
+Required Tasks
+
+Suppose the dataset contains:
+
+Education
+Primary
+Secondary
+Bachelor
+Master
+PhD
+
+Encode them as:
+
+Category	Value
+Primary	1
+Secondary	2
+Bachelor	3
+Master	4
+PhD	5
+Questions
+Why should ordinal data not use One-Hot Encoding?
+What happens if the order is changed?
+Task 6: Boolean Columns (3 Marks)
+
+Convert all Boolean columns into numeric values.
+
+Example
+
+Original	Converted
+Yes	1
+No	0
+True	1
+False	0
+Questions
+Which Boolean columns exist?
+Why are Boolean values converted into numbers?
+Task 7: Data Visualization (2 Marks)
+
+Visualize your dataset before and after preprocessing.
+
+Use at least four of the following:
+
+Histogram
+Box Plot
+Count Plot (or Bar Chart)
+Pie Chart
+Scatter Plot
+Heatmap (optional)
+
+Include screenshots in your report.
+
+Task 8: Final Dataset (2 Marks)
+
+Display the final cleaned dataset.
+
+Verify that:
+
+No missing values remain.
+All categorical variables are encoded.
+Numerical columns are scaled (where required).
+Boolean values are numeric.
+Submission Requirements
+
+Submit:
+
+Python Notebook (.ipynb)
+PDF/Word Report containing:
+Dataset description
+Screenshots of preprocessing steps
+Visualizations
+Final cleaned dataset
+Answers to all questions
+Bonus Task (+5 Marks)
+
+Perform the following:
+
+Remove duplicate rows.
+Detect highly correlated features using a correlation matrix.
+Apply Log Transformation on a highly skewed numerical column.
+Explain why log transformation was useful.
+Compare the dataset before and after preprocessing using charts.
+Marking Rubric
+Task	Marks
+Identify Column Types	5
+Continuous Numerical Preprocessing	5
+Discrete Numerical Preprocessing	4
+Nominal Categorical Preprocessing	5
+Ordinal Categorical Preprocessing	4
+Boolean Preprocessing	3
+Data Visualization	2
+Final Cleaned Dataset	2
+Total	30
+Bonus	+5
+Expected Learning Outcomes
+
+After completing this assignment, students will be able to:
+
+Identify different types of dataset columns.
+Handle missing values effectively.
+Detect and treat outliers.
+Encode categorical variables correctly.
+Scale numerical features.
+Convert Boolean values into numerical format.
+Visualize data before and after preprocessing.
+Prepare datasets for machine learning models using industry-standard preprocessing techniques.
