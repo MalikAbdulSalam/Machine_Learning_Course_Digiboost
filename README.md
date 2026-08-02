@@ -38,7 +38,10 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 [Lecture 14 : Example of Flak API ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/40-ML_Flask_project.html)
 
 
-[Lecture 15 : Example of Flak API ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/48-Preprocessing_cases (1).html)
+[Lecture 15 : Preprocessing_cases ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/48-Preprocessing_cases (1).html)
+
+[Lecture 16 : Outliers ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/49-outliers (1).html)
+
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
