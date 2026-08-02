@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outliers in Data Preprocessing</title>
+
+<style>
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    margin:40px;
+    background:#f4f7fb;
+    color:#333;
+    line-height:1.7;
+}
+h1,h2,h3{
+    color:#0056b3;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:20px 0;
+}
+table,th,td{
+    border:1px solid #ccc;
+}
+th{
+    background:#0056b3;
+    color:white;
+    padding:10px;
+}
+td{
+    padding:10px;
+}
+code{
+    background:#efefef;
+    padding:2px 5px;
+    border-radius:4px;
+}
+.box{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:8px;
+    box-shadow:0px 2px 8px rgba(0,0,0,0.1);
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Outliers in Data Preprocessing</h1>
+
+<div class="box">
+
+<h2>What is an Outlier?</h2>
+
+<p>
+An <strong>outlier</strong> is a data point that is significantly different from the
+other observations in a dataset. It lies far away from the majority of the data.
+Outliers may occur because of measurement errors, data entry mistakes, equipment
+malfunctions, or they may represent genuine rare events.
+</p>
+
+<p>
+Outliers can negatively affect machine learning models by changing the mean,
+increasing variance, and reducing prediction accuracy.
+</p>
+
+<h3>Example</h3>
+
+<table>
+
+<tr>
+<th>Student</th>
+<th>Age</th>
+</tr>
+
+<tr>
+<td>A</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>B</td>
+<td>21</td>
+</tr>
+
+<tr>
+<td>C</td>
+<td>22</td>
+</tr>
+
+<tr>
+<td>D</td>
+<td>19</td>
+</tr>
+
+<tr>
+<td>E</td>
+<td>20</td>
+</tr>
+
+<tr style="background:#ffe6e6;">
+<td>F</td>
+<td>95</td>
+</tr>
+
+</table>
+
+<p>
+Here, the value <strong>95</strong> is an outlier because all other ages are around
+19–22.
+</p>
+
+</div>
+
+<div class="box">
+
+<h2>Why are Outliers Important?</h2>
+
+<ul>
+<li>Can reduce machine learning model accuracy.</li>
+<li>Can significantly affect the mean and standard deviation.</li>
+<li>Can mislead statistical analysis.</li>
+<li>Can increase prediction errors.</li>
+<li>Sometimes they represent valuable rare events and should not be removed.</li>
+</ul>
+
+</div>
+
+<div class="box">
+
+<h2>How to Detect Outliers?</h2>
+
+<p>
+There are several statistical and visualization techniques for detecting outliers.
+</p>
+
+<h3>1. Box Plot Method (Most Popular)</h3>
+
+<p>
+A Box Plot shows the distribution of data using quartiles.
+Any value outside the whiskers is considered an outlier.
+</p>
+
+<h3>2. Interquartile Range (IQR) Method</h3>
+
+<p>
+IQR measures the spread of the middle 50% of data.
+</p>
+
+<p><strong>Formula:</strong></p>
+
+<pre>
+IQR = Q3 - Q1
+
+Lower Limit = Q1 - 1.5 × IQR
+
+Upper Limit = Q3 + 1.5 × IQR
+</pre>
+
+<p>
+Any value below the lower limit or above the upper limit is considered an outlier.
+</p>
+
+<h3>Example</h3>
+
+<table>
+
+<tr>
+<th>Quartile</th>
+<th>Value</th>
+</tr>
+
+<tr>
+<td>Q1</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>Q3</td>
+<td>40</td>
+</tr>
+
+<tr>
+<td>IQR</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>Lower Limit</td>
+<td>-10</td>
+</tr>
+
+<tr>
+<td>Upper Limit</td>
+<td>70</td>
+</tr>
+
+</table>
+
+<p>
+Any value greater than <strong>70</strong> is an outlier.
+</p>
+
+<hr>
+
+<h3>3. Z-Score Method</h3>
+
+<p>
+The Z-score measures how many standard deviations a value is away from the mean.
+</p>
+
+<p><strong>Formula</strong></p>
+
+<pre>
+Z = (X - Mean) / Standard Deviation
+</pre>
+
+<p>
+If:
+</p>
+
+<ul>
+<li>Z > 3</li>
+<li>Z < -3</li>
+</ul>
+
+<p>
+then the value is usually considered an outlier.
+</p>
+
+<hr>
+
+<h3>4. Percentile Method</h3>
+
+<p>
+Values below the 1st percentile or above the 99th percentile
+can be treated as outliers.
+</p>
+
+<hr>
+
+<h3>5. Machine Learning Methods</h3>
+
+<ul>
+<li>Isolation Forest</li>
+<li>DBSCAN</li>
+<li>Local Outlier Factor (LOF)</li>
+<li>One-Class SVM</li>
+</ul>
+
+</div>
+
+<div class="box">
+
+<h2>How to Visualize Outliers?</h2>
+
+<p>
+Visualization helps us quickly identify unusual values.
+</p>
+
+<h3>1. Box Plot ⭐ (Best Method)</h3>
+
+<p>
+A box plot directly displays outliers as individual points.
+</p>
+
+<pre>
+Matplotlib:
+
+plt.boxplot(df["Salary"])
+plt.show()
+</pre>
+
+<hr>
+
+<h3>2. Scatter Plot</h3>
+
+<p>
+Scatter plots show points that lie far away from the majority.
+</p>
+
+<pre>
+plt.scatter(df.index, df["Salary"])
+plt.show()
+</pre>
+
+<hr>
+
+<h3>3. Histogram</h3>
+
+<p>
+Histograms reveal extremely high or low values.
+</p>
+
+<pre>
+plt.hist(df["Salary"])
+plt.show()
+</pre>
+
+<hr>
+
+<h3>4. Violin Plot</h3>
+
+<p>
+Shows both the distribution and potential outliers.
+</p>
+
+<hr>
+
+<h3>5. Density Plot (KDE)</h3>
+
+<p>
+Displays the probability distribution and highlights unusual values.
+</p>
+
+</div>
+
+<div class="box">
+
+<h2>How to Handle Outliers?</h2>
+
+<p>
+The handling technique depends on why the outlier exists.
+</p>
+
+<table>
+
+<tr>
+
+<th>Situation</th>
+
+<th>Recommended Action</th>
+
+</tr>
+
+<tr>
+
+<td>Data Entry Error</td>
+
+<td>Correct or Remove</td>
+
+</tr>
+
+<tr>
+
+<td>Measurement Error</td>
+
+<td>Remove</td>
+
+</tr>
+
+<tr>
+
+<td>Valid Rare Observation</td>
+
+<td>Keep</td>
+
+</tr>
+
+<tr>
+
+<td>Extreme Value Affecting Model</td>
+
+<td>Cap or Transform</td>
+
+</tr>
+
+</table>
+
+<hr>
+
+<h3>Method 1: Remove Outliers</h3>
+
+<p>
+Delete observations that are incorrect or significantly different from the rest.
+</p>
+
+<pre>
+Remove values outside IQR limits.
+</pre>
+
+<hr>
+
+<h3>Method 2: Replace with Mean or Median</h3>
+
+<p>
+Replace the outlier with the column mean or median.
+Median is preferred because it is less affected by extreme values.
+</p>
+
+<hr>
+
+<h3>Method 3: Winsorization (Capping)</h3>
+
+<p>
+Replace extremely high values with the maximum acceptable value and
+extremely low values with the minimum acceptable value.
+</p>
+
+Example:
+
+<pre>
+Original:
+5, 8, 9, 10, 200
+
+After Capping:
+
+5, 8, 9, 10, 20
+</pre>
+
+<hr>
+
+<h3>Method 4: Log Transformation</h3>
+
+<p>
+Useful for highly skewed data like salaries, house prices,
+population, and income.
+</p>
+
+<hr>
+
+<h3>Method 5: Robust Scaling</h3>
+
+<p>
+RobustScaler uses the median and IQR instead of the mean and standard deviation.
+It performs well when outliers are present.
+</p>
+
+<hr>
+
+<h3>Method 6: Keep the Outlier</h3>
+
+<p>
+Sometimes outliers are valuable.
+</p>
+
+Examples:
+
+<ul>
+
+<li>Fraud Detection</li>
+
+<li>Disease Diagnosis</li>
+
+<li>Earthquakes</li>
+
+<li>Network Intrusion Detection</li>
+
+<li>Stock Market Crashes</li>
+
+</ul>
+
+Removing these outliers could reduce model performance.
+
+</div>
+
+<div class="box">
+
+<h2>Advantages of Handling Outliers</h2>
+
+<ul>
+
+<li>Improves model accuracy.</li>
+
+<li>Produces better statistical analysis.</li>
+
+<li>Reduces prediction error.</li>
+
+<li>Improves feature scaling.</li>
+
+<li>Creates more reliable machine learning models.</li>
+
+</ul>
+
+</div>
+
+<div class="box">
+
+<h2>Summary</h2>
+
+<table>
+
+<tr>
+
+<th>Question</th>
+
+<th>Answer</th>
+
+</tr>
+
+<tr>
+
+<td>What is an Outlier?</td>
+
+<td>An unusually large or small data value.</td>
+
+</tr>
+
+<tr>
+
+<td>How to Detect?</td>
+
+<td>IQR, Z-Score, Percentiles, Isolation Forest.</td>
+
+</tr>
+
+<tr>
+
+<td>How to Visualize?</td>
+
+<td>Box Plot, Scatter Plot, Histogram, Violin Plot.</td>
+
+</tr>
+
+<tr>
+
+<td>How to Handle?</td>
+
+<td>Remove, Replace, Cap, Log Transform, Robust Scaling, or Keep.</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</body>
+</html>
