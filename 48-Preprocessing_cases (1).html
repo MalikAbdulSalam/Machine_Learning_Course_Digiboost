@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Preprocessing Based on Column Types</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:40px;
+            background:#f4f7f9;
+            line-height:1.7;
+            color:#333;
+        }
+        h1,h2{
+            color:#0b5394;
+        }
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+            margin-bottom:30px;
+        }
+        table, th, td{
+            border:1px solid #ccc;
+        }
+        th{
+            background:#0b5394;
+            color:white;
+            padding:10px;
+        }
+        td{
+            padding:10px;
+            vertical-align:top;
+        }
+        code{
+            background:#efefef;
+            padding:2px 5px;
+            border-radius:4px;
+        }
+        .box{
+            background:white;
+            padding:20px;
+            border-radius:8px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+            margin-bottom:25px;
+        }
+        ul li{
+            margin-bottom:8px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Data Preprocessing Based on Column Types</h1>
+
+<div class="box">
+
+<p>
+Data preprocessing is one of the most important steps in Machine Learning.
+Raw data usually contains missing values, incorrect formats, duplicate records,
+outliers, and categorical data that cannot be directly used by machine learning
+algorithms.
+</p>
+
+<p>
+Different types of columns require different preprocessing techniques.
+Understanding the type of each feature helps us apply the correct preprocessing
+method and improve the model's accuracy.
+</p>
+
+</div>
+
+<h2>1. Numerical Columns (Continuous)</h2>
+
+<p><strong>Definition:</strong></p>
+
+<p>
+Continuous numerical columns contain decimal or floating-point values.
+These values can take any number within a range.
+</p>
+
+<p><strong>Examples:</strong></p>
+
+<ul>
+<li>Age</li>
+<li>Salary</li>
+<li>Height</li>
+<li>Weight</li>
+<li>House Price</li>
+<li>Temperature</li>
+</ul>
+
+<p><strong>Recommended Preprocessing:</strong></p>
+
+<ul>
+<li>Handle Missing Values using Mean or Median.</li>
+<li>Detect and Remove Outliers.</li>
+<li>Normalize or Standardize the data.</li>
+<li>Apply Log Transformation if data is highly skewed.</li>
+<li>Feature Scaling before training algorithms like KNN, SVM, and Neural Networks.</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+
+<table>
+<tr>
+<th>Age</th>
+<th>Salary</th>
+</tr>
+
+<tr>
+<td>25</td>
+<td>50000</td>
+</tr>
+
+<tr>
+<td>30</td>
+<td>62000</td>
+</tr>
+
+<tr>
+<td>NaN</td>
+<td>58000</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>2. Numerical Columns (Discrete)</h2>
+
+<p><strong>Definition:</strong></p>
+
+<p>
+Discrete numerical columns contain countable values and usually do not contain decimal numbers.
+</p>
+
+<p><strong>Examples:</strong></p>
+
+<ul>
+<li>Number of Children</li>
+<li>Quantity Sold</li>
+<li>Number of Employees</li>
+<li>Number of Orders</li>
+</ul>
+
+<p><strong>Recommended Preprocessing:</strong></p>
+
+<ul>
+<li>Fill missing values.</li>
+<li>Check for invalid values.</li>
+<li>Scale data if required.</li>
+<li>Detect outliers.</li>
+</ul>
+
+<hr>
+
+<h2>3. Categorical Columns (Nominal)</h2>
+
+<p><strong>Definition:</strong></p>
+
+<p>
+Nominal categorical data contains categories without any order.
+</p>
+
+<p><strong>Examples:</strong></p>
+
+<ul>
+<li>Gender</li>
+<li>City</li>
+<li>Country</li>
+<li>Department</li>
+<li>Color</li>
+</ul>
+
+<p><strong>Recommended Preprocessing:</strong></p>
+
+<ul>
+<li>Fill missing values using Mode.</li>
+<li>Apply One-Hot Encoding.</li>
+<li>Use Label Encoding only for binary categories.</li>
+<li>Merge rare categories if necessary.</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+
+<table>
+
+<tr>
+<th>Gender</th>
+<th>City</th>
+</tr>
+
+<tr>
+<td>Male</td>
+<td>Lahore</td>
+</tr>
+
+<tr>
+<td>Female</td>
+<td>Karachi</td>
+</tr>
+
+<tr>
+<td>Male</td>
+<td>Islamabad</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>4. Categorical Columns (Ordinal)</h2>
+
+<p><strong>Definition:</strong></p>
+
+<p>
+Ordinal data has a meaningful order or ranking.
+</p>
+
+<p><strong>Examples:</strong></p>
+
+<ul>
+<li>Education Level</li>
+<li>Customer Satisfaction</li>
+<li>Low, Medium, High</li>
+<li>Small, Medium, Large</li>
+</ul>
+
+<p><strong>Recommended Preprocessing:</strong></p>
+
+<ul>
+<li>Fill missing values.</li>
+<li>Apply Ordinal Encoding.</li>
+<li>Maintain the correct order while encoding.</li>
+</ul>
+
+<p><strong>Example Encoding:</strong></p>
+
+<table>
+
+<tr>
+<th>Category</th>
+<th>Encoded Value</th>
+</tr>
+
+<tr>
+<td>Low</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Medium</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>High</td>
+<td>3</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>5. Boolean Columns</h2>
+
+<p><strong>Examples:</strong></p>
+
+<ul>
+<li>Purchased</li>
+<li>Married</li>
+<li>Paid</li>
+<li>Yes / No</li>
+<li>True / False</li>
+</ul>
+
+<p><strong>Recommended Preprocessing:</strong></p>
+
+<ul>
+<li>Convert Yes → 1</li>
+<li>Convert No → 0</li>
+<li>Convert True → 1</li>
+<li>Convert False → 0</li>
+</ul>
+
+<hr>
+
+<h2>6. Date and Time Columns</h2>
+
+<p><strong>Examples:</strong></p>
+
+<ul>
+<li>Date of Birth</li>
+<li>Joining Date</li>
+<li>Purchase Date</li>
+<li>Transaction Time</li>
+</ul>
+
+<p><strong>Recommended Preprocessing:</strong></p>
+
+<ul>
+<li>Convert into datetime format.</li>
+<li>Extract Year.</li>
+<li>Extract Month.</li>
+<li>Extract Day.</li>
+<li>Extract Weekday.</li>
+<li>Calculate Age.</li>
+<li>Calculate Time Difference.</li>
+</ul>
+
+<hr>
+
+<h2>7. Text Columns</h2>
+
+<p><strong>Examples:</strong></p>
+
+<ul>
+<li>Customer Reviews</li>
+<li>Comments</li>
+<li>Email Messages</li>
+<li>Product Descriptions</li>
+</ul>
+
+<p><strong>Recommended Preprocessing:</strong></p>
+
+<ul>
+<li>Convert to lowercase.</li>
+<li>Remove punctuation.</li>
+<li>Remove stopwords.</li>
+<li>Tokenization.</li>
+<li>Stemming.</li>
+<li>Lemmatization.</li>
+<li>TF-IDF Vectorization.</li>
+<li>Word Embeddings.</li>
+</ul>
+
+<hr>
+
+<h2>8. ID Columns</h2>
+
+<p><strong>Examples:</strong></p>
+
+<ul>
+<li>Student ID</li>
+<li>Customer ID</li>
+<li>Order ID</li>
+<li>Employee ID</li>
+</ul>
+
+<p><strong>Recommended Preprocessing:</strong></p>
+
+<ul>
+<li>Usually remove these columns.</li>
+<li>Keep them only if they contain meaningful information.</li>
+</ul>
+
+<hr>
+
+<h2>9. Target Column</h2>
+
+<p><strong>Classification Example:</strong></p>
+
+<table>
+
+<tr>
+<th>Purchased</th>
+</tr>
+
+<tr>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>No</td>
+</tr>
+
+</table>
+
+<p><strong>Regression Example:</strong></p>
+
+<table>
+
+<tr>
+<th>House Price</th>
+</tr>
+
+<tr>
+<td>250000</td>
+</tr>
+
+<tr>
+<td>310000</td>
+</tr>
+
+</table>
+
+<p><strong>Recommended Preprocessing:</strong></p>
+
+<ul>
+<li>Encode classification labels.</li>
+<li>Do not scale unless required.</li>
+<li>Never use target information while preprocessing features.</li>
+</ul>
+
+<hr>
+
+<h2>Complete Data Preprocessing Pipeline</h2>
+
+<ol>
+
+<li>Understand the Dataset</li>
+
+<li>Identify Feature Types</li>
+
+<li>Handle Missing Values</li>
+
+<li>Remove Duplicate Records</li>
+
+<li>Correct Invalid Data</li>
+
+<li>Detect and Remove Outliers</li>
+
+<li>Encode Categorical Variables</li>
+
+<li>Scale Numerical Features</li>
+
+<li>Convert Date Columns</li>
+
+<li>Clean Text Columns</li>
+
+<li>Drop Unnecessary Columns</li>
+
+<li>Perform Feature Engineering</li>
+
+<li>Select Important Features</li>
+
+<li>Split Dataset into Training and Testing Sets</li>
+
+<li>Train Machine Learning Model</li>
+
+<li>Evaluate Model Performance</li>
+
+</ol>
+
+<hr>
+
+<h2>Summary Table</h2>
+
+<table>
+
+<tr>
+
+<th>Column Type</th>
+
+<th>Examples</th>
+
+<th>Recommended Preprocessing</th>
+
+</tr>
+
+<tr>
+
+<td>Continuous Numerical</td>
+
+<td>Age, Salary, Height</td>
+
+<td>Missing Values, Outliers, Scaling, Normalization</td>
+
+</tr>
+
+<tr>
+
+<td>Discrete Numerical</td>
+
+<td>Orders, Children</td>
+
+<td>Missing Values, Scaling, Validation</td>
+
+</tr>
+
+<tr>
+
+<td>Nominal Categorical</td>
+
+<td>Gender, City</td>
+
+<td>Mode Imputation, One-Hot Encoding</td>
+
+</tr>
+
+<tr>
+
+<td>Ordinal Categorical</td>
+
+<td>Low, Medium, High</td>
+
+<td>Ordinal Encoding</td>
+
+</tr>
+
+<tr>
+
+<td>Boolean</td>
+
+<td>Yes/No</td>
+
+<td>Convert to 0 and 1</td>
+
+</tr>
+
+<tr>
+
+<td>Date</td>
+
+<td>Joining Date</td>
+
+<td>Extract Year, Month, Day</td>
+
+</tr>
+
+<tr>
+
+<td>Text</td>
+
+<td>Reviews</td>
+
+<td>Cleaning, Tokenization, TF-IDF</td>
+
+</tr>
+
+<tr>
+
+<td>ID</td>
+
+<td>Customer ID</td>
+
+<td>Usually Drop</td>
+
+</tr>
+
+<tr>
+
+<td>Target</td>
+
+<td>Purchased, Price</td>
+
+<td>Encode if Classification</td>
+
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Conclusion</h2>
+
+<p>
+Selecting the correct preprocessing technique depends on the data type of each
+column. Numerical features usually require scaling and outlier handling,
+categorical features require encoding, date columns are converted into useful
+time-based features, text columns undergo Natural Language Processing (NLP),
+and identifier columns are generally removed. A well-preprocessed dataset leads
+to better machine learning performance, improved prediction accuracy, and faster
+model convergence.
+</p>
+
+</body>
+</html>
