@@ -1,0 +1,172 @@
+Industrial Standard Assignment: Python Matplotlib (Scatter, Bar, Histogram, Pie Charts)
+Course
+
+Python Data Visualization with Matplotlib
+
+Assignment Title
+
+Data Visualization Using Matplotlib
+
+Objective
+
+The objective of this assignment is to develop practical skills in creating professional-quality data visualizations using Matplotlib. Students will learn how to represent relationships, comparisons, distributions, and proportions through different chart types.
+
+Dataset
+
+Create a CSV file named employee_sales.csv
+
+Employee	Department	Sales	Experience	Age
+Ali	Sales	52000	2	24
+Ahmed	Sales	68000	5	29
+Sara	Marketing	47000	3	26
+Fatima	HR	39000	4	31
+Bilal	IT	81000	7	35
+Ayesha	IT	74000	6	32
+Hassan	Finance	62000	5	30
+Zain	Marketing	55000	4	28
+Maryam	Finance	59000	5	29
+Usman	HR	43000	3	27
+Task 1 – Scatter Plot
+Objective
+
+Visualize the relationship between employee experience and sales performance.
+
+Requirements
+
+Create a scatter plot showing:
+
+X-axis → Experience (Years)
+Y-axis → Sales
+Marker size = 100
+Marker color = Blue
+Add Grid
+Add Chart Title
+Label both axes
+Expected Learning
+
+Students should understand:
+
+Correlation between variables
+Positive/negative relationships
+Scatter plot customization
+Task 2 – Bar Chart
+Objective
+
+Compare total sales of employees.
+
+Requirements
+
+Create a vertical bar chart.
+
+Employee names on X-axis
+Sales on Y-axis
+Different color for each bar
+Display sales values above bars
+Rotate X-axis labels if necessary
+Add Title
+Add Grid
+Expected Learning
+
+Students should understand
+
+Category comparison
+Bar customization
+Annotation of values
+Task 3 – Histogram
+Objective
+
+Analyze the distribution of employee sales.
+
+Requirements
+
+Create a histogram.
+
+Dataset = Sales column
+Number of bins = 5
+Edge color = Black
+Transparency = 70%
+Add Title
+Add X-axis Label
+Add Y-axis Label
+Add Grid
+Expected Learning
+
+Students should understand
+
+Data distribution
+Frequency analysis
+Histogram bins
+Task 4 – Pie Chart
+Objective
+
+Show department-wise employee distribution.
+
+Requirements
+
+Count employees in each department and create a pie chart.
+
+Features:
+
+Display percentage
+Start angle = 90°
+Shadow enabled
+Explode the largest slice
+Equal aspect ratio
+Add Title
+Expected Learning
+
+Students should understand
+
+Percentage representation
+Part-to-whole relationship
+Pie chart customization
+Bonus Challenge
+
+Create a dashboard using plt.subplots() containing:
+
+Scatter Plot
+Bar Chart
+Histogram
+Pie Chart
+
+Arrange all four charts in one figure.
+
+Submission Requirements
+
+Students must submit:
+
+Python (.py) source code
+employee_sales.csv
+Output screenshots
+One-page report explaining each chart
+GitHub repository link (optional)
+Marking Rubric
+Criteria	Marks
+Scatter Plot	20
+Bar Chart	20
+Histogram	20
+Pie Chart	20
+Code Quality & Comments	10
+Report & Presentation	10
+Total	100
+Industry Best Practices
+
+Students are expected to:
+
+Write clean, readable, and well-commented code.
+Use meaningful variable names.
+Follow PEP 8 coding standards.
+Organize code into reusable functions.
+Handle file-reading errors using exception handling.
+Add chart titles, axis labels, legends (where applicable), and grids.
+Ensure charts are professional, readable, and properly formatted.
+Learning Outcomes
+
+After completing this assignment, students will be able to:
+
+Create professional scatter plots using Matplotlib.
+Compare categorical data using bar charts.
+Analyze numerical distributions using histograms.
+Visualize proportions using pie charts.
+Apply visualization best practices for real-world business datasets.
+Develop publication-ready charts suitable for reports and presentations.
