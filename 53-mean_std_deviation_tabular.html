@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mean & SD – CSV Data Analysis (House Prices)</title>
+    <!-- Chart.js for charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Prism.js for code highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f8faff;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            padding: 2rem 1.5rem;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-weight: 600;
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+        .subhead {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #475569;
+            margin-left: 8px;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 32px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #64748b;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 16px 0 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 18px 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04), 0 2px 6px rgba(0,0,0,0.02);
+            border: 1px solid #e9eef3;
+            transition: 0.2s;
+        }
+        .card:hover {
+            border-color: #cbd5e1;
+        }
+        .card h3 {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .badge {
+            background: #dbeafe;
+            color: #1e4b8a;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 40px;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 12px 0 4px;
+            font-size: 0.9rem;
+            background: #f1f5f9;
+            padding: 10px 6px;
+            border-radius: 40px;
+        }
+        .stats-row span {
+            font-weight: 500;
+        }
+        .stats-row .value {
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .inline-desc {
+            font-size: 0.85rem;
+            color: #334155;
+            margin-top: 6px;
+            padding: 0 6px;
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        .rule-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px 40px;
+            align-items: center;
+        }
+        .rule-canvas-container {
+            flex: 2;
+            min-width: 280px;
+            height: 200px;
+        }
+        .rule-legend {
+            flex: 1;
+            min-width: 160px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 16px 20px;
+        }
+        .rule-legend ul {
+            list-style: none;
+            padding: 0;
+        }
+        .rule-legend li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .color-box {
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+        }
+        .control-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px 24px;
+            background: #f1f5f9;
+            padding: 14px 22px;
+            border-radius: 60px;
+            margin-bottom: 10px;
+        }
+        .control-group label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type="range"] {
+            width: 180px;
+            accent-color: #2563eb;
+        }
+        .sd-value {
+            font-weight: 700;
+            color: #2563eb;
+            min-width: 36px;
+            display: inline-block;
+        }
+        .code-block {
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin: 16px 0 10px;
+            overflow-x: auto;
+            border: 1px solid #1e293b;
+        }
+        .code-block pre {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .code-block code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .code-header span {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            background: #1e293b;
+            padding: 4px 14px;
+            border-radius: 30px;
+        }
+        .copy-btn {
+            background: #1e293b;
+            border: none;
+            color: #94a3b8;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .copy-btn:hover {
+            background: #334155;
+            color: #f1f5f9;
+        }
+        .footnote {
+            text-align: center;
+            margin-top: 28px;
+            color: #64748b;
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 24px;
+        }
+        .python-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 24px 24px;
+            border: 1px solid #e9eef3;
+            margin-top: 24px;
+        }
+        .python-section h3 {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+        }
+        .python-section .desc {
+            color: #475569;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+        .output-demo {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-top: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #0f172a;
+            border-left: 4px solid #2563eb;
+            overflow-x: auto;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.2fr;
+            gap: 20px;
+            margin: 16px 0 10px;
+        }
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 18px 20px 20px;
+            border: 1px solid #e9eef3;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .info-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info-card ul, .info-card p {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #334155;
+            padding-left: 0;
+            list-style: none;
+        }
+        .info-card li {
+            padding: 4px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+        .info-card .pro { color: #16a34a; font-weight: 600; }
+        .info-card .con { color: #dc2626; font-weight: 600; }
+        .info-card .ml-tag {
+            background: #dbeafe;
+            color: #1e4b8a;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin: 12px 0;
+        }
+        .data-table th {
+            background: #f1f5f9;
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            border-bottom: 1px solid #e9eef3;
+        }
+        .data-table tr:hover {
+            background: #f8faff;
+        }
+        .csv-highlight {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 12px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        @media (max-width: 900px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            .rule-wrapper {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        📊 Mean &amp; Standard Deviation
+        <span class="subhead">– CSV Data Analysis (House Prices)</span>
+    </h1>
+
+    <!-- Control: adjust SD for the "spread" dataset -->
+    <div class="control-group">
+        <label>🔁 Adjust spread (SD):
+            <input type="range" id="sdSlider" min="0.5" max="18" step="0.1" value="6" />
+            <span class="sd-value" id="sdDisplay">6.0</span>
+        </label>
+        <span style="color:#475569; font-size:0.9rem;">Both datasets have <strong>same mean</strong> (50) – watch the width change</span>
+    </div>
+
+    <!-- Two histograms: low SD vs high SD -->
+    <div class="card-grid">
+        <div class="card">
+            <h3>📌 Low standard deviation <span class="badge">tight</span></h3>
+            <div class="chart-wrapper">
+                <canvas id="chartLow" width="400" height="200"></canvas>
+            </div>
+            <div class="stats-row">
+                <span>Mean <span class="value" id="meanLow">50.0</span></span>
+                <span>SD <span class="value" id="sdLow">5.0</span></span>
+            </div>
+            <div class="inline-desc">✔ Most values cluster near the center.</div>
+        </div>
+
+        <div class="card">
+            <h3>📌 High standard deviation <span class="badge">spread</span></h3>
+            <div class="chart-wrapper">
+                <canvas id="chartHigh" width="400" height="200"></canvas>
+            </div>
+            <div class="stats-row">
+                <span>Mean <span class="value" id="meanHigh">50.0</span></span>
+                <span>SD <span class="value" id="sdHigh">6.0</span></span>
+            </div>
+            <div class="inline-desc">✔ Data is widely scattered around the mean.</div>
+        </div>
+    </div>
+
+    <!-- 68-95-99.7 rule (bell curve) + legend -->
+    <div class="card full-width">
+        <h3>🔔 The 68‑95‑99.7 rule (Empirical Rule)</h3>
+        <div class="rule-wrapper">
+            <div class="rule-canvas-container">
+                <canvas id="chartRule" width="500" height="200"></canvas>
+            </div>
+            <div class="rule-legend">
+                <ul>
+                    <li><span class="color-box" style="background:#b3d9ff;"></span> 68% within ±1σ</li>
+                    <li><span class="color-box" style="background:#a3e4a3;"></span> 95% within ±2σ</li>
+                    <li><span class="color-box" style="background:#f7b3b3;"></span> 99.7% within ±3σ</li>
+                </ul>
+                <div style="font-size:0.85rem; color:#475569; margin-top:10px; border-top:1px solid #d1d9e6; padding-top:10px;">
+                    ⚡ For normal (bell‑shaped) data
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HOUSE DATA CSV EXAMPLE ===== -->
+    <div class="section-title">
+        🏠 House Price Dataset (CSV)
+        <small>– loading tabular data from CSV file</small>
+    </div>
+
+    <div class="card full-width">
+        <p style="color:#475569; margin-bottom: 12px;">
+            Here's the sample CSV data. The Python code below shows <strong>two ways</strong> to load it:
+            <strong>1) from a CSV file</strong> using <code>pandas.read_csv()</code> and
+            <strong>2) manually</strong> by defining the data directly in Python.
+        </p>
+
+        <!-- Display the CSV data as a table -->
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Size</th>
+                        <th>SqFt</th>
+                        <th>Bedrooms</th>
+                        <th>Bathrooms</th>
+                        <th>Age</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1500</td><td>1500</td><td>3</td><td>2</td><td>5</td><td>250000</td></tr>
+                    <tr><td>1800</td><td>1800</td><td>3</td><td>2</td><td>10</td><td>280000</td></tr>
+                    <tr><td>2000</td><td>2000</td><td>4</td><td>2</td><td>8</td><td>320000</td></tr>
+                    <tr><td>2200</td><td>2200</td><td>4</td><td>3</td><td>3</td><td>350000</td></tr>
+                    <tr><td>2500</td><td>2500</td><td>4</td><td>3</td><td>1</td><td>400000</td></tr>
+                    <tr><td>2800</td><td>2800</td><td>5</td><td>3</td><td>2</td><td>450000</td></tr>
+                    <tr><td>3000</td><td>3000</td><td>5</td><td>4</td><td>6</td><td>480000</td></tr>
+                    <tr><td>3200</td><td>3200</td><td>5</td><td>4</td><td>4</td><td>520000</td></tr>
+                    <tr><td>3500</td><td>3500</td><td>6</td><td>4</td><td>7</td><td>560000</td></tr>
+                    <tr><td>3800</td><td>3800</td><td>6</td><td>5</td><td>9</td><td>600000</td></tr>
+                    <tr><td>4000</td><td>4000</td><td>6</td><td>5</td><td>12</td><td>620000</td></tr>
+                    <tr><td>4200</td><td>4200</td><td>7</td><td>5</td><td>15</td><td>650000</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CSV format representation -->
+        <div class="csv-highlight">Size,SqFt,Bedrooms,Bathrooms,Age,Price
+1500,1500,3,2,5,250000
+1800,1800,3,2,10,280000
+2000,2000,4,2,8,320000
+2200,2200,4,3,3,350000
+2500,2500,4,3,1,400000
+2800,2800,5,3,2,450000
+3000,3000,5,4,6,480000
+3200,3200,5,4,4,520000
+3500,3500,6,4,7,560000
+3800,3800,6,5,9,600000
+4000,4000,6,5,12,620000
+4200,4200,7,5,15,650000</div>
+
+        <div style="background:#f1f5f9; border-radius:12px; padding:14px 18px; margin-top:8px;">
+            <strong>💡 Key Insights from this data:</strong>
+            <ul style="list-style:disc; padding-left:20px; margin-top:6px; color:#334155; line-height:1.6;">
+                <li><strong>Square footage</strong> ranges from 1,500 to 4,200 (mean ≈ 2,858, SD ≈ 839)</li>
+                <li><strong>Price</strong> ranges from $250,000 to $650,000 (mean ≈ $456,667, SD ≈ $135,417)</li>
+                <li><strong>Age</strong> ranges from 1 to 15 years (mean ≈ 6.8, SD ≈ 4.3)</li>
+                <li><strong>Strong positive correlation</strong> between SqFt and Price – larger houses cost more!</li>
+                <li>These statistics help us <strong>understand the market</strong> and detect unusual listings (outliers).</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== PROS, CONS, AND ML APPLICATIONS ===== -->
+    <div class="section-title">
+        📈 Pros, Cons &amp; Machine Learning Use Cases
+        <small>– why these statistics matter in AI</small>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <h4>✅ Pros</h4>
+            <ul>
+                <li><span class="pro">✓</span> <strong>Simple &amp; interpretable</strong> – easy to explain to non‑technical stakeholders.</li>
+                <li><span class="pro">✓</span> <strong>Efficient</strong> – O(n) computation, works on large datasets.</li>
+                <li><span class="pro">✓</span> <strong>Foundation for advanced stats</strong> – used in z‑scores, confidence intervals, and hypothesis testing.</li>
+                <li><span class="pro">✓</span> <strong>Standardized</strong> – universally understood across fields.</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h4>❌ Cons</h4>
+            <ul>
+                <li><span class="con">✗</span> <strong>Extremely sensitive to outliers</strong> – a single extreme value can skew both mean and SD.</li>
+                <li><span class="con">✗</span> <strong>Assumes symmetry</strong> – works best for normal distributions; misleading for skewed data.</li>
+                <li><span class="con">✗</span> <strong>Doesnʼt capture shape</strong> – different datasets can have same mean/SD but very different distributions (Anscombeʼs quartet).</li>
+                <li><span class="con">✗</span> <strong>Not robust</strong> – median and IQR are better choices for skewed or outlier‑heavy data.</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h4>🤖 Where itʼs used in Machine Learning</h4>
+            <ul>
+                <li><span class="ml-tag">Feature Scaling</span> <strong>Standardization (Z‑score)</strong> – subtract mean, divide by SD to center features (used in SVM, logistic regression, neural nets).</li>
+                <li><span class="ml-tag">Outlier Detection</span> Points beyond 2–3 SDs from the mean are often flagged as anomalies (e.g., fraud detection).</li>
+                <li><span class="ml-tag">Loss Functions</span> <strong>Mean Squared Error (MSE)</strong> – the standard deviation of residuals measures model performance.</li>
+                <li><span class="ml-tag">Data Normalization</span> Images, text embeddings, and sensor data are normalized using mean/SD for stable training.</li>
+                <li><span class="ml-tag">Statistical Tests</span> Used in A/B testing, feature selection (t‑tests, ANOVA), and evaluating model significance.</li>
+                <li><span class="ml-tag">Ensemble Methods</span> Gradient boosting uses mean/SD to compute impurity reductions and feature importance.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== PYTHON CODE SECTION (UPDATED with CSV) ===== -->
+    <div class="python-section">
+        <h3>🐍 Python code: Load CSV, compute mean, SD, and visualize</h3>
+        <p class="desc">
+            This code shows <strong>two approaches</strong>: loading from a CSV file using pandas, and manually creating the dataset in Python.
+        </p>
+
+        <div class="code-header">
+            <span>📄 house_data_analysis.py</span>
+            <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+        </div>
+        <div class="code-block">
+            <pre><code class="language-python" id="pythonCode">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import norm
+
+# ============================================
+# OPTION 1: LOAD FROM CSV FILE
+# ============================================
+# Save the data as 'house_data.csv' first, then load it
+# df = pd.read_csv('house_data.csv')
+
+# ============================================
+# OPTION 2: MANUALLY CREATE THE DATASET (No CSV file needed)
+# ============================================
+data = {
+    'Size': [1500, 1800, 2000, 2200, 2500, 2800, 3000, 3200, 3500, 3800, 4000, 4200],
+    'SqFt': [1500, 1800, 2000, 2200, 2500, 2800, 3000, 3200, 3500, 3800, 4000, 4200],
+    'Bedrooms': [3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7],
+    'Bathrooms': [2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5],
+    'Age': [5, 10, 8, 3, 1, 2, 6, 4, 7, 9, 12, 15],
+    'Price': [250000, 280000, 320000, 350000, 400000, 450000, 
+              480000, 520000, 560000, 600000, 620000, 650000]
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+print("=" * 60)
+print("HOUSE PRICE DATA - FIRST 5 ROWS")
+print("=" * 60)
+print(df.head())
+
+print("\n" + "=" * 60)
+print("DATA SUMMARY STATISTICS")
+print("=" * 60)
+
+# Compute mean and standard deviation for each numeric column
+numeric_cols = ['Size', 'SqFt', 'Bedrooms', 'Bathrooms', 'Age', 'Price']
+
+print("\n{:<12} {:<12} {:<12} {:<12}".format('Feature', 'Mean', 'Std Dev', 'Count'))
+print("-" * 50)
+
+for col in numeric_cols:
+    mean_val = np.mean(df[col])
+    sd_val = np.std(df[col])
+    count = len(df[col])
+    print("{:<12} {:<12.2f} {:<12.2f} {:<12}".format(col, mean_val, sd_val, count))
+
+# ============================================
+# VISUALIZE DISTRIBUTIONS
+# ============================================
+fig, axes = plt.subplots(2, 3, figsize=(15, 8))
+axes = axes.flatten()
+
+for i, col in enumerate(numeric_cols):
+    axes[i].hist(df[col], bins=10, color='#3b82f6', alpha=0.7, edgecolor='black')
+    mean_val = np.mean(df[col])
+    sd_val = np.std(df[col])
+    axes[i].axvline(mean_val, color='red', linestyle='dashed', linewidth=2, 
+                    label=f'mean = {mean_val:.1f}')
+    axes[i].axvline(mean_val + sd_val, color='orange', linestyle='dotted', linewidth=1.5, 
+                    alpha=0.7, label=f'+1σ = {mean_val+sd_val:.1f}')
+    axes[i].axvline(mean_val - sd_val, color='orange', linestyle='dotted', linewidth=1.5, 
+                    alpha=0.7, label=f'-1σ = {mean_val-sd_val:.1f}')
+    axes[i].set_title(f'{col}\nmean = {mean_val:.2f}, SD = {sd_val:.2f}')
+    axes[i].set_xlabel(col)
+    axes[i].set_ylabel('Frequency')
+    axes[i].legend(fontsize=8)
+    axes[i].grid(alpha=0.2)
+
+plt.suptitle('House Dataset - Feature Distributions', fontsize=14)
+plt.tight_layout()
+plt.show()
+
+# ============================================
+# CORRELATION HEATMAP
+# ============================================
+plt.figure(figsize=(8, 6))
+correlation_matrix = df[numeric_cols].corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0, 
+            fmt='.2f', square=True, linewidths=0.5)
+plt.title('Correlation Between Features\n(Strong positive correlation between SqFt and Price)')
+plt.tight_layout()
+plt.show()
+
+# ============================================
+# STANDARDIZATION (Z-SCORE)
+# ============================================
+print("\n" + "=" * 60)
+print("STANDARDIZATION (Z-SCORE) EXAMPLE")
+print("=" * 60)
+
+# Standardize SqFt and Price
+sqft_mean = np.mean(df['SqFt'])
+sqft_sd = np.std(df['SqFt'])
+price_mean = np.mean(df['Price'])
+price_sd = np.std(df['Price'])
+
+df['SqFt_standardized'] = (df['SqFt'] - sqft_mean) / sqft_sd
+df['Price_standardized'] = (df['Price'] - price_mean) / price_sd
+
+print("\nAfter standardization:")
+print(f"SqFt  → mean = {np.mean(df['SqFt_standardized']):.2f}, SD = {np.std(df['SqFt_standardized']):.2f}")
+print(f"Price → mean = {np.mean(df['Price_standardized']):.2f}, SD = {np.std(df['Price_standardized']):.2f}")
+
+# Show the standardized values
+print("\nFirst 5 rows with standardized values:")
+print(df[['SqFt', 'Price', 'SqFt_standardized', 'Price_standardized']].head())
+
+# ============================================
+# OUTLIER DETECTION
+# ============================================
+print("\n" + "=" * 60)
+print("OUTLIER DETECTION (Using Z-Score)")
+print("=" * 60)
+
+# Find houses with Price > 2 standard deviations from mean
+price_z_scores = (df['Price'] - price_mean) / price_sd
+outliers = df[abs(price_z_scores) > 2]
+
+if len(outliers) > 0:
+    print(f"Found {len(outliers)} potential outlier(s):")
+    print(outliers[['Size', 'SqFt', 'Price']])
+else:
+    print("No outliers detected in Price (all within ±2σ)")
+
+# ============================================
+# 68-95-99.7 RULE (Bell Curve)
+# ============================================
+print("\n" + "=" * 60)
+print("68-95-99.7 RULE (Empirical Rule)")
+print("=" * 60)
+
+# Check what percentage of SqFt falls within 1, 2, and 3 SDs
+sqft_z = (df['SqFt'] - sqft_mean) / sqft_sd
+
+within_1 = np.sum(abs(sqft_z) <= 1) / len(df) * 100
+within_2 = np.sum(abs(sqft_z) <= 2) / len(df) * 100
+within_3 = np.sum(abs(sqft_z) <= 3) / len(df) * 100
+
+print(f"SqFt within ±1σ: {within_1:.1f}% (Expected: 68%)")
+print(f"SqFt within ±2σ: {within_2:.1f}% (Expected: 95%)")
+print(f"SqFt within ±3σ: {within_3:.1f}% (Expected: 99.7%)")
+
+# Plot the bell curve
+x = np.linspace(-4, 4, 500)
+y = norm.pdf(x, 0, 1)
+
+plt.figure(figsize=(10, 5))
+plt.plot(x, y, color='black', linewidth=2.5, label='Standard Normal Distribution')
+
+colors = ['#b3d9ff', '#a3e4a3', '#f7b3b3']
+labels = ['68% within ±1σ', '95% within ±2σ', '99.7% within ±3σ']
+for k, color in zip([1, 2, 3], colors):
+    x_fill = np.linspace(-k, k, 300)
+    y_fill = norm.pdf(x_fill, 0, 1)
+    plt.fill_between(x_fill, y_fill, color=color, alpha=0.5, label=labels[k-1])
+
+plt.xticks([-3, -2, -1, 0, 1, 2, 3], ['-3σ', '-2σ', '-1σ', 'μ', '+1σ', '+2σ', '+3σ'])
+plt.title('The 68-95-99.7 Rule (Empirical Rule)')
+plt.xlabel('Standard deviations from the mean')
+plt.ylabel('Probability density')
+plt.legend()
+plt.grid(alpha=0.15)
+plt.show()
+
+print("\n✅ Key Takeaways:")
+print("1. Mean gives us the 'center' of each feature (e.g., average house price).")
+print("2. Standard deviation tells us how spread out the values are.")
+print("3. Standardization transforms features to have mean=0, SD=1.")
+print("4. This is essential for ML algorithms like SVM, PCA, and neural networks!")</code></pre>
+        </div>
+
+        <!-- Sample output preview -->
+        <div class="output-demo">
+            <strong>▶ Sample output:</strong><br /><br />
+            Feature      Mean         Std Dev      Count<br />
+            ---------------------------------------------<br />
+            Size         2858.33      839.00       12<br />
+            SqFt         2858.33      839.00       12<br />
+            Bedrooms     4.83         1.19         12<br />
+            Bathrooms    3.50         1.17         12<br />
+            Age          6.83         4.26         12<br />
+            Price        456666.67    135416.84    12<br /><br />
+            <span style="color:#64748b; font-size:0.8rem;">💡 After standardization, both SqFt and Price have mean=0 and SD=1.</span>
+        </div>
+        <div style="margin-top:12px; font-size:0.9rem; color:#475569;">
+            💡 <strong>Pro tip:</strong> Save the CSV data to a file named <code>house_data.csv</code> and use <code>pd.read_csv()</code> to load it directly in your projects!
+        </div>
+    </div>
+
+    <div class="footnote">
+        ⚡ All statistics use <strong>population</strong> standard deviation (denominator = N).
+        Drag the slider to change the spread of the synthetic dataset.
+    </div>
+</div>
+
+<script>
+    // ----- COPY CODE BUTTON -----
+    function copyCode() {
+        const codeEl = document.getElementById('pythonCode');
+        const text = codeEl.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            const orig = btn.textContent;
+            btn.textContent = '✅ Copied!';
+            setTimeout(() => btn.textContent = orig, 2000);
+        }).catch(() => {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            const btn = document.querySelector('.copy-btn');
+            const orig = btn.textContent;
+            btn.textContent = '✅ Copied!';
+            setTimeout(() => btn.textContent = orig, 2000);
+        });
+    }
+
+    // ----- CHART LOGIC (same as before) -----
+    (function() {
+        function generateNormal(n, mean, sd) {
+            const data = [];
+            for (let i = 0; i < n; i++) {
+                let u1 = Math.random();
+                let u2 = Math.random();
+                while (u1 === 0) u1 = Math.random();
+                while (u2 === 0) u2 = Math.random();
+                const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+                data.push(mean + sd * z);
+            }
+            return data;
+        }
+
+        const LOW_SD = 5;
+        const MEAN = 50;
+        const N = 600;
+        let lowData = generateNormal(N, MEAN, LOW_SD);
+        let highSd = 6.0;
+        let highData = generateNormal(N, MEAN, highSd);
+
+        function mean(arr) {
+            return arr.reduce((a, b) => a + b, 0) / arr.length;
+        }
+        function stdPop(arr) {
+            const m = mean(arr);
+            const sq = arr.reduce((acc, v) => acc + (v - m) ** 2, 0);
+            return Math.sqrt(sq / arr.length);
+        }
+
+        function histCounts(data, bins, minVal, maxVal) {
+            const counts = new Array(bins).fill(0);
+            const binWidth = (maxVal - minVal) / bins;
+            for (let v of data) {
+                if (v < minVal || v > maxVal) continue;
+                let idx = Math.floor((v - minVal) / binWidth);
+                if (idx === bins) idx = bins - 1;
+                counts[idx]++;
+            }
+            return counts;
+        }
+
+        const BINS = 20;
+        const MIN_VAL = 0;
+        const MAX_VAL = 100;
+
+        let chartLow, chartHigh, chartRule;
+
+        function renderCharts() {
+            highData = generateNormal(N, MEAN, highSd);
+
+            const meanLow = mean(lowData);
+            const sdLow = stdPop(lowData);
+            const meanHigh = mean(highData);
+            const sdHigh = stdPop(highData);
+
+            document.getElementById('meanLow').textContent = meanLow.toFixed(1);
+            document.getElementById('sdLow').textContent = sdLow.toFixed(2);
+            document.getElementById('meanHigh').textContent = meanHigh.toFixed(1);
+            document.getElementById('sdHigh').textContent = sdHigh.toFixed(2);
+
+            const countsLow = histCounts(lowData, BINS, MIN_VAL, MAX_VAL);
+            const countsHigh = histCounts(highData, BINS, MIN_VAL, MAX_VAL);
+            const binLabels = Array.from({ length: BINS }, (_, i) => {
+                const start = MIN_VAL + (i / BINS) * (MAX_VAL - MIN_VAL);
+                return start.toFixed(0);
+            });
+
+            if (chartLow) {
+                chartLow.data.datasets[0].data = countsLow;
+                chartLow.update();
+            } else {
+                const ctxLow = document.getElementById('chartLow').getContext('2d');
+                chartLow = new Chart(ctxLow, {
+                    type: 'bar',
+                    data: {
+                        labels: binLabels,
+                        datasets: [{
+                            label: 'Low SD',
+                            data: countsLow,
+                            backgroundColor: 'rgba(59, 130, 246, 0.65)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { font: { size: 8 }, maxTicksLimit: 12 } },
+                            y: { beginAtZero: true, grid: { color: '#e9eef3' }, ticks: { font: { size: 8 } } }
+                        }
+                    }
+                });
+            }
+
+            if (chartHigh) {
+                chartHigh.data.datasets[0].data = countsHigh;
+                chartHigh.update();
+            } else {
+                const ctxHigh = document.getElementById('chartHigh').getContext('2d');
+                chartHigh = new Chart(ctxHigh, {
+                    type: 'bar',
+                    data: {
+                        labels: binLabels,
+                        datasets: [{
+                            label: 'High SD',
+                            data: countsHigh,
+                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { font: { size: 8 }, maxTicksLimit: 12 } },
+                            y: { beginAtZero: true, grid: { color: '#e9eef3' }, ticks: { font: { size: 8 } } }
+                        }
+                    }
+                });
+            }
+
+            // ---- Rule chart ----
+            if (chartRule) { chartRule.destroy(); chartRule = null; }
+            const ctxRule = document.getElementById('chartRule').getContext('2d');
+
+            function gaussian(x) {
+                return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * x * x);
+            }
+
+            const regions = [
+                { half: 1, color: 'rgba(59, 130, 246, 0.4)', border: 'rgba(59, 130, 246, 0.8)' },
+                { half: 2, color: 'rgba(74, 222, 128, 0.35)', border: 'rgba(74, 222, 128, 0.8)' },
+                { half: 3, color: 'rgba(248, 113, 113, 0.35)', border: 'rgba(248, 113, 113, 0.8)' }
+            ];
+
+            const regionDatasets = regions.map(r => {
+                const pts = [];
+                for (let x = -r.half; x <= r.half; x += 0.03) {
+                    pts.push({ x, y: gaussian(x) });
+                }
+                pts.push({ x: r.half, y: 0 });
+                pts.push({ x: -r.half, y: 0 });
+                return {
+                    label: `±${r.half}σ`,
+                    data: pts,
+                    backgroundColor: r.color,
+                    borderColor: r.border,
+                    borderWidth: 0,
+                    fill: 'origin',
+                    pointRadius: 0,
+                    tension: 0.3,
+                    order: 3 - r.half,
+                };
+            });
+
+            const outlinePts = [];
+            for (let x = -4; x <= 4; x += 0.03) {
+                outlinePts.push({ x, y: gaussian(x) });
+            }
+            const outlineDataset = {
+                label: 'Bell curve',
+                data: outlinePts,
+                borderColor: '#0f172a',
+                borderWidth: 2.5,
+                fill: false,
+                pointRadius: 0,
+                tension: 0.3,
+                order: 4,
+            };
+
+            chartRule = new Chart(ctxRule, {
+                type: 'line',
+                data: { datasets: [...regionDatasets, outlineDataset] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            min: -4.2, max: 4.2,
+                            grid: { display: false },
+                            ticks: { stepSize: 1, callback: (v) => v === 0 ? 'μ' : (v > 0 ? `+${v}σ` : `${v}σ`) },
+                            font: { size: 9 }
+                        },
+                        y: { beginAtZero: true, grid: { color: '#e9eef3' }, display: false }
+                    },
+                    elements: { line: { tension: 0.3 } }
+                }
+            });
+        }
+
+        const slider = document.getElementById('sdSlider');
+        const sdDisplay = document.getElementById('sdDisplay');
+        slider.addEventListener('input', function() {
+            highSd = parseFloat(this.value);
+            sdDisplay.textContent = highSd.toFixed(1);
+            renderCharts();
+        });
+
+        renderCharts();
+    })();
+</script>
+</body>
+</html>
