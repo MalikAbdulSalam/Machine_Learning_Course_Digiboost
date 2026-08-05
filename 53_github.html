@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to Push Code to GitHub - Step by Step</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f6f8fa;
+            color: #24292e;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 50px 60px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e4e8;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h1 img {
+            width: 36px;
+            height: 36px;
+            vertical-align: middle;
+        }
+
+        .subtitle {
+            color: #586069;
+            font-size: 18px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 .step-badge {
+            display: inline-block;
+            background: #2ea44f;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            text-align: center;
+            line-height: 32px;
+            flex-shrink: 0;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            color: #0366d6;
+        }
+
+        p,
+        li {
+            color: #24292e;
+            font-size: 16px;
+        }
+
+        ul,
+        ol {
+            padding-left: 24px;
+            margin: 10px 0 16px 0;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .code-block {
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 12px 0 20px 0;
+            overflow-x: auto;
+            font-family: "SF Mono", "Consolas", "Liberation Mono", monospace;
+            font-size: 14px;
+            color: #24292e;
+            position: relative;
+        }
+
+        .code-block .comment {
+            color: #6a737d;
+        }
+
+        .code-block .command {
+            color: #d73a49;
+        }
+
+        .code-block .string {
+            color: #032f62;
+        }
+
+        .code-block .variable {
+            color: #e36209;
+        }
+
+        .code-block .path {
+            color: #22863a;
+        }
+
+        .inline-code {
+            background: #f6f8fa;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: "SF Mono", "Consolas", monospace;
+            font-size: 14px;
+            border: 1px solid #e1e4e8;
+            color: #24292e;
+        }
+
+        .note-box {
+            background: #fffbdd;
+            border-left: 4px solid #f9c513;
+            padding: 16px 20px;
+            margin: 16px 0 20px 0;
+            border-radius: 4px;
+        }
+
+        .note-box strong {
+            color: #735c0f;
+        }
+
+        .error-box {
+            background: #ffe3e6;
+            border-left: 4px solid #d73a49;
+            padding: 16px 20px;
+            margin: 16px 0 20px 0;
+            border-radius: 4px;
+        }
+
+        .error-box strong {
+            color: #b31d28;
+        }
+
+        .success-box {
+            background: #dcffe4;
+            border-left: 4px solid #2ea44f;
+            padding: 16px 20px;
+            margin: 16px 0 20px 0;
+            border-radius: 4px;
+        }
+
+        .success-box strong {
+            color: #1a7f37;
+        }
+
+        .separator {
+            border: none;
+            border-top: 2px solid #f0f2f5;
+            margin: 40px 0 30px 0;
+        }
+
+        .example-block {
+            background: #f0f5ff;
+            border: 1px solid #c8d6e5;
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 12px 0 20px 0;
+        }
+
+        .example-block .label {
+            font-weight: 600;
+            color: #0366d6;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .code-block {
+                font-size: 12px;
+                padding: 12px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>
+            <svg height="36" width="36" viewBox="0 0 16 16" fill="#2ea44f">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            Push Code to GitHub
+        </h1>
+        <div class="subtitle">Step-by-step guide from scratch</div>
+
+        <!-- PREREQUISITES -->
+        <h2><span class="step-badge">⚡</span> Prerequisites</h2>
+        <ul>
+            <li>✅ <strong>Git</strong> installed on your computer (<a href="https://git-scm.com/downloads" target="_blank">download here</a>)</li>
+            <li>✅ <strong>GitHub account</strong> (<a href="https://github.com" target="_blank">sign up here</a>)</li>
+            <li>✅ A project/folder with code you want to push</li>
+        </ul>
+
+        <hr class="separator" />
+
+        <!-- STEP 1 -->
+        <h2><span class="step-badge">1</span> Create a Repository on GitHub</h2>
+        <ol>
+            <li>Log in to your GitHub account</li>
+            <li>Click the <span class="inline-code">+</span> icon in the top-right corner → <span class="inline-code">New repository</span></li>
+            <li>Enter a <strong>Repository name</strong> (e.g., <span class="inline-code">my-first-repo</span>)</li>
+            <li>(Optional) Add a description</li>
+            <li>Choose <strong>Public</strong> or <strong>Private</strong></li>
+            <li><strong>DO NOT</strong> check "Initialize this repository with a README" (since you have existing code)</li>
+            <li>Click <strong>"Create repository"</strong></li>
+        </ol>
+
+        <!-- STEP 2 -->
+        <h2><span class="step-badge">2</span> Initialize Git in Your Local Project</h2>
+        <p>Open your terminal/command prompt and navigate to your project folder:</p>
+        <div class="code-block">
+            <span class="command">cd</span> <span class="path">path/to/your/project</span>
+        </div>
+        <p>Initialize Git in this folder:</p>
+        <div class="code-block">
+            git init
+        </div>
+
+        <!-- STEP 3 -->
+        <h2><span class="step-badge">3</span> Add Your Files to Staging</h2>
+        <p>Add all files to be tracked:</p>
+        <div class="code-block">
+            git add <span class="variable">.</span>
+        </div>
+        <p>Or add specific files:</p>
+        <div class="code-block">
+            git add <span class="string">filename1</span> <span class="string">filename2</span>
+        </div>
+
+        <!-- STEP 4 -->
+        <h2><span class="step-badge">4</span> Commit Your Files</h2>
+        <p>Create your first commit with a message:</p>
+        <div class="code-block">
+            git commit <span class="variable">-m</span> <span class="string">"Initial commit"</span>
+        </div>
+
+        <!-- STEP 5 -->
+        <h2><span class="step-badge">5</span> Link Your Local Repo to GitHub</h2>
+        <p>Copy the remote URL from your GitHub repository (you'll see it on the repo page):</p>
+        <div class="code-block">
+            git remote add origin <span class="string">https://github.com/your-username/repo-name.git</span>
+        </div>
+        <p><strong>OR</strong> if using SSH:</p>
+        <div class="code-block">
+            git remote add origin <span class="string">git@github.com:your-username/repo-name.git</span>
+        </div>
+
+        <!-- STEP 6 -->
+        <h2><span class="step-badge">6</span> Push Your Code to GitHub</h2>
+        <p>Push your code to the main branch:</p>
+        <div class="code-block">
+            git push <span class="variable">-u</span> origin main
+        </div>
+        <div class="note-box">
+            <strong>💡 Note:</strong> If your default branch is <span class="inline-code">master</span> instead of <span class="inline-code">main</span>, use:
+            <div class="code-block" style="margin-top:8px;">
+                git push <span class="variable">-u</span> origin master
+            </div>
+        </div>
+
+        <hr class="separator" />
+
+        <!-- COMPLETE EXAMPLE -->
+        <h2><span class="step-badge">📦</span> Complete Example (All Commands Together)</h2>
+        <div class="code-block">
+            <span class="comment"># Navigate to your project</span><br />
+            <span class="command">cd</span> <span class="path">~/Desktop/my-project</span><br /><br />
+
+            <span class="comment"># Initialize Git</span><br />
+            git init<br /><br />
+
+            <span class="comment"># Add all files</span><br />
+            git add <span class="variable">.</span><br /><br />
+
+            <span class="comment"># Commit</span><br />
+            git commit <span class="variable">-m</span> <span class="string">"Initial commit"</span><br /><br />
+
+            <span class="comment"># Add remote (replace with your URL)</span><br />
+            git remote add origin <span class="string">https://github.com/your-username/my-first-repo.git</span><br /><br />
+
+            <span class="comment"># Push</span><br />
+            git push <span class="variable">-u</span> origin main
+        </div>
+
+        <hr class="separator" />
+
+        <!-- COMMON ISSUES -->
+        <h2><span class="step-badge">⚠️</span> Common Issues &amp; Solutions</h2>
+
+        <div class="error-box">
+            <strong>❌ Error: "failed to push some refs"</strong><br />
+            The remote repository has files your local doesn't. Fix with:
+            <div class="code-block" style="margin-top:8px;">
+                git pull origin main --allow-unrelated-histories<br />
+                git push origin main
+            </div>
+        </div>
+
+        <div class="error-box">
+            <strong>❌ Authentication Error</strong><br />
+            GitHub no longer accepts passwords. Use a <strong>Personal Access Token</strong>:
+            <ol style="margin-top:8px;">
+                <li>Go to GitHub Settings → Developer settings → Personal access tokens → Generate new token</li>
+                <li>Use token as password when prompted</li>
+            </ol>
+        </div>
+
+        <div class="error-box">
+            <strong>❌ Branch Name Mismatch</strong><br />
+            If your local branch is <span class="inline-code">master</span> but remote uses <span class="inline-code">main</span>:
+            <div class="code-block" style="margin-top:8px;">
+                git branch <span class="variable">-M</span> main<br />
+                git push <span class="variable">-u</span> origin main
+            </div>
+        </div>
+
+        <hr class="separator" />
+
+        <!-- QUICK PUSH -->
+        <h2><span class="step-badge">⚡</span> Quick Push After Changes</h2>
+        <p>Once everything is set up, future pushes are just:</p>
+        <div class="code-block">
+            git add <span class="variable">.</span><br />
+            git commit <span class="variable">-m</span> <span class="string">"Your message here"</span><br />
+            git push
+        </div>
+
+        <div class="success-box">
+            <strong>✅ Done!</strong> Your code should now be on GitHub. Refresh your repository page to see it.
+        </div>
+
+        <hr class="separator" />
+
+        <!-- FOOTER -->
+        <p style="color:#586069; font-size:14px; text-align:center; margin-top:20px;">
+            Made with ❤️ &bull; Happy coding!
+        </p>
+
+    </div>
+
+</body>
+</html>
