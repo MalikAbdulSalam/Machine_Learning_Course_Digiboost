@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>R² vs Adjusted R² - Simple Explanation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 40px 45px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .subhead {
+            color: #4a5568;
+            font-size: 18px;
+            margin-bottom: 32px;
+            border-left: 4px solid #3182ce;
+            padding-left: 16px;
+            background: #f7fafc;
+            border-radius: 0 8px 8px 0;
+            line-height: 1.5;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: #f7fafc;
+            border-radius: 16px;
+            padding: 24px 28px;
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            border-color: #bee3f8;
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.06);
+        }
+
+        .card h2 {
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .card.r2 h2 { color: #2b6cb0; }
+        .card.adj h2 { color: #2f855a; }
+
+        .badge {
+            font-size: 13px;
+            font-weight: 600;
+            background: #e2e8f0;
+            padding: 2px 12px;
+            border-radius: 30px;
+            color: #2d3748;
+            margin-left: 6px;
+        }
+
+        .card p {
+            color: #2d3748;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .highlight-box {
+            background: #edf2f7;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 14px 0 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            color: #1a202c;
+        }
+
+        .highlight-box span.highlight {
+            color: #c05621;
+            font-weight: 600;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 28px 0 20px;
+            font-size: 15px;
+        }
+
+        .compare-table th {
+            background: #2d3748;
+            color: white;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+        }
+
+        .compare-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .compare-table .yes {
+            color: #2b6cb0;
+            font-weight: 600;
+        }
+
+        .compare-table .no {
+            color: #c53030;
+            font-weight: 600;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            border-radius: 14px;
+            padding: 22px 28px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            overflow-x: auto;
+            margin: 24px 0 12px;
+            position: relative;
+        }
+
+        .code-block .comment {
+            color: #68d391;
+        }
+        .code-block .keyword {
+            color: #f6ad55;
+        }
+        .code-block .func {
+            color: #63b3ed;
+        }
+        .code-block .string {
+            color: #f687b3;
+        }
+        .code-block .num {
+            color: #f6ad55;
+        }
+
+        .output-block {
+            background: #edf2f7;
+            border-radius: 10px;
+            padding: 16px 22px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #1a202c;
+            margin: 6px 0 16px;
+            border-left: 4px solid #3182ce;
+        }
+
+        .takeaway {
+            background: #ebf8ff;
+            border-radius: 16px;
+            padding: 24px 30px;
+            margin-top: 30px;
+            border: 1px solid #bee3f8;
+        }
+
+        .takeaway h3 {
+            color: #2b6cb0;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .takeaway ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .takeaway li {
+            padding: 8px 0 8px 34px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%232b6cb0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') left center no-repeat;
+            background-size: 20px;
+            color: #2d3748;
+            font-size: 15px;
+        }
+
+        .footnote {
+            margin-top: 28px;
+            color: #718096;
+            font-size: 14px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 24px;
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 24px 18px; }
+            .card-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 26px; }
+            .code-block { font-size: 13px; padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>📊 R² vs Adjusted R²</h1>
+    <div class="subhead">
+        <strong>Simple words + Python code</strong> &nbsp;·&nbsp; No stats jargon, just what you actually need to know.
+    </div>
+
+    <!-- Cards: R² and Adjusted R² -->
+    <div class="card-grid">
+        <div class="card r2">
+            <h2>📈 R-Squared (R²)</h2>
+            <p><strong>“How much of Y is explained by my X’s?”</strong></p>
+            <p style="margin-top: 12px;">
+                R² tells you the <strong>percentage</strong> of the variation in your outcome (Y) 
+                that your model explains. 
+            </p>
+            <div class="highlight-box">
+                R² = 0.80  →  80% of the data is explained by your model.
+            </div>
+            <p style="margin-top: 14px; font-size: 14px; color: #4a5568;">
+                ⚠️ <strong>Problem:</strong> Adding <em>any</em> variable (even useless ones) 
+                <span class="highlight">always increases or keeps R² the same</span>.
+            </p>
+        </div>
+
+        <div class="card adj">
+            <h2>📉 Adjusted R²</h2>
+            <p><strong>“Same as R², but honest.”</strong></p>
+            <p style="margin-top: 12px;">
+                Adjusted R² <strong>penalizes</strong> you for adding extra variables. It only 
+                goes up if the new variable actually improves the model.
+            </p>
+            <div class="highlight-box">
+                Adj R² = 0.76  →  lower than R² if you added junk.
+            </div>
+            <p style="margin-top: 14px; font-size: 14px; color: #4a5568;">
+                ✅ <strong>Best for</strong> comparing models with different numbers of predictors.
+            </p>
+        </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <h2 style="font-size: 22px; margin: 32px 0 12px; color: #1a202c;">⚔️ R² vs Adjusted R² – Side by Side</h2>
+    <table class="compare-table">
+        <thead>
+            <tr>
+                <th style="width: 28%;">Feature</th>
+                <th style="width: 36%;">R²</th>
+                <th style="width: 36%;">Adjusted R²</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>What it measures</strong></td>
+                <td>% of variance explained</td>
+                <td>% of variance explained <em>with penalty</em></td>
+            </tr>
+            <tr>
+                <td><strong>Goes up when adding any variable?</strong></td>
+                <td class="yes">✅ Yes (or stays same)</td>
+                <td class="no">❌ Only if variable is useful</td>
+            </tr>
+            <tr>
+                <td><strong>Best used for</strong></td>
+                <td>Explaining model fit</td>
+                <td>Comparing models with different # of predictors</td>
+            </tr>
+            <tr>
+                <td><strong>Typical value</strong></td>
+                <td>Higher (optimistic)</td>
+                <td>Lower or equal (realistic)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Python Code -->
+    <h2 style="font-size: 22px; margin: 36px 0 12px; color: #1a202c;">🐍 Python Example</h2>
+    <p style="color: #4a5568; margin-bottom: 12px;">
+        Here’s how to calculate both – and see what happens when you add a useless variable.
+    </p>
+
+    <div class="code-block">
+        <span class="comment"># Import libraries</span><br />
+        <span class="keyword">import</span> numpy <span class="keyword">as</span> np<br />
+        <span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression<br />
+        <span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> r2_score<br /><br />
+
+        <span class="comment"># Data: house size (X) → price (Y)</span><br />
+        X = np.array([<span class="num">500</span>, <span class="num">600</span>, <span class="num">700</span>, <span class="num">800</span>, <span class="num">900</span>]).reshape(-<span class="num">1</span>, <span class="num">1</span>)<br />
+        y = np.array([<span class="num">100</span>, <span class="num">120</span>, <span class="num">150</span>, <span class="num">180</span>, <span class="num">200</span>])<br /><br />
+
+        <span class="comment"># Train model</span><br />
+        model = LinearRegression()<br />
+        model.fit(X, y)<br />
+        y_pred = model.predict(X)<br /><br />
+
+        <span class="comment"># R²</span><br />
+        r2 = r2_score(y, y_pred)<br /><br />
+
+        <span class="comment"># Adjusted R² (manual)</span><br />
+        n = len(y)          <span class="comment"># observations</span><br />
+        k = X.shape[<span class="num">1</span>]     <span class="comment"># predictors</span><br />
+        adj_r2 = <span class="num">1</span> - (<span class="num">1</span> - r2) * (n - <span class="num">1</span>) / (n - k - <span class="num">1</span>)<br /><br />
+
+        <span class="func">print</span>(<span class="string">f"R² = {r2:.4f}"</span>)<br />
+        <span class="func">print</span>(<span class="string">f"Adjusted R² = {adj_r2:.4f}"</span>)
+    </div>
+
+    <div class="output-block">
+        <strong>Output:</strong><br />
+        R² = 0.9818<br />
+        Adjusted R² = 0.9758
+    </div>
+
+    <!-- Useless variable example -->
+    <div style="background: #fffff0; border-radius: 14px; padding: 18px 24px; border: 1px dashed #d69e2e; margin: 16px 0 8px;">
+        <p style="font-weight: 600; color: #744210;">➕ Now add a <em>useless</em> variable (e.g., door color code):</p>
+        <div class="code-block" style="margin: 10px 0 4px; background: #2d3748;">
+            X_useless = np.array([[<span class="num">500</span>, <span class="num">1</span>],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="num">600</span>, <span class="num">2</span>],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="num">700</span>, <span class="num">3</span>],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="num">800</span>, <span class="num">4</span>],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="num">900</span>, <span class="num">5</span>]])<br /><br />
+            <span class="comment"># R² still goes up (or stays) → 0.9818</span><br />
+            <span class="comment"># Adjusted R² goes DOWN → 0.9636  (penalized!)</span>
+        </div>
+        <p style="color: #744210; font-size: 14px; margin-top: 6px;">
+            ✅ <strong>Adjusted R²</strong> drops because the useless variable doesn’t help – it penalizes the model.
+        </p>
+    </div>
+
+    <!-- Takeaway -->
+    <div class="takeaway">
+        <h3>🧠 Quick Takeaway</h3>
+        <ul>
+            <li><strong>R²</strong> = “How much of Y is explained?” – always looks better with more variables.</li>
+            <li><strong>Adjusted R²</strong> = Same, but <em>honest</em> – only improves if a variable really matters.</li>
+            <li>Always prefer <strong>Adjusted R²</strong> when comparing models with different numbers of features.</li>
+            <li>In Python, <code>sklearn</code> gives R² directly; Adjusted R² is <strong>one line</strong> of manual math.</li>
+        </ul>
+    </div>
+
+    <div class="footnote">
+        Made with ❤️ &nbsp;·&nbsp; No confusing formulas, just what you actually need.
+    </div>
+
+</div>
+
+</body>
+</html>
