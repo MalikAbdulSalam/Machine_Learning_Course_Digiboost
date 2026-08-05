@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outlier Detection & Handling - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #2d3748;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 .icon {
+            font-size: 1.2em;
+        }
+
+        .section h3 {
+            color: #4a5568;
+            font-size: 1.3em;
+            margin: 20px 0 15px 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h4 {
+            color: #2d3748;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .card .highlight {
+            background: #edf2f7;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .formula-box {
+            background: #2d3748;
+            color: #f7fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        .badge-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .badge-danger {
+            background: #fc8181;
+            color: white;
+        }
+
+        .badge-warning {
+            background: #ecc94b;
+            color: #2d3748;
+        }
+
+        .badge-info {
+            background: #63b3ed;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        .example-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .example-box strong {
+            color: #4a5568;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+
+        .btn-success {
+            background: #48bb78;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #fc8181;
+        }
+
+        .btn-danger:hover {
+            background: #f56565;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .visualization-container {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .code-block .comment {
+            color: #68d391;
+        }
+
+        .code-block .keyword {
+            color: #fc8181;
+        }
+
+        .code-block .string {
+            color: #f6ad55;
+        }
+
+        .code-block .function {
+            color: #63b3ed;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .method-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .method-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .method-card .method-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .method-card .method-desc {
+            color: #718096;
+            font-size: 0.9em;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .tag-blue {
+            background: #bee3f8;
+            color: #2b6cb0;
+        }
+
+        .tag-green {
+            background: #c6f6d5;
+            color: #276749;
+        }
+
+        .tag-red {
+            background: #fed7d7;
+            color: #9b2c2c;
+        }
+
+        .tag-yellow {
+            background: #fefcbf;
+            color: #975a16;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Outlier Detection & Handling</h1>
+        <p class="subtitle">Complete Guide with Python Implementation</p>
+
+        <!-- What is an Outlier -->
+        <div class="section">
+            <h2><span class="icon">🔍</span> What is an Outlier?</h2>
+            <p style="font-size: 1.05em; line-height: 1.6; color: #4a5568;">
+                An <strong>outlier</strong> is a data point that is significantly different from the other observations in a dataset. 
+                It lies far away from the majority of the data and can occur due to:
+            </p>
+            <ul style="margin: 15px 0 0 20px; line-height: 1.8; color: #4a5568;">
+                <li>📝 <strong>Measurement errors</strong> - incorrect readings</li>
+                <li>⌨️ <strong>Data entry mistakes</strong> - human errors</li>
+                <li>⚙️ <strong>Equipment malfunctions</strong> - sensor failures</li>
+                <li>🌟 <strong>Genuine rare events</strong> - legitimate but unusual occurrences</li>
+            </ul>
+
+            <div class="example-box" style="margin-top: 20px;">
+                <strong>📌 Example:</strong>
+                <table style="margin: 10px 0; width: auto;">
+                    <tr><th>Student</th><th>Age</th></tr>
+                    <tr><td>A</td><td>20</td></tr>
+                    <tr><td>B</td><td>21</td></tr>
+                    <tr><td>C</td><td>22</td></tr>
+                    <tr><td>D</td><td>19</td></tr>
+                    <tr><td>E</td><td>20</td></tr>
+                    <tr style="background: #fed7d7;"><td>F</td><td><strong style="color: #c53030;">95</strong> ⚠️</td></tr>
+                </table>
+                <p>Here, the value <span class="badge badge-danger">95</span> is an outlier because all other ages are around 19–22.</p>
+            </div>
+
+            <div style="background: #fef3c7; padding: 15px; border-radius: 10px; margin-top: 15px; border-left: 4px solid #f6ad55;">
+                <strong>⚠️ Why are Outliers Important?</strong>
+                <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+                    <li>Can reduce machine learning model accuracy</li>
+                    <li>Can significantly affect the mean and standard deviation</li>
+                    <li>Can mislead statistical analysis</li>
+                    <li>Can increase prediction errors</li>
+                    <li>Sometimes they represent valuable rare events and should <strong>not</strong> be removed</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- How to Detect Outliers -->
+        <div class="section">
+            <h2><span class="icon">🔎</span> How to Detect Outliers?</h2>
+            
+            <div class="method-grid">
+                <div class="method-card">
+                    <div class="method-title">📦 Box Plot Method</div>
+                    <div class="method-desc">Shows distribution using quartiles. Values outside whiskers = outliers.</div>
+                    <span class="tag tag-blue">Most Popular</span>
+                </div>
+                <div class="method-card">
+                    <div class="method-title">📊 IQR Method</div>
+                    <div class="method-desc">Uses Interquartile Range to detect outliers.</div>
+                    <span class="tag tag-green">Statistical</span>
+                </div>
+                <div class="method-card">
+                    <div class="method-title">📈 Z-Score Method</div>
+                    <div class="method-desc">Measures standard deviations from mean.</div>
+                    <span class="tag tag-blue">Statistical</span>
+                </div>
+                <div class="method-card">
+                    <div class="method-title">🎯 Percentile Method</div>
+                    <div class="method-desc">Values below 1st or above 99th percentile.</div>
+                    <span class="tag tag-yellow">Quick</span>
+                </div>
+                <div class="method-card">
+                    <div class="method-title">🤖 ML Methods</div>
+                    <div class="method-desc">Isolation Forest, DBSCAN, LOF, One-Class SVM</div>
+                    <span class="tag tag-red">Advanced</span>
+                </div>
+            </div>
+
+            <h3>1. IQR Method (Interquartile Range)</h3>
+            <div class="formula-box">
+                IQR = Q3 - Q1<br>
+                Lower Limit = Q1 - 1.5 × IQR<br>
+                Upper Limit = Q3 + 1.5 × IQR
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h4>📋 Example</h4>
+                    <table>
+                        <tr><th>Quartile</th><th>Value</th></tr>
+                        <tr><td>Q1</td><td>20</td></tr>
+                        <tr><td>Q3</td><td>40</td></tr>
+                        <tr><td><strong>IQR</strong></td><td><strong>20</strong></td></tr>
+                        <tr><td>Lower Limit</td><td>-10</td></tr>
+                        <tr><td>Upper Limit</td><td>70</td></tr>
+                    </table>
+                    <p style="margin-top: 10px;">Any value <strong>&gt; 70</strong> is considered an outlier.</p>
+                </div>
+                <div class="card">
+                    <h4>🐍 Python Code</h4>
+                    <div class="code-block">
+                        <span class="keyword">def</span> <span class="function">detect_outliers_iqr</span>(df, column):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Q1 = df[column].quantile(<span class="number">0.25</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Q3 = df[column].quantile(<span class="number">0.75</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;IQR = Q3 - Q1<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;lower = Q1 - <span class="number">1.5</span> * IQR<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;upper = Q3 + <span class="number">1.5</span> * IQR<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> df[(df[column] &lt; lower) | (df[column] &gt; upper)]
+                    </div>
+                </div>
+            </div>
+
+            <h3>2. Z-Score Method</h3>
+            <div class="formula-box">
+                Z = (X - Mean) / Standard Deviation
+            </div>
+            <p style="margin: 10px 0; color: #4a5568;">
+                If <strong>Z &gt; 3</strong> or <strong>Z &lt; -3</strong>, the value is usually considered an outlier.
+            </p>
+
+            <div class="card" style="margin-top: 15px;">
+                <h4>🐍 Python Code</h4>
+                <div class="code-block">
+                    <span class="keyword">from</span> scipy <span class="keyword">import</span> stats<br><br>
+                    <span class="keyword">def</span> <span class="function">detect_outliers_zscore</span>(df, column, threshold=<span class="number">3</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;z_scores = np.abs(stats.zscore(df[column]))<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> df[z_scores &gt; threshold]
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Visualize Outliers -->
+        <div class="section">
+            <h2><span class="icon">📊</span> How to Visualize Outliers?</h2>
+            
+            <div class="grid-3">
+                <div class="card">
+                    <h4>📦 Box Plot</h4>
+                    <p style="font-size: 0.9em; color: #4a5568;">Directly displays outliers as individual points.</p>
+                    <div class="code-block" style="font-size: 0.8em;">
+                        plt.boxplot(df[<span class="string">"Salary"</span>])<br>
+                        plt.show()
+                    </div>
+                    <span class="badge badge-success">⭐ Best Method</span>
+                </div>
+                <div class="card">
+                    <h4>📈 Scatter Plot</h4>
+                    <p style="font-size: 0.9em; color: #4a5568;">Shows points that lie far away from the majority.</p>
+                    <div class="code-block" style="font-size: 0.8em;">
+                        plt.scatter(df.index, df[<span class="string">"Salary"</span>])<br>
+                        plt.show()
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>📊 Histogram</h4>
+                    <p style="font-size: 0.9em; color: #4a5568;">Reveals extremely high or low values.</p>
+                    <div class="code-block" style="font-size: 0.8em;">
+                        plt.hist(df[<span class="string">"Salary"</span>])<br>
+                        plt.show()
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>🎻 Violin Plot</h4>
+                    <p style="font-size: 0.9em; color: #4a5568;">Shows both distribution and potential outliers.</p>
+                </div>
+                <div class="card">
+                    <h4>📉 Density Plot (KDE)</h4>
+                    <p style="font-size: 0.9em; color: #4a5568;">Displays probability distribution and highlights unusual values.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Handle Outliers -->
+        <div class="section">
+            <h2><span class="icon">🛠️</span> How to Handle Outliers?</h2>
+            
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Situation</th>
+                            <th>Recommended Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Data Entry Error</td>
+                            <td><span class="badge badge-danger">Correct or Remove</span></td>
+                        </tr>
+                        <tr>
+                            <td>Measurement Error</td>
+                            <td><span class="badge badge-danger">Remove</span></td>
+                        </tr>
+                        <tr>
+                            <td>Valid Rare Observation</td>
+                            <td><span class="badge badge-success">Keep</span></td>
+                        </tr>
+                        <tr>
+                            <td>Extreme Value Affecting Model</td>
+                            <td><span class="badge badge-warning">Cap or Transform</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Method 1: Remove Outliers</h3>
+            <div class="example-box">
+                <strong>Delete observations</strong> that are incorrect or significantly different from the rest.<br>
+                <span style="color: #4a5568;">Remove values outside IQR limits.</span>
+            </div>
+
+            <h3>Method 2: Replace with Mean or Median</h3>
+            <div class="example-box">
+                Replace the outlier with the column mean or median.<br>
+                <span style="color: #4a5568;">Median is preferred because it is less affected by extreme values.</span>
+            </div>
+
+            <h3>Method 3: Winsorization (Capping)</h3>
+            <div class="example-box">
+                Replace extremely high values with the maximum acceptable value.<br>
+                <strong>Example:</strong> <span style="background: #e2e8f0; padding: 2px 10px; border-radius: 4px;">5, 8, 9, 10, 200 → 5, 8, 9, 10, 20</span>
+            </div>
+
+            <div class="card">
+                <h4>🐍 Python Code for Winsorization</h4>
+                <div class="code-block">
+                    <span class="keyword">def</span> <span class="function">handle_outliers_winsorize</span>(df, column):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;lower = np.percentile(df[column], <span class="number">1</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;upper = np.percentile(df[column], <span class="number">99</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;df[column] = df[column].clip(lower=lower, upper=upper)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> df
+                </div>
+            </div>
+
+            <h3>Method 4: Log Transformation</h3>
+            <div class="example-box">
+                Useful for highly skewed data like salaries, house prices, population, and income.
+            </div>
+
+            <h3>Method 5: Robust Scaling</h3>
+            <div class="example-box">
+                <code>RobustScaler</code> uses the median and IQR instead of the mean and standard deviation.<br>
+                <span style="color: #4a5568;">Performs well when outliers are present.</span>
+            </div>
+
+            <h3>Method 6: Keep the Outlier</h3>
+            <div style="background: #f0f4ff; padding: 15px; border-radius: 10px; border-left: 4px solid #667eea;">
+                <strong>🎯 Sometimes outliers are valuable:</strong>
+                <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+                    <li>🔒 Fraud Detection</li>
+                    <li>🏥 Disease Diagnosis</li>
+                    <li>🌍 Earthquakes</li>
+                    <li>🛡️ Network Intrusion Detection</li>
+                    <li>📈 Stock Market Crashes</li>
+                </ul>
+                <p style="margin-top: 10px; color: #4a5568;">Removing these outliers could reduce model performance.</p>
+            </div>
+        </div>
+
+        <!-- Advantages -->
+        <div class="section" style="border-left-color: #48bb78;">
+            <h2><span class="icon">✅</span> Advantages of Handling Outliers</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div style="font-size: 2em; text-align: center;">🎯</div>
+                    <h4>Improves Model Accuracy</h4>
+                    <p style="color: #4a5568;">Models perform better with clean data.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2em; text-align: center;">📊</div>
+                    <h4>Better Statistical Analysis</h4>
+                    <p style="color: #4a5568;">More reliable insights from data.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2em; text-align: center;">📉</div>
+                    <h4>Reduced Prediction Error</h4>
+                    <p style="color: #4a5568;">More accurate predictions.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2em; text-align: center;">⚖️</div>
+                    <h4>Improved Feature Scaling</h4>
+                    <p style="color: #4a5568;">Better normalization results.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2em; text-align: center;">🤖</div>
+                    <h4>Reliable ML Models</h4>
+                    <p style="color: #4a5568;">More robust and trustworthy models.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Table -->
+        <div class="section" style="border-left-color: #ecc94b;">
+            <h2><span class="icon">📋</span> Summary</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Question</th>
+                        <th>Answer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>What is an Outlier?</strong></td>
+                        <td>An unusually large or small data value.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>How to Detect?</strong></td>
+                        <td>IQR, Z-Score, Percentiles, Isolation Forest, DBSCAN, LOF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>How to Visualize?</strong></td>
+                        <td>Box Plot, Scatter Plot, Histogram, Violin Plot, Density Plot</td>
+                    </tr>
+                    <tr>
+                        <td><strong>How to Handle?</strong></td>
+                        <td>Remove, Replace, Cap, Log Transform, Robust Scaling, or Keep</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Complete Python Implementation -->
+        <div class="section" style="border-left-color: #9f7aea;">
+            <h2><span class="icon">🐍</span> Complete Python Implementation</h2>
+            
+            <div class="card">
+                <h4>📦 Install Required Libraries</h4>
+                <div class="code-block">
+                    pip install numpy pandas matplotlib seaborn scikit-learn scipy
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>🔧 Complete Outlier Handler Class</h4>
+                <div class="code-block" style="max-height: 400px; overflow-y: auto;">
+                    <span class="keyword">import</span> numpy <span class="keyword">as</span> np<br>
+                    <span class="keyword">import</span> pandas <span class="keyword">as</span> pd<br>
+                    <span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt<br>
+                    <span class="keyword">import</span> seaborn <span class="keyword">as</span> sns<br>
+                    <span class="keyword">from</span> scipy <span class="keyword">import</span> stats<br>
+                    <span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> RobustScaler<br>
+                    <span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> IsolationForest<br>
+                    <span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> LocalOutlierFactor<br>
+                    <br>
+                    <span class="keyword">class</span> <span class="function">OutlierHandler</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">__init__</span>(self, df):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.df = df.copy()<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.results = {}<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">detect_iqr</span>(self, column):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q1 = self.df[column].quantile(<span class="number">0.25</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q3 = self.df[column].quantile(<span class="number">0.75</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IQR = Q3 - Q1<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lower = Q1 - <span class="number">1.5</span> * IQR<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upper = Q3 + <span class="number">1.5</span> * IQR<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> self.df[(self.df[column] &lt; lower) | (self.df[column] &gt; upper)]<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">detect_zscore</span>(self, column, threshold=<span class="number">3</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z_scores = np.abs(stats.zscore(self.df[column]))<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> self.df[z_scores &gt; threshold]<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">handle_winsorize</span>(self, column):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lower = np.percentile(self.df[column], <span class="number">1</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upper = np.percentile(self.df[column], <span class="number">99</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.df[column] = self.df[column].clip(lower=lower, upper=upper)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> self.df<br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">visualize</span>(self, column):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">3</span>, figsize=(<span class="number">15</span>, <span class="number">4</span>))<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;axes[<span class="number">0</span>].boxplot(self.df[column])<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;axes[<span class="number">0</span>].set_title(<span class="string">'Box Plot'</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;axes[<span class="number">1</span>].scatter(range(len(self.df)), self.df[column])<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;axes[<span class="number">1</span>].set_title(<span class="string">'Scatter Plot'</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;axes[<span class="number">2</span>].hist(self.df[column], bins=<span class="number">30</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;axes[<span class="number">2</span>].set_title(<span class="string">'Histogram'</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plt.tight_layout()<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plt.show()<br>
+                    <br>
+                    <span class="comment"># Usage Example</span><br>
+                    df = pd.DataFrame({<span class="string">'Age'</span>: [<span class="number">20</span>, <span class="number">21</span>, <span class="number">22</span>, <span class="number">19</span>, <span class="number">20</span>, <span class="number">95</span>]})<br>
+                    handler = OutlierHandler(df)<br>
+                    outliers = handler.detect_iqr(<span class="string">'Age'</span>)<br>
+                    print(<span class="string">"Outliers:"</span>, outliers)<br>
+                    handler.handle_winsorize(<span class="string">'Age'</span>)<br>
+                    handler.visualize(<span class="string">'Age'</span>)
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Demo -->
+        <div class="section" style="border-left-color: #48bb78;">
+            <h2><span class="icon">🎮</span> Interactive Outlier Demo</h2>
+            <p style="color: #4a5568;">Click the buttons below to see different outlier handling methods in action!</p>
+            
+            <div class="flex" style="margin: 20px 0; gap: 10px;">
+                <button class="btn" onclick="showDemo('original')">📊 Original Data</button>
+                <button class="btn btn-success" onclick="showDemo('remove')">🗑️ Remove Outliers</button>
+                <button class="btn btn-warning" onclick="showDemo('winsorize')">✂️ Winsorize</button>
+                <button class="btn btn-info" onclick="showDemo('log')">📈 Log Transform</button>
+            </div>
+
+            <div id="demo-container" style="background: #f7fafc; border-radius: 12px; padding: 20px; min-height: 300px;">
+                <div id="demo-content">
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="font-size: 3em; margin-bottom: 20px;">📊</div>
+                        <h3 style="color: #4a5568;">Sample Data: Ages</h3>
+                        <div class="flex" style="justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0;">
+                            <span class="badge badge-info">20</span>
+                            <span class="badge badge-info">21</span>
+                            <span class="badge badge-info">22</span>
+                            <span class="badge badge-info">19</span>
+                            <span class="badge badge-info">20</span>
+                            <span class="badge badge-danger" style="font-size: 1.1em;">95 ⚠️</span>
+                            <span class="badge badge-info">23</span>
+                            <span class="badge badge-info">21</span>
+                            <span class="badge badge-info">22</span>
+                            <span class="badge badge-info">20</span>
+                        </div>
+                        <div class="progress-bar" style="width: 80%; margin: 20px auto;">
+                            <div class="progress-fill" style="width: 85%;"></div>
+                        </div>
+                        <p style="color: #718096;">Mean: 26.3 | Median: 21.0 | Std Dev: 23.1</p>
+                        <p style="color: #718096; font-size: 0.9em;">Outlier detected: <span class="badge badge-danger">95</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 20px; color: #718096; border-top: 2px solid #e2e8f0; margin-top: 20px;">
+            <p>📚 Outlier Detection & Handling — Complete Guide</p>
+            <p style="font-size: 0.9em;">Made with ❤️ for Data Science & Machine Learning</p>
+        </div>
+    </div>
+
+    <script>
+        function showDemo(method) {
+            const container = document.getElementById('demo-content');
+            
+            const demos = {
+                'original': `
+                    <div style="text-align: center; padding: 20px;">
+                        <h3 style="color: #4a5568;">📊 Original Data</h3>
+                        <div class="flex" style="justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0;">
+                            <span class="badge badge-info">20</span>
+                            <span class="badge badge-info">21</span>
+                            <span class="badge badge-info">22</span>
+                            <span class="badge badge-info">19</span>
+                            <span class="badge badge-info">20</span>
+                            <span class="badge badge-danger" style="font-size: 1.1em;">95 ⚠️</span>
+                            <span class="badge badge-info">23</span>
+                            <span class="badge badge-info">21</span>
+                            <span class="badge badge-info">22</span>
+                            <span class="badge badge-info">20</span>
+                        </div>
+                        <div class="progress-bar" style="width: 80%; margin: 20px auto;">
+                            <div class="progress-fill" style="width: 85%;"></div>
+                        </div>
+                        <p style="color: #718096;">Mean: 26.3 | Median: 21.0 | Std Dev: 23.1</p>
+                        <p style="color: #718096;">Outliers detected: <span class="badge badge-danger">1</span></p>
+                    </div>
+                `,
+                'remove': `
+                    <div style="text-align: center; padding: 20px;">
+                        <h3 style="color: #48bb78;">🗑️ After Removing Outliers</h3>
+                        <div class="flex" style="justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0;">
+                            <span class="badge badge-info">20</span>
+                            <span class="badge badge-info">21</span>
+                            <span class="badge badge-info">22</span>
+                            <span class="badge badge-info">19</span>
+                            <span class="badge badge-info">20</span>
+                            <span class="badge badge-info">23</span>
+                            <span class="badge badge-info">21</span>
+                            <span class="badge badge-info">22</span>
+                            <span class="badge badge-info">20</span>
+                            <span class="badge badge-success" style="opacity: 0.3;">✖️</span>
+                        </div>
+                        <div class="progress-bar" style="width: 80%; margin: 20px auto;">
+                            <div class="progress-fill" style="width: 90%;"></div>
+                        </div>
+                        <p style="color: #48bb78;">✅ Removed 1 outlier</p>
+                        <p style="color: #718096;">Mean: 20.9 | Median: 21.0 | Std Dev: 1.2</p>
+                        <p style="color: #48bb78;">✓ Cleaner data for modeling</p>
+                    </div>
+                `,
+                'winsorize': `
+                    <div style="text-align: center; padding: 20px;">
+                        <h3 style="color: #ecc94b;">✂️ After Winsorization (Capping)</h3>
+                        <div class="flex" style="justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0;">
+                            <span class="badge badge-info">20</span>
+                            <span class="badge badge-info">21</span>
+                            <span class="badge badge-info">22</span>
+                            <span class="badge badge-info">19</span>
+                            <span class="badge badge-info">20</span>
+                            <span class="badge badge-warning" style="font-size: 1.1em;">30 ⚡</span>
+                            <span class="badge badge-info">23</span>
+                            <span class="badge badge-info">21</span>
+                            <span class="badge badge-info">22</span>
+                            <span class="badge badge-info">20</span>
+                        </div>
+                        <div class="progress-bar" style="width: 80%; margin: 20px auto;">
+                            <div class="progress-fill" style="width: 88%;"></div>
+                        </div>
+                        <p style="color: #ecc94b;">⚠️ Capped 95 → 30 (at 99th percentile)</p>
+                        <p style="color: #718096;">Mean: 21.8 | Median: 21.0 | Std Dev: 3.0</p>
+                        <p style="color: #ecc94b;">✓ Preserved data shape</p>
+                    </div>
+                `,
+                'log': `
+                    <div style="text-align: center; padding: 20px;">
+                        <h3 style="color: #63b3ed;">📈 After Log Transformation</h3>
+                        <div class="flex" style="justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0;">
+                            <span class="badge badge-info">3.0</span>
+                            <span class="badge badge-info">3.04</span>
+                            <span class="badge badge-info">3.09</span>
+                            <span class="badge badge-info">2.94</span>
+                            <span class="badge badge-info">3.0</span>
+                            <span class="badge badge-info" style="font-size: 1.1em;">4.56</span>
+                            <span class="badge badge-info">3.14</span>
+                            <span class="badge badge-info">3.04</span>
+                            <span class="badge badge-info">3.09</span>
+                            <span class="badge badge-info">3.0</span>
+                        </div>
+                        <div class="progress-bar" style="width: 80%; margin: 20px auto;">
+                            <div class="progress-fill" style="width: 70%;"></div>
+                        </div>
+                        <p style="color: #63b3ed;">📊 Log(original values)</p>
+                        <p style="color: #718096;">Mean: 3.17 | Median: 3.04 | Std Dev: 0.52</p>
+                        <p style="color: #63b3ed;">✓ Reduced skewness</p>
+                    </div>
+                `
+            };
+            
+            container.innerHTML = demos[method] || demos['original'];
+        }
+    </script>
+</body>
+</html>
