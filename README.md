@@ -42,6 +42,17 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 16 : Outliers ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/49-outliers.html)
 
+[Lecture 17 : Outliers python implementation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/50-outliers_python_implementation.html)
+
+[Lecture 18 : Mean and Standerd Deviation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/51_mean_standard_Deviation.html)
+
+[Lecture 19 : Mean and Standerd Deviation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/51_mean_standard_Deviation.html)
+
+[Lecture 20 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53_github.html)
+
+[Lecture 21 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53-mean_std_deviation_tabular.html)
+
+[Lecture 22 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/55_R_square_adjuste_R2.html)
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
