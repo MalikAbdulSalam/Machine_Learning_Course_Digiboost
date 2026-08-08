@@ -50,7 +50,7 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 20 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53_github.html)
 
-[Lecture 21 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53-mean_std_deviation_tabular.html)
+[Lecture 21 : Mean adn Standard Deviation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53-mean_std_deviation_tabular.html)
 
 [Lecture 22 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/55_R_square_adjuste_R2.html)
 
