@@ -50,7 +50,7 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 20 : Mean adn Standard Deviation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53-mean_std_deviation_tabular.html)
 
-[Lecture 21 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/55_R_square_adjuste_R2.html)
+[Lecture 21 : R square and Adjusted R square](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/55_R_square_adjuste_R2.html)
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
