@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>R² vs Adjusted R² - Multiple Features</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+      line-height: 1.7;
+      background: #e9eef3;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 40px 45px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      color: #0b3b5e;
+      font-weight: 600;
+      font-size: 2.1rem;
+      text-align: center;
+      letter-spacing: -0.3px;
+      margin-top: 0;
+    }
+
+    h2 {
+      color: #1a5a8c;
+      font-weight: 600;
+      border-bottom: 3px solid #d0dfed;
+      padding-bottom: 10px;
+      margin-top: 45px;
+      font-size: 1.7rem;
+    }
+
+    h3 {
+      color: #2a4058;
+      font-weight: 600;
+      font-size: 1.3rem;
+      margin-top: 30px;
+    }
+
+    .box,
+    .warning,
+    .success {
+      padding: 18px 22px;
+      margin: 24px 0;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      background: #f0f6fe;
+      border-left: 6px solid #1a5a8c;
+      color: #0b2a40;
+    }
+
+    .warning {
+      background: #fff7ed;
+      border-left-color: #d97706;
+      color: #78350f;
+    }
+
+    .success {
+      background: #ecfdf3;
+      border-left-color: #0b7e4b;
+      color: #064e2e;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 28px 0;
+      font-size: 1rem;
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    th {
+      background: #1e4a76;
+      color: #ffffff;
+      font-weight: 600;
+      padding: 14px 12px;
+      font-size: 1.05rem;
+    }
+
+    td {
+      border: 1px solid #d6e2ed;
+      padding: 12px;
+      background-color: #ffffff;
+      color: #1e2b39;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    code {
+      background: #eef2f6;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.95rem;
+      color: #0f2b44;
+      font-weight: 500;
+    }
+
+    pre {
+      background: #1e293b;
+      color: #f1f5f9;
+      padding: 20px 24px;
+      border-radius: 14px;
+      overflow-x: auto;
+      font-size: 0.95rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      line-height: 1.6;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-weight: 400;
+      font-size: 0.95rem;
+    }
+
+    .formula {
+      text-align: center;
+      font-size: 1.5rem;
+      background: #eef5fa;
+      padding: 18px 20px;
+      margin: 28px 0;
+      border-radius: 40px;
+      font-weight: 500;
+      color: #0b3b5e;
+      font-family: 'Segoe UI', math, sans-serif;
+      border: 1px solid #cbddee;
+    }
+
+    .question {
+      background: #f6f9fc;
+      border: 1px solid #dde7f0;
+      padding: 18px 22px;
+      margin: 14px 0;
+      border-radius: 16px;
+      font-size: 1.05rem;
+      color: #142433;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .question .answer {
+      margin-top: 12px;
+      padding: 14px 18px;
+      background: #e6f0fa;
+      border-radius: 12px;
+      border-left: 4px solid #1a5a8c;
+      color: #0b2f4a;
+      font-weight: 500;
+    }
+
+    .question .answer strong {
+      color: #0b3859;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding-top: 28px;
+      border-top: 2px solid #dce6f0;
+      color: #3a5470;
+      font-size: 1.05rem;
+      letter-spacing: 0.3px;
+    }
+
+    ul,
+    ol {
+      padding-left: 28px;
+      color: #1c2c3e;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    a {
+      color: #1a5a8c;
+    }
+
+    .container p,
+    .container li,
+    .container td {
+      color: #1c2c3e;
+    }
+
+    strong {
+      color: #0b3859;
+      font-weight: 600;
+    }
+
+    .box strong,
+    .warning strong,
+    .success strong {
+      color: #0b3859;
+    }
+
+    .warning strong {
+      color: #92400e;
+    }
+    .success strong {
+      color: #0a5e3a;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        padding: 20px 16px;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      pre {
+        font-size: 0.85rem;
+        padding: 14px;
+      }
+      .formula {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>📊 R² vs Adjusted R² with Multiple Features</h1>
+
+    <div class="box">
+      <strong>Learning Goal:</strong>
+      Understand how R² and Adjusted R² work when a Linear Regression
+      model contains multiple features.
+    </div>
+
+    <!-- SECTION 1 -->
+    <h2>1. What is a Feature?</h2>
+    <p>
+      A <strong>feature</strong> is an input variable that we use to predict
+      the target variable.
+    </p>
+    <p>For example, suppose we want to predict house prices:</p>
+
+    <table>
+      <tr><th>Size</th><th>Bedrooms</th><th>Age</th><th>Distance</th><th>Price</th></tr>
+      <tr><td>1200</td><td>3</td><td>5</td><td>2.1</td><td>250</td></tr>
+      <tr><td>1500</td><td>4</td><td>3</td><td>1.5</td><td>320</td></tr>
+      <tr><td>900</td><td>2</td><td>10</td><td>5.0</td><td>180</td></tr>
+      <tr><td>1800</td><td>4</td><td>2</td><td>1.0</td><td>400</td></tr>
+      <tr><td>1100</td><td>3</td><td>8</td><td>3.5</td><td>220</td></tr>
+    </table>
+
+    <div class="success">
+      <strong>Features (X):</strong> Size, Bedrooms, Age, Distance <br>
+      <strong>Target (Y):</strong> Price
+    </div>
+
+    <h2>2. Multiple Features</h2>
+    <p>When we have more than one feature, we use <strong>Multiple Linear Regression</strong>.</p>
+
+    <pre><code>X = df[["Size", "Bedrooms", "Age", "Distance"]]
+y = df["Price"]</code></pre>
+
+    <p>Here we have <strong>4 features</strong>.</p>
+    <pre><code>k = X.shape[1]</code></pre>
+    <p>The value of <code>k</code> will be:</p>
+    <pre><code>k = 4</code></pre>
+
+    <!-- SECTION 3 -->
+    <h2>3. R² with Multiple Features</h2>
+    <p>R² tells us how much of the variation in the target variable is explained by the complete model.</p>
+    <div class="box">
+      <strong>Important:</strong> R² is calculated for the entire model, not separately for each feature.
+    </div>
+    <pre><code>r2 = r2_score(y, y_pred)</code></pre>
+    <p>If:</p>
+    <pre><code>R² = 0.85</code></pre>
+    <p>it means the model explains approximately <strong>85%</strong> of the variation in the target.</p>
+
+    <!-- SECTION 4 -->
+    <h2>4. Adjusted R² with Multiple Features</h2>
+    <p>Adjusted R² considers both the model's R² and the number of features used by the model.</p>
+    <div class="formula">
+      Adjusted R² = 1 − (1 − R²) × (n − 1) / (n − k − 1)
+    </div>
+    <p>Where:</p>
+    <ul>
+      <li><strong>n</strong> = number of observations</li>
+      <li><strong>k</strong> = number of features</li>
+      <li><strong>R²</strong> = R-Squared</li>
+    </ul>
+    <p>Python can automatically determine the number of features:</p>
+    <pre><code>n = len(y)
+k = X.shape[1]</code></pre>
+
+    <!-- SECTION 5 -->
+    <h2>5. Complete Python Example</h2>
+    <pre><code>import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+# Dataset
+data = {
+    "Size": [1200, 1500, 900, 1800, 1100],
+    "Bedrooms": [3, 4, 2, 4, 3],
+    "Age": [5, 3, 10, 2, 8],
+    "Distance": [2.1, 1.5, 5.0, 1.0, 3.5],
+    "Price": [250, 320, 180, 400, 220]
+}
+df = pd.DataFrame(data)
+
+# Features
+X = df[["Size", "Bedrooms", "Age", "Distance"]]
+# Target
+y = df["Price"]
+
+# Create model
+model = LinearRegression()
+# Train model
+model.fit(X, y)
+# Predictions
+y_pred = model.predict(X)
+
+# R²
+r2 = r2_score(y, y_pred)
+
+# Number of observations
+n = len(y)
+# Number of features
+k = X.shape[1]
+
+# Adjusted R²
+adjusted_r2 = 1 - (1 - r2) * (n - 1) / (n - k - 1)
+
+print("Number of observations:", n)
+print("Number of features:", k)
+print("R²:", r2)
+print("Adjusted R²:", adjusted_r2)</code></pre>
+
+    <!-- SECTION 6 -->
+    <h2>6. Do We Calculate R² for Every Feature?</h2>
+    <div class="warning">
+      <strong>No.</strong> You normally calculate R² for the complete regression model.
+    </div>
+    <p>For example:</p>
+    <pre><code>X = df[["Size", "Bedrooms", "Age", "Distance"]]</code></pre>
+    <p>This creates one model using all four features. The resulting R² represents the performance of that complete model.</p>
+
+    <table>
+      <tr><th>Model</th><th>Features</th><th>R²</th><th>Adjusted R²</th></tr>
+      <tr><td>Model 1</td><td>Size</td><td>...</td><td>...</td></tr>
+      <tr><td>Model 2</td><td>Size + Bedrooms</td><td>...</td><td>...</td></tr>
+      <tr><td>Model 3</td><td>Size + Bedrooms + Age</td><td>...</td><td>...</td></tr>
+      <tr><td>Model 4</td><td>All Features</td><td>...</td><td>...</td></tr>
+    </table>
+
+    <!-- ASSIGNMENT -->
+    <h2>📝 Practical Assignment</h2>
+
+    <h3>Task 1: Build a Multiple Linear Regression Model</h3>
+    <p>Use the following dataset:</p>
+    <pre><code>import pandas as pd
+
+data = {
+    "Size": [1000, 1200, 1500, 1800, 2000,
+             1100, 1400, 1600, 1900, 2200],
+    "Bedrooms": [2, 3, 3, 4, 4,
+                 2, 3, 4, 4, 5],
+    "Age": [10, 8, 5, 3, 2,
+            12, 7, 4, 3, 1],
+    "Distance": [5.0, 4.0, 3.0, 2.0, 1.0,
+                 6.0, 3.5, 2.5, 1.5, 0.5],
+    "Price": [180, 220, 280, 350, 400,
+              190, 260, 320, 370, 450]
+}
+df = pd.DataFrame(data)</code></pre>
+
+    <h3>Task 2: Create Different Models</h3>
+    <p>Create the following models:</p>
+    <ol>
+      <li>Size only</li>
+      <li>Size + Bedrooms</li>
+      <li>Size + Bedrooms + Age</li>
+      <li>Size + Bedrooms + Age + Distance</li>
+    </ol>
+
+    <h3>Task 3: Calculate R² and Adjusted R²</h3>
+    <p>Calculate both values for every model.</p>
+    <p>Use:</p>
+    <pre><code>r2_score(y, y_pred)</code></pre>
+    <p>and:</p>
+    <pre><code>adjusted_r2 = 1 - (1 - r2) * (n - 1) / (n - k - 1)</code></pre>
+
+    <h3>Task 4: Create a Comparison Table</h3>
+    <table>
+      <tr><th>Model</th><th>Number of Features</th><th>R²</th><th>Adjusted R²</th></tr>
+      <tr><td>Model 1</td><td>1</td><td>____</td><td>____</td></tr>
+      <tr><td>Model 2</td><td>2</td><td>____</td><td>____</td></tr>
+      <tr><td>Model 3</td><td>3</td><td>____</td><td>____</td></tr>
+      <tr><td>Model 4</td><td>4</td><td>____</td><td>____</td></tr>
+    </table>
+
+    <!-- QUESTIONS WITH ANSWERS -->
+    <h2>❓ Questions & Answers</h2>
+
+    <div class="question">
+      <strong>Q1.</strong> What does R² tell us about a regression model?
+      <div class="answer"><strong>Answer:</strong> R² (the coefficient of determination) tells us the proportion of variance in the target variable that is explained by the independent variables in the model. It ranges from 0 to 1, where 1 means the model explains all the variability, and 0 means it explains none.</div>
+    </div>
+
+    <div class="question">
+      <strong>Q2.</strong> What happens to R² when more features are added?
+      <div class="answer"><strong>Answer:</strong> R² never decreases when more features are added — it either stays the same or increases. This is because adding more predictors allows the model to fit the training data at least as well, even if the new features are completely irrelevant.</div>
+    </div>
+
+    <div class="question">
+      <strong>Q3.</strong> Why can R² be misleading when many features are added?
+      <div class="answer"><strong>Answer:</strong> R² can be misleading because it will keep increasing (or stay the same) as you add more features, even if those features have no real predictive power. This can lead to overfitting, where the model captures noise rather than the true underlying relationship, giving a false impression of a "better" model.</div>
+    </div>
+
+    <div class="question">
+      <strong>Q4.</strong> What does Adjusted R² consider that R² does not?
+      <div class="answer"><strong>Answer:</strong> Adjusted R² takes into account the <strong>number of features (k)</strong> in the model and the <strong>sample size (n)</strong>. It applies a penalty for adding extra predictors, so it only increases if the new feature actually improves the model more than would be expected by chance.</div>
+    </div>
+
+    <div class="question">
+      <strong>Q5.</strong> What is <code>k</code> in the Adjusted R² formula?
+      <div class="answer"><strong>Answer:</strong> In the Adjusted R² formula, <code>k</code> is the <strong>number of independent features (predictors)</strong> used in the regression model. It is used in the penalty term: 1 − (1 − R²) × (n − 1) / (n − k − 1).</div>
+    </div>
+
+    <div class="question">
+      <strong>Q6.</strong> What does <code>X.shape[1]</code> return?
+      <div class="answer"><strong>Answer:</strong> In Python (with pandas or NumPy), <code>X.shape[1]</code> returns the <strong>number of columns</strong> in the feature matrix <code>X</code>. Since each column typically represents a feature, this gives the total number of features used in the model.</div>
+    </div>
+
+    <div class="question">
+      <strong>Q7.</strong> Which metric is more useful when comparing models with different numbers of features?
+      <div class="answer"><strong>Answer:</strong> <strong>Adjusted R²</strong> is more useful when comparing models with different numbers of features because it accounts for the number of predictors. It penalizes the addition of unnecessary features, helping you select a model that balances goodness-of-fit with simplicity (avoiding overfitting).</div>
+    </div>
+
+    <div class="question">
+      <strong>Q8.</strong> Can Adjusted R² decrease when a new feature is added? Explain.
+      <div class="answer"><strong>Answer:</strong> Yes, Adjusted R² <strong>can decrease</strong> when a new feature is added. This happens if the new feature does not provide enough improvement in R² to offset the penalty for adding an extra predictor. In other words, if the feature adds little or no explanatory power, the adjusted metric will go down, signaling that the feature is not worth including.</div>
+    </div>
+
+    <!-- CHALLENGE -->
+    <h2>🚀 Challenge</h2>
+    <p>Find or create a dataset containing at least:</p>
+    <ul>
+      <li>30 observations</li>
+      <li>5 or more features</li>
+      <li>1 target variable</li>
+    </ul>
+    <p>Build at least five different regression models by adding features one at a time.</p>
+    <p>For every model calculate:</p>
+    <ul>
+      <li>R²</li>
+      <li>Adjusted R²</li>
+    </ul>
+    <p>Finally, determine which model gives the best balance between model performance and number of features.</p>
+
+    <h2>🎓 Final Takeaway</h2>
+    <div class="success">
+      <p><strong>R²</strong> measures how much of the target's variation is explained by the complete model.</p>
+      <p><strong>Adjusted R²</strong> does the same thing but also considers how many features are being used.</p>
+      <p>Therefore, when comparing regression models with different numbers of features, <strong>Adjusted R² is often more useful than R² alone.</strong></p>
+    </div>
+
+    <div class="footer">
+      📊 Python Machine Learning Practical Assignment <br>
+      Topic: R² vs Adjusted R² with Multiple Features
+    </div>
+
+  </div>
+</body>
+</html>
