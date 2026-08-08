@@ -46,13 +46,11 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 18 : Mean and Standerd Deviation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/51_mean_standard_Deviation.html)
 
-[Lecture 19 : Mean and Standerd Deviation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/51_mean_standard_Deviation.html)
+[Lecture 19 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53_github.html)
 
-[Lecture 20 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53_github.html)
+[Lecture 20 : Mean adn Standard Deviation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53-mean_std_deviation_tabular.html)
 
-[Lecture 21 : Mean adn Standard Deviation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/53-mean_std_deviation_tabular.html)
-
-[Lecture 22 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/55_R_square_adjuste_R2.html)
+[Lecture 21 : Github Push Code to repository](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/55_R_square_adjuste_R2.html)
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
