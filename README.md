@@ -52,6 +52,8 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 21 : R square and Adjusted R square](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/55_R_square_adjuste_R2.html)
 
+[Lecture 22 : R square and Adjusted R square more](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/56_R_square_adjuste_R2.html)
+
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
 
