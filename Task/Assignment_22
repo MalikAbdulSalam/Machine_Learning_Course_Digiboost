@@ -1,0 +1,226 @@
+ASSIGNMENT: R² vs Adjusted R² in Multiple Linear Regression
+Objective: Gain hands-on experience with R² and Adjusted R² by building multiple regression models, comparing their performance, and understanding the trade-off between model complexity and explanatory power.
+
+
+===================================================================
+📁 1. Dataset
+===================================================================
+
+You will work with a dataset of 50 houses with the following features:
+
+Size (sq ft) – living area
+
+Bedrooms – number of bedrooms
+
+Bathrooms – number of bathrooms
+
+Age (years) – age of the house
+
+Lot Size (sq ft) – total land area
+
+Garage – number of garage spaces
+
+Price – target variable (in thousands $)
+
+Generate the dataset using the Python code below:
+
+python
+import pandas as pd
+import numpy as np
+
+np.random.seed(42)   # for reproducibility
+
+n = 50
+size = np.random.randint(800, 3000, n)
+bedrooms = np.random.randint(2, 6, n)
+bathrooms = np.random.randint(1, 4, n)
+age = np.random.randint(0, 30, n)
+lot_size = np.random.randint(2000, 8000, n)
+garage = np.random.randint(0, 3, n)
+
+# Price = 50 + 0.12*size + 8*bedrooms + 15*bathrooms - 2*age + 0.02*lot_size + 10*garage + noise
+noise = np.random.normal(0, 20, n)
+price = (50 + 0.12*size + 8*bedrooms + 15*bathrooms - 2*age + 0.02*lot_size + 10*garage + noise).astype(int)
+
+df = pd.DataFrame({
+    'Size': size,
+    'Bedrooms': bedrooms,
+    'Bathrooms': bathrooms,
+    'Age': age,
+    'LotSize': lot_size,
+    'Garage': garage,
+    'Price': price
+})
+
+print(df.head())
+print("Shape:", df.shape)
+
+===================================================================
+📝 2. Tasks
+===================================================================
+
+
+___________________________________________________________________
+Task 1: Build Simple Models (1 feature)
+___________________________________________________________________
+Build a Linear Regression model using only Size to predict Price.
+
+Calculate R² and Adjusted R² for this model.
+
+___________________________________________________________________
+Task 2: Add Features Sequentially
+___________________________________________________________________
+Starting from the Size-only model, add features one by one in this order:
+
+Model 1: Size
+
+Model 2: Size + Bedrooms
+
+Model 3: Size + Bedrooms + Bathrooms
+
+Model 4: Size + Bedrooms + Bathrooms + Age
+
+Model 5: Size + Bedrooms + Bathrooms + Age + LotSize
+
+Model 6: Size + Bedrooms + Bathrooms + Age + LotSize + Garage
+
+For each model, compute:
+
+R²
+
+Adjusted R²
+
+Number of features (k)
+
+___________________________________________________________________
+Task 3: Build a Comparison Table
+___________________________________________________________________
+Fill in the following table with your results:
+
+Model	Features Used	k (features)	R²	Adjusted R²
+Model 1	Size	1		
+Model 2	Size, Bedrooms	2		
+Model 3	Size, Bedrooms, Bathrooms	3		
+Model 4	Size, Bedrooms, Bathrooms, Age	4		
+Model 5	Size, Bedrooms, Bathrooms, Age, LotSize	5		
+Model 6	Size, Bedrooms, Bathrooms, Age, LotSize, Garage	6		
+
+___________________________________________________________________
+Task 4: Analyze and Answer
+___________________________________________________________________
+Describe the trend of R² as you add more features. Does it ever decrease?
+
+Describe the trend of Adjusted R². Does it always increase? If not, where does it drop?
+
+Which model would you choose as the "best" and why? Justify using both R² and Adjusted R².
+
+Explain in your own words why Adjusted R² is a better metric for comparing models with different numbers of features.
+
+
+___________________________________________________________________
+Task 5: Challenge – Try a Different Order
+___________________________________________________________________
+Build models by adding features in a different order (e.g., start with Garage, then LotSize, etc.).
+
+Does the final Adjusted R² of the full model change? Why or why not?
+
+Does the path of Adjusted R² values change as you add features? Explain.
+
+
+======================================================================
+💻 3. Starter Code Skeleton
+======================================================================
+Use the following skeleton to implement your solution. Fill in the missing parts.
+
+python
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+# ---- 1. Load dataset (use the generation code above) ----
+# (Insert dataset generation code here)
+
+# ---- 2. Define features and target ----
+X = df[['Size']]   # start with just Size
+y = df['Price']
+
+# ---- 3. Function to compute metrics ----
+def compute_metrics(X, y):
+    model = LinearRegression()
+    model.fit(X, y)
+    y_pred = model.predict(X)
+    r2 = r2_score(y, y_pred)
+    n = len(y)
+    k = X.shape[1]
+    adj_r2 = 1 - (1 - r2) * (n - 1) / (n - k - 1)
+    return r2, adj_r2, k
+
+# ---- 4. Build models sequentially ----
+# Model 1: Size
+X1 = df[['Size']]
+r2_1, adj_1, k_1 = compute_metrics(X1, y)
+
+# Model 2: Size + Bedrooms
+X2 = df[['Size', 'Bedrooms']]
+r2_2, adj_2, k_2 = compute_metrics(X2, y)
+
+# ... continue for all 6 models
+
+# ---- 5. Print results ----
+print(f"Model 1: R²={r2_1:.4f}, Adj R²={adj_1:.4f}, k={k_1}")
+print(f"Model 2: R²={r2_2:.4f}, Adj R²={adj_2:.4f}, k={k_2}")
+# ... print all models
+
+======================================================================
+📤 4. Submission Checklist
+======================================================================
+Please submit the following items:
+
+✅ Python code (well-commented) that generates the dataset and computes all metrics.
+
+✅ Completed comparison table (Task 3) with all values filled.
+
+✅ Written answers to the questions in Task 4 and Task 5 (short paragraphs).
+
+✅ A brief conclusion (2–3 sentences) summarizing which model you recommend and why.
+
+
+======================================================================
+⏰ Deadline: Next session
+======================================================================
+📊 Total points: 100
+
+📋 5. Grading Rubric
+Criteria	Excellent (100%)	Good (75%)	Needs Improvement (50%)
+Code Implementation	Clean, runs without errors, well-commented	Runs but minor issues	Errors or incomplete
+Table Completion	All values correct, neatly presented	Most values correct	Missing or incorrect values
+Analysis Questions	Insightful, clear, demonstrates understanding	Correct but brief	Vague or incorrect
+Challenge Task	Thoughtful exploration with clear explanation	Attempted but superficial	Not attempted
+💡 6. Hints & Tips
+Use X.shape[1] to get the number of features dynamically.
+
+Remember: Adjusted R² formula uses n (observations) and k (features).
+
+If n - k - 1 becomes zero or negative, it means the model is over-parameterized — but with n=50 and k≤6 you are safe.
+
+Compare the difference between R² and Adjusted R² – it grows as you add useless features.
+
+For the challenge, you can loop over feature lists or manually specify different orders.
+
+======================================================================
+🔍 7. Expected Output (Approximate)
+======================================================================
+Your numbers will vary slightly due to the random noise, but the trends should be similar:
+
+text
+Model 1 (Size):           R²=0.7123, Adj=0.7063, k=1
+Model 2 (+Bedrooms):      R²=0.7341, Adj=0.7228, k=2
+Model 3 (+Bathrooms):     R²=0.7892, Adj=0.7756, k=3
+Model 4 (+Age):           R²=0.8014, Adj=0.7839, k=4
+Model 5 (+LotSize):       R²=0.8097, Adj=0.7875, k=5
+Model 6 (+Garage):        R²=0.8123, Adj=0.7851, k=6   # Notice Adjusted R² DROPS!
+✅ Key observation: In the sample above, Adjusted R² drops from 0.7875 to 0.7851 when Garage is added, indicating that Garage does not contribute enough to justify adding it. This is exactly why Adjusted R² is useful!
+
+📊 R² vs Adjusted R² – Practical Assignment
+Machine Learning · Linear Regression · Model Selection
