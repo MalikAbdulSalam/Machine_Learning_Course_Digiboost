@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ensemble Learning: Bagging vs Boosting</title>
+    <!-- Google Font for a clean look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f6f9fc;
+            color: #1e293b;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #0f2b3d, #1e4a6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .subhead {
+            font-size: 1.1rem;
+            color: #475569;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .badge-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1.5rem;
+            margin-bottom: 2.5rem;
+            padding: 1rem 1.25rem;
+            background: #f1f5f9;
+            border-radius: 1.5rem;
+            align-items: center;
+        }
+
+        .badge-grid span {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .badge-grid i {
+            margin-right: 0.4rem;
+            color: #2563eb;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-bottom: 3px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title i {
+            color: #2563eb;
+            font-size: 1.8rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0 2rem 0;
+        }
+
+        @media (max-width: 720px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2rem;
+                flex-wrap: wrap;
+            }
+        }
+
+        .card {
+            background: #f8fafc;
+            border-radius: 1.5rem;
+            padding: 1.5rem 1.8rem;
+            border: 1px solid #e9edf2;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            border-color: #b8d0e7;
+            background: #ffffff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card h3 i {
+            font-size: 1.4rem;
+            color: #2563eb;
+        }
+
+        .card .highlight {
+            font-weight: 600;
+            color: #0f2b3d;
+        }
+
+        .card ul, .card p {
+            margin-top: 0.5rem;
+            color: #334155;
+        }
+
+        .card ul {
+            padding-left: 1.2rem;
+        }
+
+        .card ul li {
+            margin-bottom: 0.35rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0 2rem 0;
+            font-size: 0.95rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .comparison-table th {
+            background: #1e293b;
+            color: white;
+            font-weight: 600;
+            padding: 0.9rem 1.2rem;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 0.9rem 1.2rem;
+            border-bottom: 1px solid #e9edf2;
+            background: white;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table .icon-cell i {
+            margin-right: 0.5rem;
+            width: 1.4rem;
+            color: #2563eb;
+        }
+
+        .code-block {
+            background: #1e293b;
+            border-radius: 1.2rem;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+
+        .code-block code {
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        .analogy-box {
+            background: #eef2ff;
+            padding: 1.5rem 2rem;
+            border-radius: 1.5rem;
+            border-left: 6px solid #3b82f6;
+            margin: 1.8rem 0;
+        }
+
+        .analogy-box strong {
+            color: #1e3a8a;
+        }
+
+        .footer-note {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .footer-note i {
+            color: #2563eb;
+            margin-right: 0.3rem;
+        }
+
+        .tag {
+            background: #dbeafe;
+            color: #1e3a8a;
+            font-weight: 500;
+            padding: 0.2rem 0.9rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #1e293b;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #0f2b3d;
+            transform: translateY(-2px);
+        }
+
+        /* small screens */
+        @media (max-width: 480px) {
+            .container { padding: 1.5rem 1rem; }
+            .code-block { padding: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ======== HEADER ======== -->
+    <h1>
+        <i class="fas fa-layer-group" style="color: #2563eb; -webkit-text-fill-color: #2563eb;"></i>
+        Ensemble Learning
+    </h1>
+    <div class="subhead">
+        <i class="fas fa-people-arrows" style="margin-right: 0.5rem;"></i>
+        Bagging · Boosting · Stacking — explained with Python code
+    </div>
+
+    <div class="badge-grid">
+        <span><i class="fas fa-check-circle"></i> Bagging → reduces <strong>Variance</strong></span>
+        <span><i class="fas fa-check-circle"></i> Boosting → reduces <strong>Bias</strong></span>
+        <span><i class="fas fa-check-circle"></i> Stacking → combines <strong>diverse</strong> models</span>
+        <span><i class="fas fa-code"></i> scikit-learn examples</span>
+        <span><i class="fas fa-database"></i> Breast Cancer dataset</span>
+    </div>
+
+    <!-- ======== WHAT IS ENSEMBLE ======== -->
+    <div class="section-title">
+        <i class="fas fa-users"></i> What is Ensemble Learning?
+    </div>
+    <p style="font-size: 1.05rem; margin-bottom: 0.75rem;">
+        <strong>Ensemble learning</strong> combines multiple models to produce one superior predictor.
+        Instead of trusting a single “expert,” you pool the wisdom of many — cancelling out biases,
+        reducing overfitting, and capturing complex patterns no single model could.
+    </p>
+    <div class="analogy-box">
+        <i class="fas fa-lightbulb" style="color: #2563eb; margin-right: 0.6rem;"></i>
+        <strong>Analogy:</strong> A panel of specialists beats any single doctor. Bagging = 100
+        doctors vote independently. Boosting = doctors learn from each other’s mistakes, one after another.
+        Stacking = a chief physician weighs the opinions of cardiologists, neurologists, and orthopedists.
+    </div>
+
+    <!-- ======== BAGGING vs BOOSTING (cards) ======== -->
+    <div class="section-title">
+        <i class="fas fa-arrows-left-right"></i> Bagging vs. Boosting – At a Glance
+    </div>
+    <div class="card-grid">
+        <!-- Bagging card -->
+        <div class="card">
+            <h3><i class="fas fa-cubes"></i> Bagging</h3>
+            <p><span class="highlight">Parallel</span> · trains models <strong>simultaneously</strong></p>
+            <ul>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Each model gets a random <strong>subset</strong> of data (with replacement).</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Models <strong>do not</strong> talk to each other.</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Final prediction = <strong>majority vote</strong> (or average).</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Goal: reduce <strong>Variance</strong> (overfitting).</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Uses <strong>deep</strong> models (e.g., full decision trees).</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> <span class="tag">⭐ Low overfitting risk</span></li>
+            </ul>
+            <div style="margin-top: 0.8rem;"><i class="fas fa-code"></i> <strong>Example:</strong> Random Forest</div>
+        </div>
+
+        <!-- Boosting card -->
+        <div class="card">
+            <h3><i class="fas fa-arrow-trend-up"></i> Boosting</h3>
+            <p><span class="highlight">Sequential</span> · trains models <strong>one after another</strong></p>
+            <ul>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Each new model focuses on <strong>mistakes</strong> of the previous one.</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Misclassified points get <strong>higher weight</strong>.</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Final prediction = <strong>weighted sum</strong> of all weak learners.</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Goal: reduce <strong>Bias</strong> (underfitting).</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> Uses <strong>shallow</strong> models (e.g., stumps).</li>
+                <li><i class="fas fa-arrow-right" style="color: #2563eb; width: 1.2rem;"></i> <span class="tag">⚠️ Needs careful tuning</span></li>
+            </ul>
+            <div style="margin-top: 0.8rem;"><i class="fas fa-code"></i> <strong>Example:</strong> AdaBoost, XGBoost</div>
+        </div>
+    </div>
+
+    <!-- ======== DETAILED COMPARISON TABLE ======== -->
+    <div class="section-title">
+        <i class="fas fa-table"></i> Deep-Dive Comparison
+    </div>
+    <table class="comparison-table">
+        <thead>
+            <tr><th>Aspect</th><th>Bagging</th><th>Boosting</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><i class="fas fa-clock icon-cell"></i> Training</td><td><strong>Parallel</strong> — all models trained at once</td><td><strong>Sequential</strong> — must wait for previous model</td></tr>
+            <tr><td><i class="fas fa-weight-hanging icon-cell"></i> Data weighting</td><td>All points equal chance</td><td>Misclassified points get <strong>higher weight</strong></td></tr>
+            <tr><td><i class="fas fa-bullseye icon-cell"></i> Primary goal</td><td>Reduce <strong>Variance</strong> (overfitting)</td><td>Reduce <strong>Bias</strong> (underfitting)</td></tr>
+            <tr><td><i class="fas fa-tree icon-cell"></i> Model depth</td><td><strong>Deep</strong> (strong learners, e.g. full trees)</td><td><strong>Shallow</strong> (weak learners, e.g. stumps)</td></tr>
+            <tr><td><i class="fas fa-shield-halved icon-cell"></i> Overfitting risk</td><td><span style="color: #16a34a;">Low</span> — robust out-of-the-box</td><td><span style="color: #dc2626;">Higher</span> — needs hyperparameter tuning</td></tr>
+            <tr><td><i class="fas fa-microchip icon-cell"></i> Compute</td><td>Fast (parallelizable)</td><td>Slower (sequential)</td></tr>
+            <tr><td><i class="fas fa-people-group icon-cell"></i> Analogy</td><td>100 independent voters</td><td>Study group correcting each other</td></tr>
+            <tr><td><i class="fas fa-star icon-cell"></i> Famous algo</td><td><strong>Random Forest</strong></td><td><strong>XGBoost</strong> · AdaBoost · LightGBM</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ======== PYTHON CODE (full example) ======== -->
+    <div class="section-title">
+        <i class="fab fa-python"></i> Python Code – Bagging, Boosting &amp; Stacking
+    </div>
+    <p>This snippet trains three ensembles on the Breast Cancer dataset and prints accuracy.</p>
+
+    <div class="code-block">
+        <pre><code class="language-python">import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+
+# --- Ensemble models ---
+from sklearn.ensemble import RandomForestClassifier   # Bagging
+from sklearn.ensemble import AdaBoostClassifier      # Boosting
+from sklearn.ensemble import StackingClassifier      # Stacking
+
+# --- Base models for Stacking ---
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+
+# Load data
+X, y = load_breast_cancer(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Scale for SVM & Logistic Regression
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# 1. BAGGING (Random Forest)
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X_train, y_train)
+rf_acc = accuracy_score(y_test, rf.predict(X_test))
+
+# 2. BOOSTING (AdaBoost)
+boost = AdaBoostClassifier(n_estimators=50, learning_rate=1.0, random_state=42)
+boost.fit(X_train, y_train)
+boost_acc = accuracy_score(y_test, boost.predict(X_test))
+
+# 3. STACKING
+base_learners = [
+    ('dt', DecisionTreeClassifier(max_depth=5, random_state=42)),
+    ('svm', SVC(kernel='rbf', probability=True, random_state=42)),
+    ('rf', RandomForestClassifier(n_estimators=50, random_state=42))
+]
+stack = StackingClassifier(
+    estimators=base_learners,
+    final_estimator=LogisticRegression(),
+    cv=5
+)
+stack.fit(X_train_scaled, y_train)
+stack_acc = accuracy_score(y_test, stack.predict(X_test_scaled))
+
+# --- Results ---
+print(f"✅ Bagging (Random Forest) : {rf_acc:.4f}")
+print(f"✅ Boosting (AdaBoost)     : {boost_acc:.4f}")
+print(f"✅ Stacking                : {stack_acc:.4f}")</code></pre>
+    </div>
+
+    <!-- ======== TYPICAL OUTPUT ======== -->
+    <div style="background: #f1f5f9; border-radius: 1rem; padding: 0.8rem 1.5rem; margin: 0.5rem 0 1.5rem 0;">
+        <i class="fas fa-terminal" style="color: #2563eb; margin-right: 0.5rem;"></i>
+        <strong>Typical output:</strong>
+        <pre style="background: transparent; padding: 0.3rem 0; margin: 0; font-size: 0.95rem; color: #0f2b3d;">✅ Bagging (Random Forest) : 0.9649
+✅ Boosting (AdaBoost)     : 0.9737
+✅ Stacking                : 0.9825</pre>
+    </div>
+
+    <!-- ======== GOLDEN RULE ======== -->
+    <div class="section-title">
+        <i class="fas fa-gem"></i> The Golden Rule: When to Choose What
+    </div>
+    <div class="card-grid" style="margin-top: 0;">
+        <div class="card" style="border-left: 6px solid #2563eb;">
+            <h3 style="font-size: 1.2rem;"><i class="fas fa-shield"></i> Pick Bagging if…</h3>
+            <ul>
+                <li>You have a <strong>small</strong> dataset.</li>
+                <li>You want a model that works <strong>out-of-the-box</strong> with zero tuning.</li>
+                <li>You are <strong>terrified of overfitting</strong>.</li>
+                <li>You need fast, parallel training.</li>
+            </ul>
+        </div>
+        <div class="card" style="border-left: 6px solid #dc2626;">
+            <h3 style="font-size: 1.2rem;"><i class="fas fa-trophy"></i> Pick Boosting if…</h3>
+            <ul>
+                <li>You have a <strong>large, clean</strong> dataset.</li>
+                <li>You are in a competition and need <strong>maximum accuracy</strong>.</li>
+                <li>You are willing to spend time tuning <code>learning_rate</code> and <code>n_estimators</code>.</li>
+                <li>You have the compute for sequential training.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======== KEY TAKEAWAY ======== -->
+    <div style="background: #0f2b3d; color: white; padding: 1.5rem 2rem; border-radius: 1.5rem; margin: 2rem 0;">
+        <i class="fas fa-brain" style="color: #60a5fa; font-size: 1.6rem; float: left; margin-right: 1rem;"></i>
+        <p style="font-size: 1.05rem; margin: 0;">
+            <strong>Memory Trick:</strong> <span style="color: #93c5fd;">Bagging</span> → <strong>B</strong> (Bias? No — it fights <strong>V</strong>ariance!)<br>
+            <span style="color: #93c5fd;">Boosting</span> → fights <strong>B</strong>ias (sequential corrections).<br>
+            And <strong>Stacking</strong> is the ultimate ensemble — it learns <em>which</em> model to trust.
+        </p>
+    </div>
+
+    <!-- ======== FOOTER ======== -->
+    <div class="footer-note">
+        <span><i class="fas fa-code"></i> Built with scikit-learn · Breast Cancer dataset</span>
+        <span><i class="fas fa-rotate-right"></i> Run the code, tweak the params, and watch accuracy change!</span>
+    </div>
+
+</div>
+
+<!-- Prism.js for code highlighting -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
