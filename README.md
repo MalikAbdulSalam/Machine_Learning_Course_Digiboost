@@ -64,7 +64,7 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 25 : When to use which model](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/59-ensemble_learning_bagging_boosting.html)
 
-[Lecture 25 : When to use which model](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/46-confustion_metrics.html)
+[Lecture 26 : Confusion Matrices](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/46-confustion_metrics.html)
 
 
 
