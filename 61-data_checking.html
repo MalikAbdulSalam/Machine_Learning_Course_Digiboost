@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📘 Notes: Checking Linear Relationship in a Dataset</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f8f9fc;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            padding: 2rem 1.5rem;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem 2.8rem;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.12);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            border-left: 6px solid #4f46e5;
+            padding-left: 1.2rem;
+            margin-bottom: 2rem;
+            color: #0f172a;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin-top: 2.4rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid #e9edf4;
+            color: #1e293b;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.8rem;
+            margin-bottom: 0.8rem;
+            color: #1e293b;
+        }
+
+        .equation {
+            background: #f1f5f9;
+            padding: 1rem 1.8rem;
+            border-radius: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            margin: 1.2rem 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+        }
+
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 1.2rem 1.6rem;
+            border-radius: 18px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 1.2rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+
+        .code-block span.comment {
+            color: #94a3b8;
+        }
+
+        .code-block span.keyword {
+            color: #c084fc;
+        }
+
+        .code-block span.func {
+            color: #60a5fa;
+        }
+
+        .code-block span.string {
+            color: #34d399;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+            padding: 0.9rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid #d1d9e8;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #e9edf4;
+        }
+
+        .correlation-table td:first-child {
+            font-weight: 500;
+        }
+
+        .highlight-box {
+            background: #fef9e7;
+            border-left: 6px solid #f59e0b;
+            padding: 1.2rem 1.8rem;
+            border-radius: 16px;
+            margin: 1.6rem 0;
+        }
+
+        .important-box {
+            background: #f0f4ff;
+            border-left: 6px solid #4f46e5;
+            padding: 1.2rem 1.8rem;
+            border-radius: 16px;
+            margin: 1.6rem 0;
+        }
+
+        .good-bad-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 1.4rem 0;
+        }
+
+        .good-bad-card {
+            background: #f8fafc;
+            padding: 1.2rem 1.6rem;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .good-bad-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .residual-diagram {
+            font-family: 'Courier New', monospace;
+            background: #f1f5f9;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            white-space: pre;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 0.8rem 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.9rem;
+            border-radius: 30px;
+            margin-right: 0.5rem;
+        }
+
+        .process-step {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4rem 0.8rem;
+            background: #f8fafc;
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            margin: 0.3rem 0;
+            font-weight: 500;
+        }
+
+        .arrow {
+            color: #94a3b8;
+            font-weight: 300;
+            margin: 0 0.2rem;
+        }
+
+        .footer-note {
+            margin-top: 2.8rem;
+            background: #f1f5f9;
+            padding: 1.2rem 2rem;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 1.5rem; }
+            .good-bad-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .equation { font-size: 0.95rem; white-space: normal; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>📘 Notes: Checking Linear Relationship in a Dataset</h1>
+
+    <!-- 1. Linearity -->
+    <h2>1. What is Linearity?</h2>
+    <p>A dataset is <strong>linear</strong> when the relationship between the features and the target can be reasonably represented using a straight-line/linear equation.</p>
+    <p>For multiple features:</p>
+    <div class="equation">
+        y = b₀ + b₁x₁ + b₂x₂ + … + b<sub>n</sub>x<sub>n</sub>
+    </div>
+    <ul style="margin: 0.5rem 0 1rem 1.6rem;">
+        <li><strong>y</strong> = target / label</li>
+        <li><strong>x₁, x₂, …</strong> = features</li>
+        <li><strong>b₀</strong> = intercept</li>
+        <li><strong>b₁, b₂, …</strong> = coefficients</li>
+    </ul>
+
+    <!-- 2. Correlation -->
+    <h2>2. Correlation</h2>
+    <p>Correlation tells us how strongly two variables have a <strong>linear</strong> relationship. The correlation value is between: <br> <span style="font-family: monospace; background: #eef2f6; padding: 0.1rem 0.6rem; border-radius: 20px;">−1 ≤ r ≤ 1</span></p>
+
+    <table class="correlation-table">
+        <thead><tr><th>Correlation</th><th>Meaning</th></tr></thead>
+        <tbody>
+            <tr><td>+1</td><td>Perfect positive relationship</td></tr>
+            <tr><td>0</td><td>No linear relationship</td></tr>
+            <tr><td>-1</td><td>Perfect negative relationship</td></tr>
+            <tr><td>0.7 to 1</td><td>Strong positive</td></tr>
+            <tr><td>0.3 to 0.7</td><td>Moderate positive</td></tr>
+            <tr><td>0 to 0.3</td><td>Weak positive</td></tr>
+            <tr><td>-0.3 to 0</td><td>Weak negative</td></tr>
+            <tr><td>-0.7 to -0.3</td><td>Moderate negative</td></tr>
+            <tr><td>-1 to -0.7</td><td>Strong negative</td></tr>
+        </tbody>
+    </table>
+    <p style="font-size: 0.9rem; color: #475569;"><i>These ranges are rough guidelines, not strict rules.</i></p>
+
+    <!-- 3. Example -->
+    <h2>3. Example</h2>
+    <p>Suppose our dataset contains: <span class="badge">Age</span> <span class="badge">Math</span> <span class="badge">Chemistry</span> <span class="badge">Physics</span> <span class="badge">English</span> <span class="badge">Attendance</span> <span class="badge">Result</span></p>
+    <p>We can calculate correlation with:</p>
+    <div class="code-block">
+print(df.corr(numeric_only=True)[<span class="string">"Result"</span>].sort_values())
+    </div>
+    <p><strong>Output:</strong></p>
+    <div class="code-block" style="background: #1e293b; color: #cbd5e1;">
+Age          -0.223424<br>
+Math          0.197798<br>
+Chemistry     0.242254<br>
+Physics       0.248278<br>
+English       0.283273<br>
+Attendance    0.322150<br>
+Result        1.000000
+    </div>
+
+    <h3>Interpretation</h3>
+    <ul style="margin-left: 1.6rem;">
+        <li><strong>Age = -0.223</strong> → There is a weak negative linear relationship between Age and Result.</li>
+        <li><strong>Math = 0.198</strong> → There is a weak positive linear relationship between Math and Result.</li>
+        <li><strong>Chemistry = 0.242</strong> → weak positive.</li>
+        <li><strong>Physics = 0.248</strong> → weak positive.</li>
+        <li><strong>English = 0.283</strong> → weak positive.</li>
+        <li><strong>Attendance = 0.322</strong> → Attendance has the strongest positive correlation with Result among these features.</li>
+    </ul>
+
+    <!-- 4. Important -->
+    <div class="important-box">
+        <h3 style="margin-top: 0;">4. Important: Correlation Does NOT Prove Linearity</h3>
+        <p style="font-weight: 500;">This is very important.</p>
+        <p>If correlation is low, we cannot immediately say: <em>“The dataset is nonlinear.”</em> Correlation only measures the linear relationship between two variables. For multiple features, we need additional tests.</p>
+    </div>
+
+    <!-- 5. Linear Regression Test -->
+    <h2>5. Linear Regression Test</h2>
+    <p>One practical method is to train a Linear Regression model.</p>
+    <div class="code-block">
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split<br>
+<span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression<br>
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> r2_score<br><br>
+X = df.drop(<span class="string">"Result"</span>, axis=1)<br>
+y = df[<span class="string">"Result"</span>]<br><br>
+X_train, X_test, y_train, y_test = train_test_split(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;X, y, test_size=0.2, random_state=42<br>
+)<br><br>
+model = LinearRegression()<br>
+model.fit(X_train, y_train)<br>
+y_pred = model.predict(X_test)<br><br>
+r2 = r2_score(y_test, y_pred)<br>
+<span class="func">print</span>(<span class="string">"R²:"</span>, r2)
+    </div>
+
+    <!-- 6. R² -->
+    <h2>6. What is R²?</h2>
+    <p><strong>R² (R-squared)</strong> tells us how well the model explains the variation in the target. Its value is commonly interpreted as:</p>
+    <ul style="margin-left: 1.6rem;">
+        <li><strong>R² close to 1</strong> → model explains the data well</li>
+        <li><strong>R² close to 0</strong> → model explains very little</li>
+    </ul>
+    <p>For example: <br> <span style="background: #e9edf4; padding: 0.1rem 0.7rem; border-radius: 20px;">R² = 0.90</span> means the linear model explains about 90% of the variation in the target on that evaluation data. <br> <span style="background: #e9edf4; padding: 0.1rem 0.7rem; border-radius: 20px;">R² = 0.20</span> means the linear model explains only about 20%.</p>
+    <div class="highlight-box">
+        <p><strong>⚠️ Don't treat a universal cutoff</strong> like R² > 0.7 as proof of linearity; what is acceptable depends on the problem and dataset.</p>
+    </div>
+
+    <!-- 7. Residual Plot -->
+    <h2>7. Residual Plot</h2>
+    <p>Another important test is the residual plot. <br> <strong>Residual:</strong> <span style="background: #eef2f6; padding: 0.1rem 0.8rem; border-radius: 20px;">Residual = Actual − Predicted</span></p>
+    <div class="code-block">
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt<br><br>
+residuals = y_test - y_pred<br>
+plt.scatter(y_pred, residuals)<br>
+plt.axhline(0)<br>
+plt.xlabel(<span class="string">"Predicted Values"</span>)<br>
+plt.ylabel(<span class="string">"Residuals"</span>)<br>
+plt.show()
+    </div>
+
+    <div class="good-bad-grid">
+        <div class="good-bad-card">
+            <h4 style="color: #16a34a;">✅ Good sign</h4>
+            <p>If residuals are randomly scattered around zero:</p>
+            <div class="residual-diagram">
+•     •<br>
+    •<br>
+•     •   •<br>
+      •<br>
+-------------------- 0<br>
+   •    •
+            </div>
+            <p style="margin-top: 0.4rem;">This supports the use of a linear model.</p>
+        </div>
+        <div class="good-bad-card">
+            <h4 style="color: #dc2626;">❌ Bad sign</h4>
+            <p>If you see a clear curve or pattern:</p>
+            <div class="residual-diagram">
+•             •<br>
+  •         •<br>
+    •     •<br>
+      • •
+            </div>
+            <p style="margin-top: 0.4rem;">then a simple linear model may not adequately capture the relationship.</p>
+        </div>
+    </div>
+
+    <!-- 8. Complete Process -->
+    <h2>8. Complete Process</h2>
+    <p>When you have: <strong>Multiple Features + One Label</strong> use this process:</p>
+
+    <div style="background: #f1f5f9; border-radius: 28px; padding: 1.2rem 1.8rem; margin: 0.8rem 0;">
+        <div class="process-step">Dataset <span class="arrow">→</span> Separate X and y <span class="arrow">→</span> Check correlations <span class="arrow">→</span> Visualize relationships <span class="arrow">→</span> Train Linear Regression <span class="arrow">→</span> Calculate R² <span class="arrow">→</span> Check residual plot <span class="arrow">→</span> Decide model suitability</div>
+    </div>
+
+    <div class="footer-note">
+        <p style="font-weight: 600;">📌 Remember</p>
+        <ul style="margin-left: 1.2rem; list-style-type: '✓ ';">
+            <li><strong>Correlation ≠ proof of linearity</strong></li>
+            <li>High correlation → strong linear relationship between two variables</li>
+            <li>Low correlation → weak linear relationship, but the relationship could still be nonlinear</li>
+            <li><strong>R² + residual analysis</strong> → better evidence for whether a linear model is appropriate</li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>
