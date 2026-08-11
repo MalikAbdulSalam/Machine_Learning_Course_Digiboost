@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Model Selection · Simple Words</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+        body { background: #f2f6fe; padding: 2rem 1.5rem; display: flex; justify-content: center; }
+        .container { max-width: 1440px; width: 100%; background: white; border-radius: 32px; box-shadow: 0 20px 40px -12px rgba(0,20,30,0.15); padding: 2rem 1.8rem 2.5rem; }
+        h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; color: #0b1a2b; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 0.2rem; }
+        .subhead { color: #3b5a7a; font-size: 1rem; margin-bottom: 2rem; border-left: 4px solid #2a7de1; padding-left: 18px; background: #f0f5ff; border-radius: 0 12px 12px 0; line-height: 1.6; padding: 0.7rem 1.2rem; }
+
+        /* plot */
+        .plot-section { background: #f8fbff; border-radius: 28px; padding: 1.8rem 1.5rem 2rem; margin-bottom: 2.5rem; border: 1px solid #dce8f5; }
+        .plot-title { font-weight: 600; font-size: 1.2rem; color: #0b2a44; display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
+        .flow-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 0.8rem; align-items: stretch; }
+        .flow-node { background: white; border-radius: 20px; padding: 1rem 1.2rem; min-width: 170px; flex: 1 0 auto; max-width: 250px; box-shadow: 0 4px 10px rgba(0,20,40,0.06); border: 1px solid #dde6f0; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .flow-node:hover { border-color: #7ca3d4; box-shadow: 0 6px 14px rgba(26,85,150,0.08); }
+        .node-icon { font-size: 1.8rem; margin-bottom: 6px; color: #1f6eb0; }
+        .node-label { font-weight: 600; font-size: 0.95rem; color: #0b2742; }
+        .node-desc { font-size: 0.75rem; color: #3f6282; margin-top: 6px; line-height: 1.4; }
+        .node-badge { background: #e6eff8; padding: 2px 12px; border-radius: 40px; font-size: 0.6rem; font-weight: 600; color: #1f4d7a; margin-top: 6px; letter-spacing: 0.02em; }
+        .flow-arrow { display: flex; align-items: center; color: #7d9fc7; font-size: 1.3rem; flex-shrink: 0; padding: 0 2px; }
+        .flow-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.4rem 0.2rem; margin-bottom: 0.8rem; width: 100%; }
+        .flow-row:last-child { margin-bottom: 0; }
+
+        .legend { display: flex; flex-wrap: wrap; gap: 0.8rem 1.8rem; justify-content: center; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid #d8e4f0; }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #1e3d5c; }
+        .color-swatch { width: 14px; height: 14px; border-radius: 6px; }
+        .swatch-reg { background: #2870b0; }
+        .swatch-cls { background: #2a8e5c; }
+        .swatch-clu { background: #8b5bbd; }
+        .swatch-assoc { background: #c0762a; }
+        .swatch-rl { background: #b34141; }
+        .swatch-dim { background: #1f8faa; }
+        .swatch-eval { background: #6a588a; }
+        .swatch-other { background: #b3779e; }
+
+        /* table */
+        .table-wrapper { overflow-x: auto; border-radius: 20px; border: 1px solid #e1e9f2; background: #ffffff; margin-top: 0.5rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 1050px; }
+        th { background: #f0f6fe; color: #11324b; font-weight: 600; padding: 0.9rem 0.9rem; text-align: left; border-bottom: 2px solid #cbd8e8; }
+        td { padding: 0.8rem 0.9rem; border-bottom: 1px solid #e4ecf5; vertical-align: top; background-color: white; }
+        .model-name { font-weight: 650; color: #06203a; display: flex; align-items: center; gap: 8px; }
+        .model-name i { color: #2a7de1; font-size: 0.9rem; width: 1.2rem; }
+        .tut-badge { background: #eef3fa; color: #1e4a7a; font-size: 0.7rem; font-weight: 600; padding: 2px 10px; border-radius: 30px; white-space: nowrap; margin-left: 6px; }
+        .library { font-family: 'SF Mono', 'Fira Code', monospace; background: #eaf1fa; padding: 4px 12px; border-radius: 30px; font-size: 0.73rem; color: #00337a; display: inline-block; white-space: nowrap; }
+        .category-tag { font-size: 0.6rem; font-weight: 600; padding: 2px 10px; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.03em; background: #dbe7f5; color: #1f4870; margin-right: 6px; }
+        .cat-regression { background: #d4e2f7; color: #00337a; }
+        .cat-classification { background: #d9f0e1; color: #006b3b; }
+        .cat-clustering { background: #f1defa; color: #5e2b7a; }
+        .cat-association { background: #fce9d6; color: #964b00; }
+        .cat-reinforcement { background: #fad6d6; color: #9e2b2b; }
+        .cat-dimred { background: #d6ecf7; color: #005f7a; }
+        .cat-evaluation { background: #e8e0f0; color: #4d3a70; }
+        .cat-other { background: #f0dce8; color: #7a3d63; }
+
+        .search-box { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 1.8rem; background: #f8faff; padding: 0.7rem 1.5rem; border-radius: 60px; border: 1px solid #dce5f0; }
+        #searchInput { border: none; background: transparent; font-size: 1rem; padding: 0.5rem 0; flex: 1; min-width: 160px; outline: none; color: #0b1a2b; }
+        .badge-filter { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+        .pill { background: #e6edf6; padding: 5px 14px; border-radius: 40px; font-size: 0.75rem; font-weight: 500; color: #1f3b58; cursor: pointer; transition: 0.15s; border: 1px solid transparent; white-space: nowrap; }
+        .pill.active { background: #1a3f66; color: white; border-color: #1a3f66; }
+        .pill:hover { background: #d0def0; }
+
+        @media (max-width: 700px) { .container { padding: 1rem; } h1 { font-size: 1.6rem; } .flow-node { min-width: 130px; padding: 0.8rem; } .flow-arrow { font-size: 1rem; } }
+        .footer-note { margin-top: 2rem; font-size: 0.9rem; color: #3d5d7e; background: #ecf3fa; padding: 0.8rem 1.8rem; border-radius: 60px; display: inline-block; }
+        .simple-highlight { background: #fcf3d9; border-radius: 12px; padding: 0.2rem 0.6rem; font-weight: 500; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        <i class="fas fa-sitemap" style="color: #1f6eb0;"></i> 
+        ML Model Selection <span style="font-size: 1rem; font-weight: 400; color: #4b6f92; margin-left: 8px;">· explained in simple words</span>
+    </h1>
+    <div class="subhead">
+        <i class="fas fa-lightbulb"></i> 
+        <strong>Quick guide:</strong> First, use the visual chart to pick a <em>family</em> of models. Then search or filter the table below for the exact model. All explanations are in plain English.
+    </div>
+
+    <!-- ========== PLOT ========== -->
+    <div class="plot-section">
+        <div class="plot-title"><i class="fas fa-arrow-trend-up"></i> Which model family should you start with?</div>
+        <!-- row 1 -->
+        <div class="flow-row">
+            <div class="flow-node" style="background: #eaf1fb; border-color: #b7cfe7;">
+                <div class="node-icon"><i class="fas fa-question-circle"></i></div>
+                <div class="node-label">What do you want to do?</div>
+                <div class="node-desc">Answer this first</div>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-node" style="border-color: #b7d0e8;">
+                <div class="node-icon"><i class="fas fa-bullseye"></i></div>
+                <div class="node-label">Predict a number?</div>
+                <div class="node-desc">Like price or temperature</div>
+                <span class="node-badge">Regression</span>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-node" style="border-color: #b7d0e8;">
+                <div class="node-icon"><i class="fas fa-tag"></i></div>
+                <div class="node-label">Predict a label?</div>
+                <div class="node-desc">Like spam or not spam</div>
+                <span class="node-badge">Classification</span>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-node" style="border-color: #b7d0e8;">
+                <div class="node-icon"><i class="fas fa-arrows-spin"></i></div>
+                <div class="node-label">Find groups?</div>
+                <div class="node-desc">No labels, just patterns</div>
+                <span class="node-badge">Clustering</span>
+            </div>
+        </div>
+        <!-- row 2 -->
+        <div class="flow-row" style="margin-top: 0.6rem;">
+            <div class="flow-node" style="background: #f5f9fe; border-color: #c5d8ec; flex: 0 1 180px;">
+                <div class="node-icon"><i class="fas fa-database"></i></div>
+                <div class="node-label">What's your data like?</div>
+                <div class="node-desc">Size, shape, messiness</div>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-node" style="border-color: #c5d8ec;">
+                <div class="node-icon"><i class="fas fa-chart-simple"></i></div>
+                <div class="node-label">Is it a straight line or a curve?</div>
+                <div class="node-desc">Linear = simple, non-linear = complex</div>
+                <span class="node-badge">Use kernels or trees</span>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-node" style="border-color: #c5d8ec;">
+                <div class="node-icon"><i class="fas fa-layer-group"></i></div>
+                <div class="node-label">Too many columns?</div>
+                <div class="node-desc">Reduce features first</div>
+                <span class="node-badge">PCA · t‑SNE</span>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-node" style="border-color: #c5d8ec;">
+                <div class="node-icon"><i class="fas fa-boxes"></i></div>
+                <div class="node-label">Need better accuracy?</div>
+                <div class="node-desc">Combine many models</div>
+                <span class="node-badge">Random Forest · XGBoost</span>
+            </div>
+        </div>
+        <!-- row 3 -->
+        <div class="flow-row" style="margin-top: 0.6rem;">
+            <div class="flow-node" style="background: #f3f7fd; border-color: #c5d8ec; flex: 0 1 150px;">
+                <div class="node-icon"><i class="fas fa-cart-plus"></i></div>
+                <div class="node-label">Shopping basket data?</div>
+                <div class="node-desc">Find what goes together</div>
+                <span class="node-badge">Association</span>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-node" style="border-color: #c5d8ec;">
+                <div class="node-icon"><i class="fas fa-robot"></i></div>
+                <div class="node-label">Learning from actions?</div>
+                <div class="node-desc">Games, robots, decisions</div>
+                <span class="node-badge">Reinforcement</span>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-node" style="border-color: #c5d8ec;">
+                <div class="node-icon"><i class="fas fa-file-alt"></i></div>
+                <div class="node-label">Working with text?</div>
+                <div class="node-desc">Emails, reviews, tweets</div>
+                <span class="node-badge">Naive Bayes · SVM</span>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-node" style="border-color: #c5d8ec;">
+                <div class="node-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="node-label">Data is imbalanced?</div>
+                <div class="node-desc">Rare events like fraud</div>
+                <span class="node-badge">Use F1-score · Isolation Forest</span>
+            </div>
+        </div>
+
+        <div class="legend">
+            <span class="legend-item"><span class="color-swatch swatch-reg"></span> Regression</span>
+            <span class="legend-item"><span class="color-swatch swatch-cls"></span> Classification</span>
+            <span class="legend-item"><span class="color-swatch swatch-clu"></span> Clustering</span>
+            <span class="legend-item"><span class="color-swatch swatch-assoc"></span> Association</span>
+            <span class="legend-item"><span class="color-swatch swatch-rl"></span> Reinforcement</span>
+            <span class="legend-item"><span class="color-swatch swatch-dim"></span> Dim Reduction</span>
+            <span class="legend-item"><span class="color-swatch swatch-eval"></span> Evaluation</span>
+            <span class="legend-item"><span class="color-swatch swatch-other"></span> Other / Advanced</span>
+        </div>
+    </div>
+
+    <!-- ========== SEARCH ========== -->
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search model, condition, or library...">
+        <div class="badge-filter" id="filterGroup">
+            <span class="pill active" data-filter="all">All</span>
+            <span class="pill" data-filter="regression">Regression</span>
+            <span class="pill" data-filter="classification">Classification</span>
+            <span class="pill" data-filter="clustering">Clustering</span>
+            <span class="pill" data-filter="association">Association</span>
+            <span class="pill" data-filter="reinforcement">Reinforcement</span>
+            <span class="pill" data-filter="dimred">Dim Reduction</span>
+            <span class="pill" data-filter="evaluation">Evaluation</span>
+            <span class="pill" data-filter="other">Other</span>
+        </div>
+    </div>
+
+    <!-- ========== TABLE ========== -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th style="min-width:180px;">Model</th>
+                    <th style="min-width:220px;">When to use it <span style="font-weight:400; font-size:0.75rem;">(simple words)</span></th>
+                    <th style="min-width:230px;">Real‑world example</th>
+                    <th style="min-width:210px;">Python library</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    <div class="footer-note"><i class="fas fa-check-circle"></i> <strong>Tip:</strong> If you're unsure, start with <span class="simple-highlight">Linear Regression</span> (for numbers) or <span class="simple-highlight">Logistic Regression</span> (for categories) — they're the simplest.</div>
+</div>
+
+<script>
+    (function() {
+        // ---------- MODEL LIST WITH SIMPLE CONDITION DESCRIPTIONS ----------
+        const models = [
+            // ---- REGRESSION (predict a number) ----
+            { name: "Linear Regression", tut: "Tut 04-05", category: "regression", condition: "📏 Straight line relationship. Easy to explain.", example: "Predict car price from engine size", library: "sklearn.linear_model.LinearRegression" },
+            { name: "Multiple Regression", tut: "Tut 05", category: "regression", condition: "📊 Several things affect the number (e.g., size + bedrooms).", example: "House price from size, bedrooms, location", library: "sklearn.linear_model.LinearRegression" },
+            { name: "Polynomial Regression", tut: "Tut 06", category: "regression", condition: "〰️ The data follows a curve (like growth speeding up).", example: "Population growth over decades", library: "sklearn.preprocessing.PolynomialFeatures" },
+            { name: "SVR (Linear)", tut: "Tut 07", category: "regression", condition: "📈 Good for small/medium data with a straight trend.", example: "Stock price trend", library: "sklearn.svm.SVR(kernel='linear')" },
+            { name: "SVR (RBF/Poly)", tut: "Tut 07", category: "regression", condition: "🌀 Handles complex wiggly patterns well.", example: "Chemical reactivity from molecular structure", library: "sklearn.svm.SVR(kernel='rbf')" },
+            { name: "Decision Tree Regression", tut: "Tut 08", category: "regression", condition: "🌳 If-Then rules. Very easy to explain to your boss.", example: "Salary based on experience + skills", library: "sklearn.tree.DecisionTreeRegressor" },
+            { name: "Random Forest Regression", tut: "Tut 09", category: "regression", condition: "🌲🌲 Many trees averaged. Works great on messy data.", example: "Bike rental count from weather data", library: "sklearn.ensemble.RandomForestRegressor" },
+            { name: "XGBoost Regression", tut: "Tut 55", category: "regression", condition: "🏆 Top choice for winning competitions. Very accurate.", example: "Predicting transaction amounts (big data)", library: "xgboost.XGBRegressor" },
+            { name: "LightGBM Regression", tut: "extended", category: "regression", condition: "⚡ Very fast on huge datasets. Leaf‑wise growth.", example: "Click‑through rate prediction", library: "lightgbm.LGBMRegressor" },
+            { name: "CatBoost Regression", tut: "extended", category: "regression", condition: "🐱 Handles categories (like 'color') without extra work.", example: "Insurance claim severity", library: "catboost.CatBoostRegressor" },
+            { name: "ElasticNet Regression", tut: "extended", category: "regression", condition: "🧹 Good when you have many columns and want to clean up noise.", example: "Genomics data prediction", library: "sklearn.linear_model.ElasticNet" },
+            { name: "Ridge Regression", tut: "extended", category: "regression", condition: "🛡️ Use when columns are related to each other.", example: "Housing price with many similar features", library: "sklearn.linear_model.Ridge" },
+            { name: "Lasso Regression", tut: "extended", category: "regression", condition: "✂️ Automatically picks the most important columns.", example: "Finding key genes for a disease", library: "sklearn.linear_model.Lasso" },
+
+            // ---- CLASSIFICATION (predict a category) ----
+            { name: "Logistic Regression", tut: "Tut 12", category: "classification", condition: "🎯 Gives a probability (e.g., 70% chance of disease).", example: "Heart disease probability", library: "sklearn.linear_model.LogisticRegression" },
+            { name: "KNN", tut: "Tut 13", category: "classification", condition: "👥 Looks at the 'nearest neighbors' to decide.", example: "Movie genre from 5 closest users", library: "sklearn.neighbors.KNeighborsClassifier" },
+            { name: "SVM (Linear)", tut: "Tut 14", category: "classification", condition: "📏 Finds a straight line to separate groups. Good for text.", example: "Politics vs Sports articles", library: "sklearn.svm.SVC(kernel='linear')" },
+            { name: "SVM (RBF/Poly)", tut: "Tut 15", category: "classification", condition: "🌀 Finds curvy boundaries. Great for tricky patterns.", example: "Cancer cell classification", library: "sklearn.svm.SVC(kernel='rbf')" },
+            { name: "Naive Bayes", tut: "Tut 16", category: "classification", condition: "📧 Simple and fast. Works well for text (spam, reviews).", example: "Spam email filter", library: "sklearn.naive_bayes.GaussianNB" },
+            { name: "Decision Tree (Gini/ID3)", tut: "Tut 17-20", category: "classification", condition: "🌳 If‑Then rules. Easy to understand.", example: "Loan approval (yes/no) based on credit score", library: "sklearn.tree.DecisionTreeClassifier" },
+            { name: "Random Forest Classifier", tut: "Tut 23", category: "classification", condition: "🌲🌲 Many trees averaged. Reduces mistakes.", example: "Customer churn prediction", library: "sklearn.ensemble.RandomForestClassifier" },
+            { name: "XGBoost Classifier", tut: "Tut 55", category: "classification", condition: "🏆 Top accuracy. Use when you need the best result.", example: "Fraud detection", library: "xgboost.XGBClassifier" },
+            { name: "AdaBoost", tut: "extended", category: "classification", condition: "🔁 Improves weak models one step at a time.", example: "Face detection", library: "sklearn.ensemble.AdaBoostClassifier" },
+            { name: "Gradient Boosting", tut: "extended", category: "classification", condition: "🔁 Fixes mistakes from previous models.", example: "Customer satisfaction prediction", library: "sklearn.ensemble.GradientBoostingClassifier" },
+
+            // ---- CLUSTERING (find groups) ----
+            { name: "K-Means", tut: "Tut 26-27", category: "clustering", condition: "🎯 You know how many groups you want (e.g., 3).", example: "Shopper segmentation: Budget / Moderate / Luxury", library: "sklearn.cluster.KMeans" },
+            { name: "DBSCAN", tut: "Tut 31-32", category: "clustering", condition: "📍 Finds groups of any shape. Good at spotting outliers.", example: "Crime hotspots (outliers = isolated crimes)", library: "sklearn.cluster.DBSCAN" },
+            { name: "Agglomerative HC", tut: "Tut 28-29", category: "clustering", condition: "📊 Builds a hierarchy (like a family tree).", example: "Animal taxonomy (Kingdom → Phylum)", library: "sklearn.cluster.AgglomerativeClustering" },
+            { name: "Gaussian Mixture", tut: "Tut 33", category: "clustering", condition: "🎭 Soft clustering: a point can belong to multiple groups.", example: "News article: 60% Politics, 30% Tech", library: "sklearn.mixture.GaussianMixture" },
+            { name: "OPTICS", tut: "extended", category: "clustering", condition: "📌 Finds groups with different densities (tight vs loose).", example: "Astronomical data clustering", library: "sklearn.cluster.OPTICS" },
+            { name: "Spectral Clustering", tut: "extended", category: "clustering", condition: "🔗 Uses connections (like a social network) to find groups.", example: "Community detection in social networks", library: "sklearn.cluster.SpectralClustering" },
+
+            // ---- ASSOCIATION (shopping basket) ----
+            { name: "Apriori", tut: "Tut 34-35", category: "association", condition: "🛒 Finds rules like 'Milk → Bread'. Good for small data.", example: "Market basket analysis", library: "mlxtend.frequent_patterns.apriori" },
+            { name: "FP-Growth", tut: "Tut 38-39", category: "association", condition: "🚀 Fast version of Apriori. Works on huge datasets.", example: "Amazon 100M carts analysis", library: "mlxtend.frequent_patterns.fpgrowth" },
+
+            // ---- REINFORCEMENT (learning from actions) ----
+            { name: "Q-Learning", tut: "Tut 43", category: "reinforcement", condition: "🤖 Learns from past actions (even bad ones).", example: "Self‑driving car in a maze", library: "numpy + custom" },
+            { name: "SARSA", tut: "Tut 44", category: "reinforcement", condition: "🛡️ Safer on‑policy learning. Used in robotics.", example: "Robot walking down stairs", library: "numpy + custom" },
+            { name: "Upper Confidence Bound", tut: "Tut 45-46", category: "reinforcement", condition: "🎰 For simple 'slot machine' problems (one step).", example: "Which news headline gets the most clicks?", library: "numpy (math)" },
+            { name: "Thompson Sampling", tut: "Tut 47-48", category: "reinforcement", condition: "🎲 Bayesian approach. Learns faster than UCB.", example: "Drug dosage efficacy testing", library: "numpy (Beta)" },
+
+            // ---- DIMENSIONALITY REDUCTION (reduce columns) ----
+            { name: "PCA", tut: "Tut 49", category: "dimred", condition: "📉 Compresses many columns into few. Unsupervised.", example: "100x100 face images → 50 features", library: "sklearn.decomposition.PCA" },
+            { name: "LDA", tut: "Tut 50", category: "dimred", condition: "📉 Compresses columns while keeping groups separate.", example: "50 medical tests → 2 features for Healthy/Sick", library: "sklearn.discriminant_analysis.LinearDiscriminantAnalysis" },
+            { name: "t-SNE", tut: "extended", category: "dimred", condition: "📊 For visualization. Makes high‑dim data into 2D.", example: "MNIST digits plotted in 2D", library: "sklearn.manifold.TSNE" },
+            { name: "UMAP", tut: "extended", category: "dimred", condition: "⚡ Fast t‑SNE alternative. Good for huge data.", example: "Single‑cell RNA‑seq data visualization", library: "umap-learn" },
+
+            // ---- EVALUATION / OTHER ----
+            { name: "Regression Metrics (MAE, MSE)", tut: "Tut 10", category: "evaluation", condition: "📏 How wrong is your number prediction?", example: "House price model is off by $5k on average", library: "sklearn.metrics.mean_absolute_error" },
+            { name: "Classification Metrics (F1, Precision)", tut: "Tut 24-25", category: "evaluation", condition: "🎯 How good is your category prediction?", example: "Spam filter: how many real spams did it catch?", library: "sklearn.metrics.classification_report" },
+            { name: "Cross-Validation", tut: "Tut 52-53", category: "evaluation", condition: "🔄 Test your model on different slices of data.", example: "500 rows → split into 5 groups, test each", library: "sklearn.model_selection.cross_val_score" },
+            { name: "Grid Search", tut: "Tut 54", category: "evaluation", condition: "🔍 Automatically find the best settings (hyperparameters).", example: "Try 10, 50, 100 trees and find the best", library: "sklearn.model_selection.GridSearchCV" },
+            { name: "Pipeline", tut: "Tut 56", category: "evaluation", condition: "🔗 Chain steps together (clean → reduce → model).", example: "Impute missing values → Scale → PCA → XGBoost", library: "sklearn.pipeline.Pipeline" },
+            { name: "Isolation Forest", tut: "extended", category: "other", condition: "🚨 Finds rare, unusual events (anomalies).", example: "Fraud transaction detection", library: "sklearn.ensemble.IsolationForest" },
+            { name: "MLP (Neural Net)", tut: "extended", category: "other", condition: "🧠 Deep learning for complex patterns.", example: "Handwritten digit recognition (MNIST)", library: "sklearn.neural_network.MLPClassifier" }
+        ];
+
+        // ---------- RENDER ----------
+        const tbody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const filterPills = document.querySelectorAll('#filterGroup .pill');
+        let currentCategory = 'all';
+
+        function renderTable(filterCategory = 'all', searchTerm = '') {
+            const lowerSearch = searchTerm.toLowerCase().trim();
+            let html = '';
+
+            for (let m of models) {
+                if (filterCategory !== 'all' && m.category !== filterCategory) continue;
+                if (lowerSearch !== '') {
+                    const inName = m.name.toLowerCase().includes(lowerSearch);
+                    const inCond = m.condition.toLowerCase().includes(lowerSearch);
+                    const inLib = m.library.toLowerCase().includes(lowerSearch);
+                    const inExample = m.example.toLowerCase().includes(lowerSearch);
+                    const inTut = m.tut.toLowerCase().includes(lowerSearch);
+                    if (!(inName || inCond || inLib || inExample || inTut)) continue;
+                }
+
+                let catClass = 'category-tag';
+                if (m.category === 'regression') catClass += ' cat-regression';
+                else if (m.category === 'classification') catClass += ' cat-classification';
+                else if (m.category === 'clustering') catClass += ' cat-clustering';
+                else if (m.category === 'association') catClass += ' cat-association';
+                else if (m.category === 'reinforcement') catClass += ' cat-reinforcement';
+                else if (m.category === 'dimred') catClass += ' cat-dimred';
+                else if (m.category === 'evaluation') catClass += ' cat-evaluation';
+                else catClass += ' cat-other';
+
+                let icon = 'fa-cube';
+                if (m.category === 'regression') icon = 'fa-chart-line';
+                else if (m.category === 'classification') icon = 'fa-tags';
+                else if (m.category === 'clustering') icon = 'fa-circle-nodes';
+                else if (m.category === 'association') icon = 'fa-cart-shopping';
+                else if (m.category === 'reinforcement') icon = 'fa-robot';
+                else if (m.category === 'dimred') icon = 'fa-compress';
+                else if (m.category === 'evaluation') icon = 'fa-check-double';
+                else icon = 'fa-microchip';
+
+                html += `
+                    <tr>
+                        <td>
+                            <div class="model-name">
+                                <i class="fas ${icon}"></i> ${m.name}
+                                <span class="tut-badge">${m.tut}</span>
+                            </div>
+                            <span class="${catClass}">${m.category}</span>
+                        </td>
+                        <td style="font-size:0.92rem; line-height:1.5;">${m.condition}</td>
+                        <td><i class="fas fa-arrow-right" style="font-size:0.7rem; color:#3d7eb3;"></i> ${m.example}</td>
+                        <td><span class="library">${m.library}</span></td>
+                    </tr>
+                `;
+            }
+
+            if (html === '') {
+                html = `<tr><td colspan="4" style="text-align:center; padding:2.5rem; color:#5c7f9e; background:#fafdff;">
+                    <i class="fas fa-search" style="font-size:1.4rem; display:block; margin-bottom:8px;"></i>
+                    No models match your search or filter.
+                </td></tr>`;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function update() { renderTable(currentCategory, searchInput.value); }
+
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', function() {
+                filterPills.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.getAttribute('data-filter');
+                update();
+            });
+        });
+
+        searchInput.addEventListener('input', update);
+        renderTable('all', '');
+    })();
+</script>
+</body>
+</html>
