@@ -54,14 +54,20 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 22 : R square and Adjusted R square more](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/56_R_square_adjuste_R2.html)
 
+[Lecture 23 : When to use which model](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/57-when_to_use_which_model.html)
+
+[Lecture 24 : Correlation](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/61-data_checking.html)
+
+[Lecture 25 : When to use which model](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/59-ensemble_learning_bagging_boosting.html)
+
+
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
 
-
-
-#ML Tree
-
 ![ML Tree](35-AI_tree.png)
+
+
+![ML Tree](59-correlation.png)
 
 
 
