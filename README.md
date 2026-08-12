@@ -62,7 +62,7 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 24 : Correlation](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/61-data_checking.html)
 
-[Lecture 25 : When to use which model](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/59-ensemble_learning_bagging_boosting.html)
+[Lecture 25 : Ensemble Learning](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/59-ensemble_learning_bagging_boosting.html)
 
 [Lecture 26 : Confusion Matrices](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/46-confustion_metrics.html)
 
