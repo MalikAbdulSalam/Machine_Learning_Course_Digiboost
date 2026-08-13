@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Residuals in Machine Learning</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f6f8;
+            color: #222;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f4e79;
+        }
+
+        h2 {
+            color: #2e6da4;
+            margin-top: 30px;
+        }
+
+        .formula {
+            background: #eef5fb;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 5px solid #2e6da4;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #1f4e79;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .key-point {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .good {
+            background: #e8f5e9;
+            padding: 15px;
+            border-left: 5px solid #4caf50;
+        }
+
+        code {
+            background: #eee;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Why Do We Use Residuals in Machine Learning?</h1>
+
+    <p>
+        In Machine Learning, a <strong>residual</strong> tells us how far
+        our model's prediction is from the actual value.
+    </p>
+
+    <h2>1. What is a Residual?</h2>
+
+    <p>The residual is calculated using:</p>
+
+    <div class="formula">
+        Residual = Actual − Predicted
+    </div>
+
+    <p>Mathematically:</p>
+
+    <div class="formula">
+        e = y − ŷ
+    </div>
+
+    <ul>
+        <li><strong>y</strong> = Actual value</li>
+        <li><strong>ŷ</strong> = Predicted value</li>
+        <li><strong>e</strong> = Residual</li>
+    </ul>
+
+    <h2>2. Example of Residuals</h2>
+
+    <table>
+        <tr>
+            <th>Actual (y)</th>
+            <th>Predicted (ŷ)</th>
+            <th>Residual (y − ŷ)</th>
+        </tr>
+
+        <tr>
+            <td>100</td>
+            <td>90</td>
+            <td>10</td>
+        </tr>
+
+        <tr>
+            <td>150</td>
+            <td>160</td>
+            <td>-10</td>
+        </tr>
+
+        <tr>
+            <td>200</td>
+            <td>195</td>
+            <td>5</td>
+        </tr>
+    </table>
+
+    <div class="example">
+        <strong>Example:</strong><br><br>
+
+        Actual value = 100<br>
+        Predicted value = 90
+
+        <div class="formula">
+            Residual = 100 − 90 = 10
+        </div>
+
+        The model predicted <strong>10 units too low</strong>.
+    </div>
+
+    <h2>3. Why Do We Use Residuals?</h2>
+
+    <h3>① To Measure Prediction Error</h3>
+
+    <p>
+        Residuals show us how much the model's predictions differ
+        from the actual values.
+    </p>
+
+    <ul>
+        <li><strong>Residual = 0</strong> → Perfect prediction</li>
+        <li><strong>Positive residual</strong> → Model predicted too low</li>
+        <li><strong>Negative residual</strong> → Model predicted too high</li>
+        <li><strong>Large residual</strong> → Large prediction error</li>
+    </ul>
+
+    <h3>② To Evaluate Regression Models</h3>
+
+    <p>
+        Several important regression metrics are calculated using
+        residuals.
+    </p>
+
+    <h4>Mean Squared Error (MSE)</h4>
+
+    <div class="formula">
+        MSE = (1/n) × Σ(y − ŷ)²
+    </div>
+
+    <p>Since:</p>
+
+    <div class="formula">
+        Residual = y − ŷ
+    </div>
+
+    <p>we can write:</p>
+
+    <div class="formula">
+        MSE = (1/n) × Σ(Residual²)
+    </div>
+
+    <h4>Root Mean Squared Error (RMSE)</h4>
+
+    <div class="formula">
+        RMSE = √MSE
+    </div>
+
+    <h3>③ To Check Whether the Model Is Appropriate</h3>
+
+    <p>
+        We can plot residuals against predicted values.
+        Ideally, residuals should be randomly scattered around zero.
+    </p>
+
+    <div class="good">
+        <strong>Good residual pattern:</strong><br><br>
+
+        Residuals should generally look random rather than forming
+        a clear pattern or curve.
+        <br><br>
+
+        Example:
+        <br><br>
+
+        &nbsp;&nbsp; • &nbsp;&nbsp;&nbsp;&nbsp; •<br>
+        • &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp;&nbsp;&nbsp; •<br>
+        ─────────────────── 0<br>
+        &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp; •<br>
+        • &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; •
+    </div>
+
+    <p>
+        If residuals show a clear pattern, it can indicate that the
+        model is missing some relationship in the data.
+    </p>
+
+    <h2>4. Real-World Example: House Price Prediction</h2>
+
+    <div class="example">
+
+        <strong>Actual house price:</strong> $300,000<br>
+
+        <strong>Predicted house price:</strong> $280,000
+
+        <div class="formula">
+            Residual = 300,000 − 280,000
+        </div>
+
+        <div class="formula">
+            Residual = $20,000
+        </div>
+
+        <p>
+            Therefore, the model <strong>underestimated the house price
+            by $20,000</strong>.
+        </p>
+
+    </div>
+
+    <h2>5. Important Concept</h2>
+
+    <div class="key-point">
+        <strong>Think of residual as:</strong>
+
+        <p>
+            "How much did my model get wrong?"
+        </p>
+    </div>
+
+    <h2>6. Summary</h2>
+
+    <ul>
+        <li>Residual = Actual − Predicted</li>
+        <li>Residual measures prediction error.</li>
+        <li>Positive residual means the prediction was too low.</li>
+        <li>Negative residual means the prediction was too high.</li>
+        <li>MSE and RMSE are based on residuals.</li>
+        <li>Residual plots help us diagnose regression models.</li>
+        <li>Randomly scattered residuals around zero are generally desirable.</li>
+    </ul>
+
+    <div class="formula">
+        Residual = y − ŷ
+    </div>
+
+</div>
+
+</body>
+</html>
