@@ -77,6 +77,9 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 ![ML Tree](35-AI_tree.png)
 
+![Confusion Matrics](65-confusion_matrics.png)
+
+
 
 ![ML Tree](59-correlation.png)
 
