@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification Evaluation Metrics in Machine Learning</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f4e79;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #2e75b6;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            color: #3f6f8f;
+        }
+
+        .definition {
+            background: #eef6ff;
+            border-left: 5px solid #2e75b6;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .example {
+            background: #eef8e8;
+            border-left: 5px solid #5a9e35;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #e0a800;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .formula {
+            background: #f1f1f1;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: "Courier New", monospace;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2e75b6;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7f7f7;
+        }
+
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        code {
+            background-color: #eee;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        .metric-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #fafafa;
+        }
+
+        .important {
+            font-weight: bold;
+            color: #c0392b;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #1f4e79;
+            color: white;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Classification Evaluation Metrics in Machine Learning</h1>
+
+    <!-- INTRODUCTION -->
+
+    <h2>1. What is Model Evaluation?</h2>
+
+    <div class="definition">
+        <strong>Model evaluation</strong> is the process of measuring how
+        well a Machine Learning model performs on data that it has not seen
+        during training.
+    </div>
+
+    <p>
+        When we train a classification model, the model makes predictions.
+        We need to compare those predictions with the actual answers to
+        determine how well the model is performing.
+    </p>
+
+    <p>
+        Different evaluation metrics provide different information about
+        model performance.
+    </p>
+
+    <div class="example">
+        <strong>Example:</strong>
+        Suppose we build a Machine Learning model that predicts whether a
+        patient has a disease.
+        <br><br>
+        1 = Disease<br>
+        0 = No Disease
+    </div>
+
+
+    <!-- CLASSIFICATION -->
+
+    <h2>2. What is Classification?</h2>
+
+    <p>
+        Classification is a type of supervised Machine Learning problem
+        where the model predicts a category or class.
+    </p>
+
+    <table>
+        <tr>
+            <th>Application</th>
+            <th>Class 0</th>
+            <th>Class 1</th>
+        </tr>
+
+        <tr>
+            <td>Spam Detection</td>
+            <td>Not Spam</td>
+            <td>Spam</td>
+        </tr>
+
+        <tr>
+            <td>Disease Detection</td>
+            <td>No Disease</td>
+            <td>Disease</td>
+        </tr>
+
+        <tr>
+            <td>Loan Prediction</td>
+            <td>Rejected</td>
+            <td>Approved</td>
+        </tr>
+
+        <tr>
+            <td>Image Classification</td>
+            <td>Cat</td>
+            <td>Dog</td>
+        </tr>
+    </table>
+
+
+    <!-- TRAINING AND TESTING -->
+
+    <h2>3. Training Data and Testing Data</h2>
+
+    <p>
+        We normally divide our dataset into training and testing portions.
+    </p>
+
+    <div class="formula">
+        Dataset → Training Data + Testing Data
+    </div>
+
+    <ul>
+        <li>
+            <strong>Training data:</strong>
+            Used to train the Machine Learning model.
+        </li>
+
+        <li>
+            <strong>Testing data:</strong>
+            Used to evaluate the trained model.
+        </li>
+    </ul>
+
+    <div class="example">
+        <strong>Example:</strong>
+        If we have 1,000 samples, we might use 80% for training and
+        20% for testing.
+    </div>
+
+
+    <!-- CONFUSION MATRIX -->
+
+    <h2>4. Confusion Matrix</h2>
+
+    <p>
+        A confusion matrix is one of the most important tools for evaluating
+        a classification model.
+    </p>
+
+    <p>
+        It compares the actual class with the predicted class.
+    </p>
+
+    <table>
+        <tr>
+            <th></th>
+            <th>Predicted Positive</th>
+            <th>Predicted Negative</th>
+        </tr>
+
+        <tr>
+            <th>Actual Positive</th>
+            <td><strong>TP</strong></td>
+            <td><strong>FN</strong></td>
+        </tr>
+
+        <tr>
+            <th>Actual Negative</th>
+            <td><strong>FP</strong></td>
+            <td><strong>TN</strong></td>
+        </tr>
+    </table>
+
+
+    <div class="metric-card">
+
+        <h3>TP - True Positive</h3>
+
+        <p>
+            The model predicts positive and the actual value is positive.
+        </p>
+
+        <div class="example">
+            Patient has a disease → Model predicts disease.
+        </div>
+
+    </div>
+
+
+    <div class="metric-card">
+
+        <h3>TN - True Negative</h3>
+
+        <p>
+            The model predicts negative and the actual value is negative.
+        </p>
+
+        <div class="example">
+            Patient does not have a disease → Model predicts no disease.
+        </div>
+
+    </div>
+
+
+    <div class="metric-card">
+
+        <h3>FP - False Positive</h3>
+
+        <p>
+            The model predicts positive but the actual value is negative.
+        </p>
+
+        <div class="example">
+            Healthy patient → Model predicts disease.
+        </div>
+
+    </div>
+
+
+    <div class="metric-card">
+
+        <h3>FN - False Negative</h3>
+
+        <p>
+            The model predicts negative but the actual value is positive.
+        </p>
+
+        <div class="example">
+            Patient has disease → Model predicts no disease.
+        </div>
+
+    </div>
+
+
+    <!-- COMPLETE CONFUSION MATRIX EXAMPLE -->
+
+    <h2>5. Complete Confusion Matrix Example</h2>
+
+    <p>
+        Suppose a disease detection model is tested on 100 patients.
+    </p>
+
+    <table>
+        <tr>
+            <th></th>
+            <th>Predicted Disease</th>
+            <th>Predicted No Disease</th>
+        </tr>
+
+        <tr>
+            <th>Actual Disease</th>
+            <td>TP = 40</td>
+            <td>FN = 10</td>
+        </tr>
+
+        <tr>
+            <th>Actual No Disease</th>
+            <td>FP = 5</td>
+            <td>TN = 45</td>
+        </tr>
+    </table>
+
+    <p>Therefore:</p>
+
+    <ul>
+        <li>True Positive = 40</li>
+        <li>True Negative = 45</li>
+        <li>False Positive = 5</li>
+        <li>False Negative = 10</li>
+    </ul>
+
+
+    <!-- ACCURACY -->
+
+    <h2>6. Accuracy</h2>
+
+    <p>
+        Accuracy tells us the percentage of all predictions that are correct.
+    </p>
+
+    <div class="formula">
+        Accuracy = (TP + TN) /
+        (TP + TN + FP + FN)
+    </div>
+
+    <h3>Example</h3>
+
+    <p>Using our confusion matrix:</p>
+
+    <div class="formula">
+        Accuracy = (40 + 45) /
+        (40 + 45 + 5 + 10)
+    </div>
+
+    <div class="formula">
+        Accuracy = 85 / 100 = 85%
+    </div>
+
+    <div class="example">
+        The model correctly classified 85 out of 100 patients.
+    </div>
+
+
+    <div class="warning">
+        <strong>Important:</strong>
+        Accuracy can be misleading when the dataset is highly imbalanced.
+    </div>
+
+
+    <!-- PRECISION -->
+
+    <h2>7. Precision</h2>
+
+    <p>
+        Precision answers this question:
+    </p>
+
+    <div class="definition">
+        Out of all the samples predicted as positive, how many were
+        actually positive?
+    </div>
+
+    <div class="formula">
+        Precision = TP / (TP + FP)
+    </div>
+
+    <h3>Example</h3>
+
+    <div class="formula">
+        Precision = 40 / (40 + 5)
+    </div>
+
+    <div class="formula">
+        Precision = 40 / 45 = 88.89%
+    </div>
+
+    <div class="example">
+        The model predicted 45 patients as having the disease.
+        Only 40 actually had the disease.
+    </div>
+
+    <p>
+        High precision means the model produces fewer
+        <strong>false positives</strong>.
+    </p>
+
+
+    <!-- RECALL -->
+
+    <h2>8. Recall</h2>
+
+    <p>
+        Recall is also known as:
+    </p>
+
+    <ul>
+        <li>Sensitivity</li>
+        <li>True Positive Rate (TPR)</li>
+    </ul>
+
+    <div class="definition">
+        Recall tells us how many of the actual positive samples
+        were correctly detected by the model.
+    </div>
+
+    <div class="formula">
+        Recall = TP / (TP + FN)
+    </div>
+
+    <h3>Example</h3>
+
+    <div class="formula">
+        Recall = 40 / (40 + 10)
+    </div>
+
+    <div class="formula">
+        Recall = 40 / 50 = 80%
+    </div>
+
+    <div class="example">
+        There were 50 patients who actually had the disease.
+        The model detected 40 of them.
+    </div>
+
+    <p>
+        High recall means the model produces fewer
+        <strong>false negatives</strong>.
+    </p>
+
+
+    <!-- F1 SCORE -->
+
+    <h2>9. F1-Score</h2>
+
+    <p>
+        F1-score combines precision and recall into one metric.
+    </p>
+
+    <div class="formula">
+        F1 = 2 ×
+        (Precision × Recall) /
+        (Precision + Recall)
+    </div>
+
+    <h3>Example</h3>
+
+    <p>Suppose:</p>
+
+    <ul>
+        <li>Precision = 88.89%</li>
+        <li>Recall = 80%</li>
+    </ul>
+
+    <div class="formula">
+        F1 ≈ 84.21%
+    </div>
+
+    <p>
+        F1-score is especially useful when we want a balance between
+        precision and recall.
+    </p>
+
+
+    <!-- SPECIFICITY -->
+
+    <h2>10. Specificity</h2>
+
+    <p>
+        Specificity measures how well the model identifies negative samples.
+    </p>
+
+    <div class="formula">
+        Specificity = TN / (TN + FP)
+    </div>
+
+    <p>
+        Specificity is also called the
+        <strong>True Negative Rate (TNR)</strong>.
+    </p>
+
+    <h3>Example</h3>
+
+    <div class="formula">
+        Specificity = 45 / (45 + 5)
+    </div>
+
+    <div class="formula">
+        Specificity = 90%
+    </div>
+
+    <div class="example">
+        There were 50 healthy patients and the model correctly identified
+        45 of them.
+    </div>
+
+
+    <!-- FPR -->
+
+    <h2>11. False Positive Rate</h2>
+
+    <p>
+        False Positive Rate tells us the percentage of actual negative
+        samples that were incorrectly predicted as positive.
+    </p>
+
+    <div class="formula">
+        FPR = FP / (FP + TN)
+    </div>
+
+    <h3>Example</h3>
+
+    <div class="formula">
+        FPR = 5 / (5 + 45)
+    </div>
+
+    <div class="formula">
+        FPR = 5 / 50 = 10%
+    </div>
+
+    <p>
+        Notice that:
+    </p>
+
+    <div class="formula">
+        Specificity = 1 - FPR
+    </div>
+
+
+    <!-- TPR -->
+
+    <h2>12. True Positive Rate</h2>
+
+    <p>
+        True Positive Rate is another name for Recall.
+    </p>
+
+    <div class="formula">
+        TPR = Recall = TP / (TP + FN)
+    </div>
+
+    <div class="example">
+        In our example:
+        <br><br>
+        TPR = 40 / 50 = 80%
+    </div>
+
+
+    <!-- ROC -->
+
+    <h2>13. ROC Curve</h2>
+
+    <p>
+        ROC stands for <strong>Receiver Operating Characteristic</strong>.
+    </p>
+
+    <p>
+        The ROC curve plots:
+    </p>
+
+    <ul>
+        <li>True Positive Rate (TPR) on the Y-axis</li>
+        <li>False Positive Rate (FPR) on the X-axis</li>
+    </ul>
+
+    <div class="formula">
+        Y-axis = TPR = TP / (TP + FN)
+    </div>
+
+    <div class="formula">
+        X-axis = FPR = FP / (FP + TN)
+    </div>
+
+
+    <!-- AUC -->
+
+    <h2>14. ROC-AUC</h2>
+
+    <p>
+        AUC stands for <strong>Area Under the Curve</strong>.
+    </p>
+
+    <p>
+        ROC-AUC measures how well the model can distinguish between
+        positive and negative classes across classification thresholds.
+    </p>
+
+    <table>
+        <tr>
+            <th>AUC Score</th>
+            <th>General Interpretation</th>
+        </tr>
+
+        <tr>
+            <td>1.00</td>
+            <td>Perfect</td>
+        </tr>
+
+        <tr>
+            <td>0.90 - 1.00</td>
+            <td>Excellent</td>
+        </tr>
+
+        <tr>
+            <td>0.80 - 0.90</td>
+            <td>Good</td>
+        </tr>
+
+        <tr>
+            <td>0.70 - 0.80</td>
+            <td>Acceptable</td>
+        </tr>
+
+        <tr>
+            <td>0.50</td>
+            <td>Random guessing</td>
+        </tr>
+
+        <tr>
+            <td>Below 0.50</td>
+            <td>Worse than random in this scoring direction</td>
+        </tr>
+    </table>
+
+
+    <div class="example">
+        <strong>Example:</strong>
+        If a model has ROC-AUC = 0.95, it has excellent ability to
+        distinguish between positive and negative samples.
+    </div>
+
+
+    <!-- CLASSIFICATION REPORT -->
+
+    <h2>15. Classification Report</h2>
+
+    <p>
+        Scikit-learn provides a function called
+        <code>classification_report()</code>.
+    </p>
+
+    <pre>
+from sklearn.metrics import classification_report
+
+print(classification_report(y_test, y_pred))
+    </pre>
+
+    <p>
+        The classification report provides:
+    </p>
+
+    <ul>
+        <li>Precision</li>
+        <li>Recall</li>
+        <li>F1-score</li>
+        <li>Support</li>
+        <li>Accuracy</li>
+    </ul>
+
+
+    <!-- SUPPORT -->
+
+    <h2>16. What is Support?</h2>
+
+    <p>
+        Support is the number of actual samples belonging to each class
+        in the test dataset.
+    </p>
+
+    <div class="example">
+        Suppose the test dataset contains:
+        <br><br>
+        Class 0 → 50 samples<br>
+        Class 1 → 30 samples
+        <br><br>
+        Then support for Class 0 is 50 and support for Class 1 is 30.
+    </div>
+
+
+    <!-- MACRO AND WEIGHTED -->
+
+    <h2>17. Macro Average and Weighted Average</h2>
+
+    <h3>Macro Average</h3>
+
+    <p>
+        Macro average calculates the metric independently for each class
+        and then takes the simple average.
+    </p>
+
+    <div class="formula">
+        Macro Average = Average of all class scores
+    </div>
+
+    <h3>Weighted Average</h3>
+
+    <p>
+        Weighted average calculates the metric for each class and gives
+        more weight to classes with more samples.
+    </p>
+
+    <div class="formula">
+        Weighted Average = Average weighted by class support
+    </div>
+
+
+    <!-- IMBALANCED DATA -->
+
+    <h2>18. Why Accuracy Can Be Misleading</h2>
+
+    <p>
+        Consider a dataset containing 1,000 patients:
+    </p>
+
+    <ul>
+        <li>990 patients are healthy.</li>
+        <li>10 patients have a disease.</li>
+    </ul>
+
+    <p>
+        Imagine a model that predicts every patient as healthy.
+    </p>
+
+    <p>
+        It correctly predicts 990 patients.
+    </p>
+
+    <div class="formula">
+        Accuracy = 990 / 1000 = 99%
+    </div>
+
+    <div class="warning">
+        The model has 99% accuracy but detects
+        <strong>zero</strong> patients with the disease.
+    </div>
+
+    <p>
+        Therefore, for imbalanced datasets, we should also consider
+        precision, recall, F1-score, specificity, and ROC-AUC.
+    </p>
+
+
+    <!-- PRECISION VS RECALL -->
+
+    <h2>19. Precision vs Recall</h2>
+
+    <table>
+        <tr>
+            <th>Precision</th>
+            <th>Recall</th>
+        </tr>
+
+        <tr>
+            <td>Focuses on false positives</td>
+            <td>Focuses on false negatives</td>
+        </tr>
+
+        <tr>
+            <td>Useful when false alarms are costly</td>
+            <td>Useful when missing positives is costly</td>
+        </tr>
+
+        <tr>
+            <td>Spam filtering</td>
+            <td>Disease detection</td>
+        </tr>
+
+        <tr>
+            <td>Fraud alerts where investigation is expensive</td>
+            <td>Safety or screening systems</td>
+        </tr>
+    </table>
+
+
+    <!-- REAL WORLD -->
+
+    <h2>20. Real-World Examples</h2>
+
+    <h3>Example 1: Disease Detection</h3>
+
+    <p>
+        In disease detection, missing a patient with a disease can be
+        dangerous.
+    </p>
+
+    <p>
+        Therefore, <strong>Recall</strong> is often very important.
+    </p>
+
+
+    <h3>Example 2: Spam Detection</h3>
+
+    <p>
+        If a legitimate email is incorrectly classified as spam,
+        the user may miss an important message.
+    </p>
+
+    <p>
+        Therefore, <strong>Precision</strong> can be especially important.
+    </p>
+
+
+    <h3>Example 3: Fraud Detection</h3>
+
+    <p>
+        A bank may want to detect as many fraudulent transactions as
+        possible.
+    </p>
+
+    <p>
+        Therefore, <strong>Recall</strong> can be very important.
+    </p>
+
+
+    <h3>Example 4: Balanced Dataset</h3>
+
+    <p>
+        If all classes have approximately similar numbers of samples,
+        <strong>Accuracy</strong> can be a useful metric.
+    </p>
+
+
+    <!-- COMPLETE PYTHON -->
+
+    <h2>21. Complete Python Example</h2>
+
+    <p>
+        The following program creates a classification dataset,
+        trains a Logistic Regression model, makes predictions, and
+        calculates all major evaluation metrics.
+    </p>
+
+    <pre>
+# ==========================================
+# CLASSIFICATION EVALUATION
+# ==========================================
+
+# Import libraries
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    classification_report,
+    roc_auc_score,
+    roc_curve
+)
+
+
+# ==========================================
+# 1. CREATE DATASET
+# ==========================================
+
+# Features:
+# Age and Salary
+
+X = np.array([
+    [20, 20000],
+    [22, 25000],
+    [25, 30000],
+    [27, 35000],
+    [30, 40000],
+    [32, 45000],
+    [35, 50000],
+    [38, 55000],
+    [40, 60000],
+    [42, 65000],
+    [45, 70000],
+    [48, 75000],
+    [50, 80000],
+    [52, 85000],
+    [55, 90000],
+    [58, 95000],
+    [60, 100000],
+    [62, 105000],
+    [65, 110000],
+    [68, 115000]
+])
+
+
+# Target:
+# 0 = No
+# 1 = Yes
+
+y = np.array([
+    0, 0, 0, 0, 0,
+    0, 0, 1, 1, 1,
+    1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1
+])
+
+
+# ==========================================
+# 2. TRAIN-TEST SPLIT
+# ==========================================
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.30,
+    random_state=42,
+    stratify=y
+)
+
+
+# ==========================================
+# 3. CREATE MODEL
+# ==========================================
+
+model = LogisticRegression()
+
+
+# ==========================================
+# 4. TRAIN MODEL
+# ==========================================
+
+model.fit(X_train, y_train)
+
+
+# ==========================================
+# 5. MAKE CLASS PREDICTIONS
+# ==========================================
+
+y_pred = model.predict(X_test)
+
+
+# ==========================================
+# 6. GET PREDICTED PROBABILITIES
+# ==========================================
+
+y_probability = model.predict_proba(X_test)[:, 1]
+
+
+# ==========================================
+# 7. CONFUSION MATRIX
+# ==========================================
+
+cm = confusion_matrix(
+    y_test,
+    y_pred
+)
+
+print("Confusion Matrix:")
+print(cm)
+
+
+# ==========================================
+# 8. GET TN, FP, FN, TP
+# ==========================================
+
+TN, FP, FN, TP = cm.ravel()
+
+print("\nTrue Negative:", TN)
+print("False Positive:", FP)
+print("False Negative:", FN)
+print("True Positive:", TP)
+
+
+# ==========================================
+# 9. ACCURACY
+# ==========================================
+
+accuracy = accuracy_score(
+    y_test,
+    y_pred
+)
+
+print("\nAccuracy:", accuracy)
+
+
+# ==========================================
+# 10. PRECISION
+# ==========================================
+
+precision = precision_score(
+    y_test,
+    y_pred
+)
+
+print("Precision:", precision)
+
+
+# ==========================================
+# 11. RECALL
+# ==========================================
+
+recall = recall_score(
+    y_test,
+    y_pred
+)
+
+print("Recall:", recall)
+
+
+# ==========================================
+# 12. F1-SCORE
+# ==========================================
+
+f1 = f1_score(
+    y_test,
+    y_pred
+)
+
+print("F1 Score:", f1)
+
+
+# ==========================================
+# 13. SPECIFICITY
+# ==========================================
+
+specificity = TN / (TN + FP)
+
+print("Specificity:", specificity)
+
+
+# ==========================================
+# 14. ROC-AUC
+# ==========================================
+
+auc = roc_auc_score(
+    y_test,
+    y_probability
+)
+
+print("ROC-AUC:", auc)
+
+
+# ==========================================
+# 15. CLASSIFICATION REPORT
+# ==========================================
+
+print("\nClassification Report:")
+
+print(
+    classification_report(
+        y_test,
+        y_pred
+    )
+)
+
+
+# ==========================================
+# 16. ROC CURVE
+# ==========================================
+
+fpr, tpr, thresholds = roc_curve(
+    y_test,
+    y_probability
+)
+
+
+plt.plot(
+    fpr,
+    tpr,
+    label="ROC Curve"
+)
+
+plt.plot(
+    [0, 1],
+    [0, 1],
+    linestyle="--",
+    label="Random Model"
+)
+
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+
+plt.title("ROC Curve")
+
+plt.legend()
+
+plt.show()
+    </pre>
+
+
+    <!-- EXPLAIN CODE -->
+
+    <h2>22. Explanation of Python Code</h2>
+
+    <h3>Step 1: Import Libraries</h3>
+
+    <pre>
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+    </pre>
+
+    <p>
+        NumPy is used for numerical data.
+        Scikit-learn provides the model and evaluation functions.
+    </p>
+
+
+    <h3>Step 2: Create Features</h3>
+
+    <pre>
+X = np.array([
+    [20, 20000],
+    [25, 30000],
+    [30, 40000]
+])
+    </pre>
+
+    <p>
+        Here, each row represents one sample.
+        The columns represent features such as age and salary.
+    </p>
+
+
+    <h3>Step 3: Create Target</h3>
+
+    <pre>
+y = np.array([
+    0,
+    0,
+    1
+])
+    </pre>
+
+    <p>
+        The target contains the class labels.
+    </p>
+
+
+    <h3>Step 4: Split Data</h3>
+
+    <pre>
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.30,
+    random_state=42,
+    stratify=y
+)
+    </pre>
+
+    <p>
+        70% of the data is used for training and 30% is used for testing.
+    </p>
+
+
+    <h3>Step 5: Train Model</h3>
+
+    <pre>
+model = LogisticRegression()
+
+model.fit(X_train, y_train)
+    </pre>
+
+    <p>
+        The model learns patterns from the training data.
+    </p>
+
+
+    <h3>Step 6: Predict Classes</h3>
+
+    <pre>
+y_pred = model.predict(X_test)
+    </pre>
+
+    <p>
+        This returns the final predicted class, such as 0 or 1.
+    </p>
+
+
+    <h3>Step 7: Predict Probabilities</h3>
+
+    <pre>
+y_probability = model.predict_proba(X_test)[:, 1]
+    </pre>
+
+    <p>
+        This returns the probability of each sample belonging to class 1.
+    </p>
+
+    <div class="warning">
+        For ROC-AUC, use predicted probabilities or decision scores rather
+        than only the final 0/1 predictions.
+    </div>
+
+
+    <!-- METRIC SUMMARY -->
+
+    <h2>23. Evaluation Metrics Summary</h2>
+
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Main Question</th>
+            <th>Formula</th>
+        </tr>
+
+        <tr>
+            <td>Accuracy</td>
+            <td>How many predictions are correct?</td>
+            <td>(TP + TN) / Total</td>
+        </tr>
+
+        <tr>
+            <td>Precision</td>
+            <td>How many predicted positives are actually positive?</td>
+            <td>TP / (TP + FP)</td>
+        </tr>
+
+        <tr>
+            <td>Recall</td>
+            <td>How many actual positives were detected?</td>
+            <td>TP / (TP + FN)</td>
+        </tr>
+
+        <tr>
+            <td>F1-score</td>
+            <td>How well are precision and recall balanced?</td>
+            <td>2PR / (P + R)</td>
+        </tr>
+
+        <tr>
+            <td>Specificity</td>
+            <td>How many actual negatives were detected?</td>
+            <td>TN / (TN + FP)</td>
+        </tr>
+
+        <tr>
+            <td>FPR</td>
+            <td>How many negatives were incorrectly predicted positive?</td>
+            <td>FP / (FP + TN)</td>
+        </tr>
+
+        <tr>
+            <td>ROC-AUC</td>
+            <td>How well does the model separate the classes?</td>
+            <td>Area under ROC curve</td>
+        </tr>
+    </table>
+
+
+    <!-- MEMORY TRICK -->
+
+    <h2>24. Easy Way to Remember</h2>
+
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Easy Meaning</th>
+        </tr>
+
+        <tr>
+            <td>Accuracy</td>
+            <td>Overall correctness</td>
+        </tr>
+
+        <tr>
+            <td>Precision</td>
+            <td>Predicted Positive → Was it actually Positive?</td>
+        </tr>
+
+        <tr>
+            <td>Recall</td>
+            <td>Actual Positive → Did we find it?</td>
+        </tr>
+
+        <tr>
+            <td>F1-score</td>
+            <td>Balance between Precision and Recall</td>
+        </tr>
+
+        <tr>
+            <td>Specificity</td>
+            <td>Actual Negative → Did we correctly identify it?</td>
+        </tr>
+
+        <tr>
+            <td>ROC-AUC</td>
+            <td>How well can the model separate the classes?</td>
+        </tr>
+    </table>
+
+
+    <!-- STUDENT SUMMARY -->
+
+    <h2>25. Final Student Summary</h2>
+
+    <div class="definition">
+
+        <p>
+            Classification evaluation metrics help us understand how well
+            a classification model performs.
+        </p>
+
+        <p>
+            The confusion matrix provides four basic values:
+        </p>
+
+        <ul>
+            <li>True Positive (TP)</li>
+            <li>True Negative (TN)</li>
+            <li>False Positive (FP)</li>
+            <li>False Negative (FN)</li>
+        </ul>
+
+        <p>
+            These values are then used to calculate Accuracy, Precision,
+            Recall, F1-score, Specificity, and other metrics.
+        </p>
+
+    </div>
+
+
+    <h2>26. Important Formulas</h2>
+
+    <div class="formula">
+        Accuracy = (TP + TN) / (TP + TN + FP + FN)
+    </div>
+
+    <div class="formula">
+        Precision = TP / (TP + FP)
+    </div>
+
+    <div class="formula">
+        Recall = TP / (TP + FN)
+    </div>
+
+    <div class="formula">
+        Specificity = TN / (TN + FP)
+    </div>
+
+    <div class="formula">
+        FPR = FP / (FP + TN)
+    </div>
+
+    <div class="formula">
+        F1 = 2 × (Precision × Recall) /
+        (Precision + Recall)
+    </div>
+
+    <div class="formula">
+        TPR = Recall = TP / (TP + FN)
+    </div>
+
+
+    <h2>27. Key Takeaways</h2>
+
+    <ol>
+        <li>Always evaluate your model on unseen test data.</li>
+
+        <li>
+            Start by understanding the confusion matrix.
+        </li>
+
+        <li>
+            Accuracy measures overall correctness.
+        </li>
+
+        <li>
+            Precision is related to false positives.
+        </li>
+
+        <li>
+            Recall is related to false negatives.
+        </li>
+
+        <li>
+            F1-score balances precision and recall.
+        </li>
+
+        <li>
+            Specificity measures the true negative rate.
+        </li>
+
+        <li>
+            ROC-AUC measures class discrimination across thresholds.
+        </li>
+
+        <li>
+            Do not rely only on accuracy for imbalanced datasets.
+        </li>
+
+        <li>
+            Choose the evaluation metric according to the real-world
+            objective of the problem.
+        </li>
+    </ol>
+
+</div>
+
+<footer>
+    Machine Learning | Classification Evaluation Metrics
+</footer>
+
+</body>
+</html>
