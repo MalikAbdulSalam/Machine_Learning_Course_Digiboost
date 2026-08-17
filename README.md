@@ -70,16 +70,21 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 27 : Confusion Matrices Precision Recall F1-Score](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/64-evaluation_matrics.html)
 
+[Lecture 28 : Overfitting Under Fiting](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/62-over_fitting_under_fitting.html)
 
+[Lecture 29 : Over fitting Under Fitting 2](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/63-overfitting_underfitting.html)
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
+## AI Tree
 
 ![ML Tree](35-AI_tree.png)
 
+## Correlations
+![Correlaltions ](59-correlation.png)
 
-![ML Tree](59-correlation.png)
 
+## Confusion Matrics
 ![Confusion Matrics](65-confusion_matrics.png)
 
 
