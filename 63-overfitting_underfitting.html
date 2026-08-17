@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overfitting &amp; Underfitting · ML visual</title>
+  <!-- Chart.js CDN for lightweight plots -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f7f9fc;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+      padding: 2rem 1.5rem;
+      color: #1e293b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      max-width: 1200px;
+      width: 100%;
+    }
+    h1 {
+      font-weight: 600;
+      font-size: 2.4rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .subhead {
+      color: #475569;
+      font-size: 1.1rem;
+      border-left: 4px solid #94a3b8;
+      padding-left: 1rem;
+      margin-bottom: 2rem;
+      font-weight: 350;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 780px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 1.6rem 1.8rem 2rem;
+      box-shadow: 0 12px 30px -8px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.02);
+      transition: transform 0.1s ease;
+      border: 1px solid #e9edf2;
+    }
+    .card:hover {
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.12);
+    }
+    .card h2 {
+      font-weight: 600;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 500;
+      background: #e2e8f0;
+      padding: 0.15rem 0.8rem;
+      border-radius: 30px;
+      color: #1e293b;
+    }
+    .card p {
+      color: #334155;
+      line-height: 1.6;
+      margin: 0.6rem 0 0.8rem 0;
+    }
+    .feature-grid {
+      background: #f1f5f9;
+      border-radius: 20px;
+      padding: 0.8rem 1.2rem;
+      margin: 1rem 0 1.2rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.6rem;
+    }
+    .feature-grid span {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .feature-grid .val {
+      font-weight: 400;
+      color: #0f172a;
+    }
+    .example-box {
+      background: #f8fafc;
+      border-radius: 18px;
+      padding: 1rem 1.2rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.9rem;
+      border: 1px solid #e2e8f0;
+      margin: 1rem 0;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+    .fix-list {
+      background: #f1f5f9;
+      border-radius: 18px;
+      padding: 0.8rem 1.4rem;
+      margin: 0.8rem 0 0 0;
+      list-style: none;
+    }
+    .fix-list li {
+      padding: 0.3rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      gap: 8px;
+    }
+    .fix-list li:last-child {
+      border-bottom: none;
+    }
+    .fix-list li::before {
+      content: "▹";
+      color: #3b82f6;
+      font-weight: 600;
+    }
+    .chart-container {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 0.8rem 0.8rem 0.4rem 0.8rem;
+      margin: 1.2rem 0 0.2rem 0;
+      border: 1px solid #eef2f6;
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+      max-height: 180px;
+    }
+    .analogy {
+      background: #fef9e7;
+      border-radius: 40px;
+      padding: 0.6rem 1.4rem;
+      display: inline-block;
+      font-weight: 450;
+      font-size: 0.9rem;
+      border: 1px solid #fde68a;
+      margin-top: 0.2rem;
+    }
+    .bias-variance {
+      background: #f1f5f9;
+      border-radius: 20px;
+      padding: 0.8rem 1.4rem;
+      margin: 0.8rem 0;
+      font-size: 0.95rem;
+    }
+    .bias-variance strong {
+      font-weight: 600;
+    }
+    .highlight-red { color: #b91c1c; font-weight: 500; }
+    .highlight-blue { color: #1d4ed8; font-weight: 500; }
+    .highlight-green { color: #15803d; font-weight: 500; }
+    .footer-note {
+      margin-top: 2.8rem;
+      text-align: center;
+      color: #64748b;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 2rem;
+      font-size: 0.95rem;
+    }
+    .row-3 {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+      margin-top: 0.8rem;
+    }
+    .mini-badge {
+      background: #eef2f6;
+      border-radius: 40px;
+      padding: 0.1rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+    .comp-item {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 0.3rem 0.6rem;
+      text-align: center;
+      font-size: 0.9rem;
+      border: 1px solid #e2e8f0;
+    }
+    @media (max-width: 600px) {
+      .comparison-grid { grid-template-columns: 1fr; }
+    }
+    .inline-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
+    <div>
+      <h1>🧠 overfitting · underfitting</h1>
+      <div class="subhead">machine learning · bias–variance tradeoff</div>
+    </div>
+    <div class="analogy">📘 study analogy: underfit = barely study · overfit = memorize</div>
+  </div>
+
+  <!-- two main cards -->
+  <div class="card-grid">
+    <!-- UNDERFITTING CARD -->
+    <div class="card">
+      <h2><span class="inline-icon">⬇️</span> underfitting <span class="badge">high bias</span></h2>
+      <p><span class="highlight-red">✖ too simple</span> · fails to capture pattern. High error on <strong>both</strong> training &amp; test.</p>
+      
+      <div class="feature-grid">
+        <span>📊 training error <span class="val highlight-red">high</span></span>
+        <span>📉 test error <span class="val highlight-red">high</span></span>
+        <span>🧩 model complexity <span class="val">low</span></span>
+      </div>
+
+      <!-- visual: underfitting (straight line) -->
+      <div class="chart-container">
+        <canvas id="underfitChart" width="400" height="150"></canvas>
+      </div>
+
+      <div class="example-box">
+        <span style="color:#475569;">📐 actual trend (curve) </span>   <span style="color:#b45309;">●</span> training points <br>
+        <span style="color:#2563eb;">━━━</span> underfit (straight line) → misses curve
+      </div>
+
+      <div><strong>⚙️ causes</strong></div>
+      <ul class="fix-list">
+        <li>model too simple (e.g. linear for nonlinear data)</li>
+        <li>too few features / wrong features</li>
+        <li>excessive regularization (λ too high)</li>
+        <li>insufficient training time</li>
+      </ul>
+
+      <div><strong>🔧 fixes</strong></div>
+      <ul class="fix-list">
+        <li>increase model complexity (add layers, polynomial features)</li>
+        <li>add relevant features</li>
+        <li>train longer / reduce regularization</li>
+      </ul>
+    </div>
+
+    <!-- OVERFITTING CARD -->
+    <div class="card">
+      <h2><span class="inline-icon">⬆️</span> overfitting <span class="badge">high variance</span></h2>
+      <p><span class="highlight-blue">✖ too complex</span> · memorizes noise. <span class="highlight-green">Very low</span> training error, <span class="highlight-red">high</span> test error.</p>
+      
+      <div class="feature-grid">
+        <span>📊 training error <span class="val highlight-green">very low</span></span>
+        <span>📉 test error <span class="val highlight-red">high</span></span>
+        <span>🧩 model complexity <span class="val">high</span></span>
+      </div>
+
+      <!-- visual: overfitting (wiggly) -->
+      <div class="chart-container">
+        <canvas id="overfitChart" width="400" height="150"></canvas>
+      </div>
+
+      <div class="example-box">
+        <span style="color:#475569;">📐 true pattern (smooth) </span>  <span style="color:#b45309;">●</span> training points <br>
+        <span style="color:#d97706;">﹏﹏</span> overfit (wiggly) → passes through every point
+      </div>
+
+      <div><strong>⚙️ causes</strong></div>
+      <ul class="fix-list">
+        <li>model too complex (too many parameters)</li>
+        <li>too little training data</li>
+        <li>training too many epochs</li>
+        <li>no regularization</li>
+      </ul>
+
+      <div><strong>🔧 fixes</strong></div>
+      <ul class="fix-list">
+        <li>collect more training data</li>
+        <li>regularization (L1/L2, dropout)</li>
+        <li>early stopping</li>
+        <li>reduce model complexity</li>
+        <li>cross-validation</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- COMPARISON + BIAS-VARIANCE -->
+  <div style="display: flex; flex-wrap: wrap; gap: 1.8rem; margin-top: 2rem; background: white; border-radius: 32px; padding: 1.8rem 2rem; border: 1px solid #e9edf2;">
+    <div style="flex: 2; min-width: 240px;">
+      <h3 style="font-weight: 600; margin-bottom: 0.5rem;">📋 comparison</h3>
+      <div class="comparison-grid">
+        <div class="comp-item"><strong>underfit</strong><br>high bias</div>
+        <div class="comp-item"><strong>good fit</strong><br>balanced</div>
+        <div class="comp-item"><strong>overfit</strong><br>high variance</div>
+      </div>
+      <div style="background: #f1f5f9; border-radius: 20px; padding: 0.8rem 1.2rem; margin-top: 0.5rem;">
+        <span style="display: inline-block; margin-right: 1.2rem;"><span class="mini-badge">train err</span> under: high · good: low · over: very low</span>
+        <span><span class="mini-badge">test err</span> under: high · good: low · over: high</span>
+      </div>
+      <div class="bias-variance" style="margin-top: 0.8rem;">
+        <strong>🧬 bias–variance perspective</strong><br>
+        <span style="background:#e2e8f0; border-radius: 40px; padding:0.1rem 0.8rem;">underfitting</span> → high bias, low variance · misses patterns<br>
+        <span style="background:#e2e8f0; border-radius: 40px; padding:0.1rem 0.8rem;">overfitting</span>  → low bias, high variance · sensitive to noise
+      </div>
+    </div>
+    <!-- GOOD FIT visual (extra) -->
+    <div style="flex: 1; min-width: 200px; background: #fafcfd; border-radius: 24px; padding: 0.8rem 0.8rem 0.2rem 0.8rem; border: 1px solid #e2e8f0;">
+      <div style="text-align: center; font-weight: 500; font-size: 0.95rem;">✅ good fit (balanced)</div>
+      <canvas id="goodfitChart" width="300" height="130" style="max-height:130px;"></canvas>
+      <div style="font-size:0.8rem; text-align:center; color:#475569; padding-bottom:0.2rem;">low train &amp; test error</div>
+    </div>
+  </div>
+
+  <!-- KEY TAKEAWAY -->
+  <div style="background: #eef2ff; border-radius: 40px; padding: 1.4rem 2rem; margin-top: 2.5rem; border: 1px solid #c7d2fe; display: flex; flex-wrap: wrap; gap: 0.8rem 2rem; align-items: center;">
+    <div style="font-size: 1.8rem;">🎯</div>
+    <div style="flex:1;"><strong style="font-size:1.1rem;">key takeaway</strong><br>
+      <span style="background: #b91c1c; color:white; border-radius: 40px; padding:0.05rem 0.8rem; font-weight:500;">underfit</span> model is too simple → fails to learn.<br>
+      <span style="background: #1d4ed8; color:white; border-radius: 40px; padding:0.05rem 0.8rem; font-weight:500;">overfit</span> model is too complex → memorizes noise.<br>
+      <span class="highlight-green">aim for the sweet spot</span> – good generalization.
+    </div>
+    <div style="font-size:0.9rem; background: white; border-radius: 40px; padding:0.3rem 1.2rem; border:1px solid #b9c7e0;">⚖️ balance complexity</div>
+  </div>
+
+  <div class="footer-note">
+    ⚡ visualizations show polynomial fits · underfit (straight) · overfit (wiggly) · good fit (smooth curve)
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---- UNDERFITTING: straight line + points (curve trend) ----
+    const ctxUnder = document.getElementById('underfitChart').getContext('2d');
+    const xData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    // actual trend (sinusoidal / curve) – for reference only, but we plot line
+    const actualCurve = [0.8, 1.2, 2.0, 3.5, 4.8, 5.2, 4.5, 3.0, 1.8, 1.0];
+    const trainPoints = [1.0, 1.6, 2.8, 4.2, 5.0, 5.5, 4.2, 2.8, 1.4, 0.9];
+    // underfit: simple linear trend
+    const underfitLine = [0.7, 1.2, 1.7, 2.2, 2.7, 3.2, 3.7, 4.2, 4.7, 5.2];
+
+    new Chart(ctxUnder, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: 'training points',
+            data: xData.map((x, i) => ({ x, y: trainPoints[i] })),
+            backgroundColor: '#b45309',
+            pointRadius: 5,
+            pointHoverRadius: 6,
+            showLine: false,
+          },
+          {
+            label: 'underfit (linear)',
+            data: xData.map((x, i) => ({ x, y: underfitLine[i] })),
+            type: 'line',
+            borderColor: '#2563eb',
+            borderWidth: 3,
+            pointRadius: 0,
+            fill: false,
+            tension: 0.1,
+          },
+          {
+            label: 'actual trend (curve)',
+            data: xData.map((x, i) => ({ x, y: actualCurve[i] })),
+            type: 'line',
+            borderColor: '#94a3b8',
+            borderDash: [6, 4],
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          x: { display: false, grid: { display: false } },
+          y: { display: false, grid: { display: false }, min: 0, max: 7 }
+        },
+        elements: { point: { radius: 0 } }
+      }
+    });
+
+    // ---- OVERFITTING: wiggly (high variance) ----
+    const ctxOver = document.getElementById('overfitChart').getContext('2d');
+    const overfitPoints = [1.0, 1.8, 2.9, 4.3, 5.1, 5.6, 4.0, 2.5, 1.2, 0.8];
+    // wiggly overfit (high-degree polynomial)
+    const overfitLine = [0.9, 2.0, 3.5, 4.8, 5.0, 4.2, 3.8, 2.2, 1.5, 0.8];
+    // true smooth
+    const smoothTrue = [0.8, 1.3, 2.2, 3.4, 4.5, 5.0, 4.3, 3.0, 1.8, 1.0];
+
+    new Chart(ctxOver, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: 'training points',
+            data: xData.map((x, i) => ({ x, y: overfitPoints[i] })),
+            backgroundColor: '#b45309',
+            pointRadius: 5,
+            showLine: false,
+          },
+          {
+            label: 'overfit (wiggly)',
+            data: xData.map((x, i) => ({ x, y: overfitLine[i] })),
+            type: 'line',
+            borderColor: '#d97706',
+            borderWidth: 3,
+            pointRadius: 0,
+            fill: false,
+            tension: 0.4,
+          },
+          {
+            label: 'true smooth',
+            data: xData.map((x, i) => ({ x, y: smoothTrue[i] })),
+            type: 'line',
+            borderColor: '#64748b',
+            borderDash: [5, 4],
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { display: false, grid: { display: false } },
+          y: { display: false, grid: { display: false }, min: 0, max: 7 }
+        }
+      }
+    });
+
+    // ---- GOOD FIT ----
+    const ctxGood = document.getElementById('goodfitChart').getContext('2d');
+    const goodPoints = [0.9, 1.4, 2.3, 3.6, 4.7, 5.3, 4.4, 3.0, 1.7, 0.9];
+    const goodFitLine = [0.85, 1.4, 2.3, 3.6, 4.6, 5.1, 4.3, 3.0, 1.8, 0.95];
+    new Chart(ctxGood, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: 'train points',
+            data: xData.map((x, i) => ({ x, y: goodPoints[i] })),
+            backgroundColor: '#15803d',
+            pointRadius: 4,
+            showLine: false,
+          },
+          {
+            label: 'good fit',
+            data: xData.map((x, i) => ({ x, y: goodFitLine[i] })),
+            type: 'line',
+            borderColor: '#2563eb',
+            borderWidth: 2.5,
+            pointRadius: 0,
+            fill: false,
+            tension: 0.2,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { display: false, grid: { display: false } },
+          y: { display: false, grid: { display: false }, min: 0, max: 7 }
+        }
+      }
+    });
+  })();
+</script>
+<!-- small note: charts are minimal for clarity -->
+</body>
+</html>
