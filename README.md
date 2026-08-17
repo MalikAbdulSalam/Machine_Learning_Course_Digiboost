@@ -68,6 +68,8 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 26 : Confusion Matrices](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/46-confustion_metrics.html)
 
+[Lecture 27 : Confusion Matrices Precision Recall F1-Score](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/64-evaluation_matrics.html)
+
 
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
