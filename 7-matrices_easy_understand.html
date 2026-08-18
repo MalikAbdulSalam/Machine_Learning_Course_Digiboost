@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning Evaluation Metrics</title>
+
+<style>
+    body{
+        font-family: Arial, sans-serif;
+        background:#f4f6f9;
+        margin:40px;
+        color:#333;
+        line-height:1.7;
+    }
+
+    h1{
+        text-align:center;
+        color:#0d6efd;
+    }
+
+    h2{
+        color:#198754;
+        margin-top:30px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        margin-top:20px;
+    }
+
+    th{
+        background:#0d6efd;
+        color:white;
+        padding:12px;
+    }
+
+    td{
+        border:1px solid #ccc;
+        padding:10px;
+        text-align:center;
+    }
+
+    tr:nth-child(even){
+        background:#f8f9fa;
+    }
+
+    .box{
+        background:white;
+        padding:20px;
+        border-radius:8px;
+        margin-top:20px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .example{
+        background:#fff8dc;
+        padding:12px;
+        border-left:5px solid orange;
+        margin-top:10px;
+    }
+
+    .memory{
+        background:#e8f5e9;
+        padding:15px;
+        border-left:5px solid green;
+        font-weight:bold;
+    }
+</style>
+
+</head>
+<body>
+
+<h1>Machine Learning Evaluation Metrics (Simple Explanation)</h1>
+
+<div class="box">
+
+<table>
+<tr>
+<th>Metric</th>
+<th>Simple Meaning</th>
+<th>Better Value</th>
+</tr>
+
+<tr>
+<td><b>MAE</b></td>
+<td>Average mistake</td>
+<td>Smaller ✅</td>
+</tr>
+
+<tr>
+<td><b>MSE</b></td>
+<td>Average mistake, but big mistakes count much more</td>
+<td>Smaller ✅</td>
+</tr>
+
+<tr>
+<td><b>RMSE</b></td>
+<td>Average mistake (easy to understand)</td>
+<td>Smaller ✅</td>
+</tr>
+
+<tr>
+<td><b>R²</b></td>
+<td>How good the model is</td>
+<td>Bigger (Closer to 1) ✅</td>
+</tr>
+
+<tr>
+<td><b>Accuracy</b></td>
+<td>How many answers are correct</td>
+<td>Bigger ✅</td>
+</tr>
+
+<tr>
+<td><b>Precision</b></td>
+<td>When the model says "Yes", how often is it correct?</td>
+<td>Bigger ✅</td>
+</tr>
+
+<tr>
+<td><b>Recall</b></td>
+<td>How many real "Yes" cases the model found</td>
+<td>Bigger ✅</td>
+</tr>
+
+<tr>
+<td><b>F1 Score</b></td>
+<td>Balance of Precision and Recall</td>
+<td>Bigger ✅</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="box">
+
+<h2>Example 1: House Price Prediction (Regression)</h2>
+
+<p>
+Actual House Price = <b>100</b><br>
+Predicted Price = <b>90</b><br>
+Mistake = <b>10</b>
+</p>
+
+<div class="example">
+<b>MAE:</b> Average mistake is <b>10</b><br><br>
+
+<b>MSE:</b> Squares the mistake.<br>
+10² = <b>100</b><br><br>
+
+<b>RMSE:</b> Square root of MSE.<br>
+√100 = <b>10</b><br><br>
+
+<b>R²:</b> If R² = <b>0.95</b>, the model is about <b>95% good</b>.
+</div>
+
+</div>
+
+<div class="box">
+
+<h2>Example 2: Cat vs Dog Classification</h2>
+
+<p>
+There are <b>100</b> pictures.<br>
+The model correctly predicts <b>95</b>.
+</p>
+
+<div class="example">
+<b>Accuracy = 95%</b><br><br>
+
+Meaning:<br>
+The model got <b>95 out of 100</b> predictions correct.
+</div>
+
+</div>
+
+<div class="box">
+
+<h2>Precision</h2>
+
+<p>
+The model predicts <b>20</b> pictures are Cats.
+</p>
+
+<ul>
+<li>18 are actually Cats ✅</li>
+<li>2 are Dogs ❌</li>
+</ul>
+
+<div class="example">
+<b>Precision = 18 / 20 = 90%</b><br><br>
+
+Meaning:<br>
+Whenever the model says <b>"Cat"</b>, it is correct <b>90%</b> of the time.
+</div>
+
+</div>
+
+<div class="box">
+
+<h2>Recall</h2>
+
+<p>
+There are actually <b>25</b> Cat pictures.
+The model finds only <b>20</b>.
+</p>
+
+<div class="example">
+<b>Recall = 20 / 25 = 80%</b><br><br>
+
+Meaning:<br>
+The model found <b>80%</b> of all the real Cat pictures.
+</div>
+
+</div>
+
+<div class="box">
+
+<h2>F1 Score</h2>
+
+<div class="example">
+Precision = 90%<br>
+Recall = 80%<br><br>
+
+<b>F1 Score ≈ 85%</b><br><br>
+
+Meaning:<br>
+One score that measures how good both Precision and Recall are together.
+</div>
+
+</div>
+
+<div class="box">
+
+<h2>Easy Memory Trick 🧠</h2>
+
+<div class="memory">
+
+MAE = Average Error<br><br>
+
+MSE = Big Errors Matter More<br><br>
+
+RMSE = Average Error (Easy to Understand)<br><br>
+
+R² = How Good the Model Is<br><br>
+
+Accuracy = How Many Correct<br><br>
+
+Precision = When Model Says "Yes", Is It Right?<br><br>
+
+Recall = Did It Find All the Real "Yes" Cases?<br><br>
+
+F1 Score = Balance of Precision and Recall
+
+</div>
+
+</div>
+
+<div class="box">
+
+<h2>One-Line Summary</h2>
+
+<ul>
+<li><b>Regression (Predict Numbers):</b> MAE, MSE, RMSE, R²</li>
+
+<li><b>Classification (Predict Classes):</b> Accuracy, Precision, Recall, F1 Score</li>
+</ul>
+
+</div>
+
+</body>
+</html>
