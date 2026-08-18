@@ -76,6 +76,10 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 29 : Over fitting Under Fitting 2](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/63-overfitting_underfitting.html)
 
+[Lecture 30 : Save the trained model weights and use them](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/68-save_model_for_inference.html)
+
+
+
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
 
 ## AI Tree
