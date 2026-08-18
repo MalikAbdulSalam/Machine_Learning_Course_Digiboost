@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saving and Loading Machine Learning Models</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #1f4e79;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #1f4e79;
+            border-bottom: 2px solid #1f4e79;
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            color: #2e6da4;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #f5f5f5;
+            padding: 20px;
+            overflow-x: auto;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+        }
+
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .diagram {
+            background: #ffffff;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .step {
+            background: #eaf2f8;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1f4e79;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            background: #1f4e79;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        Saving and Loading Machine Learning Models Using Python
+    </h1>
+
+    <div class="box">
+        <h2>1. Introduction</h2>
+
+        <p>
+            When we train a Machine Learning model, the model learns patterns
+            from the training data. Training a model can take seconds, minutes,
+            hours, or even days.
+        </p>
+
+        <p>
+            Instead of training the model every time we want to use it,
+            we can save the trained model to a file and load it later.
+        </p>
+
+        <p>The basic workflow is:</p>
+
+        <div class="diagram">
+            <strong>Training Data</strong>
+            <br>
+            ↓
+            <br>
+            <strong>ML Algorithm</strong>
+            <br>
+            ↓
+            <br>
+            <strong>Trained Model</strong>
+            <br>
+            ↓
+            <strong>Save Model</strong>
+            <br>
+            ↓
+            <strong>model.pkl</strong>
+            <br>
+            ↓
+            <strong>Load Model Later</strong>
+            <br>
+            ↓
+            <strong>New Data → Prediction</strong>
+        </div>
+    </div>
+
+
+    <div class="box">
+        <h2>2. Regression Models</h2>
+
+        <p>
+            Regression is a type of supervised Machine Learning used when
+            the target value is numerical.
+        </p>
+
+        <h3>Examples:</h3>
+
+        <ul>
+            <li>Predicting salary</li>
+            <li>Predicting house prices</li>
+            <li>Predicting temperature</li>
+            <li>Predicting sales</li>
+            <li>Predicting student marks</li>
+        </ul>
+
+        <p>
+            Some common regression algorithms are:
+        </p>
+
+        <ul>
+            <li>Linear Regression</li>
+            <li>Multiple Linear Regression</li>
+            <li>Polynomial Regression</li>
+            <li>Decision Tree Regression</li>
+            <li>Random Forest Regression</li>
+            <li>Support Vector Regression</li>
+        </ul>
+    </div>
+
+
+    <div class="box">
+        <h2>3. Classification Models</h2>
+
+        <p>
+            Classification is a type of supervised Machine Learning used
+            when the target represents a category or class.
+        </p>
+
+        <h3>Examples:</h3>
+
+        <ul>
+            <li>Spam or Not Spam</li>
+            <li>Pass or Fail</li>
+            <li>Cat or Dog</li>
+            <li>Fraud or Not Fraud</li>
+            <li>Disease or No Disease</li>
+        </ul>
+
+        <p>
+            Some common classification algorithms are:
+        </p>
+
+        <ul>
+            <li>Logistic Regression</li>
+            <li>K-Nearest Neighbors (KNN)</li>
+            <li>Decision Tree Classifier</li>
+            <li>Random Forest Classifier</li>
+            <li>Support Vector Machine (SVM)</li>
+            <li>Naive Bayes</li>
+        </ul>
+    </div>
+
+
+    <div class="box">
+        <h2>4. Installing Required Libraries</h2>
+
+        <p>
+            We can use the <strong>joblib</strong> library to save and load
+            scikit-learn models.
+        </p>
+
+        <pre><code>pip install joblib scikit-learn pandas</code></pre>
+
+        <p>Import joblib:</p>
+
+        <pre><code>import joblib</code></pre>
+    </div>
+
+
+    <div class="box">
+        <h2>5. Saving a Regression Model</h2>
+
+        <p>
+            Let's create a simple Linear Regression model and save it.
+        </p>
+
+        <pre><code>import pandas as pd
+import joblib
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+
+# Example dataset
+data = {
+    "hours": [1, 2, 3, 4, 5, 6, 7, 8],
+    "salary": [20, 25, 30, 35, 40, 45, 50, 55]
+}
+
+df = pd.DataFrame(data)
+
+
+# Features and target
+X = df[["hours"]]
+y = df["salary"]
+
+
+# Train/test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+
+# Create model
+model = LinearRegression()
+
+
+# Train model
+model.fit(X_train, y_train)
+
+
+# Make predictions
+predictions = model.predict(X_test)
+
+
+# Evaluate model
+print("R2:", r2_score(y_test, predictions))
+print("MSE:", mean_squared_error(y_test, predictions))
+
+
+# Save trained model
+joblib.dump(model, "regression_model.pkl")
+
+print("Regression model saved!")</code></pre>
+
+        <div class="success">
+            <strong>Output file:</strong>
+            <br>
+            regression_model.pkl
+        </div>
+    </div>
+
+
+    <div class="box">
+        <h2>6. Loading the Regression Model</h2>
+
+        <p>
+            Once the model has been saved, we can load it later without
+            training it again.
+        </p>
+
+        <pre><code>import joblib
+
+# Load trained model
+model = joblib.load("regression_model.pkl")
+
+# New data
+new_data = [[10]]
+
+# Make prediction
+prediction = model.predict(new_data)
+
+print("Predicted salary:", prediction[0])</code></pre>
+
+        <div class="important">
+            <strong>Important:</strong>
+            The model is loaded from the
+            <code>regression_model.pkl</code> file and does not need
+            to be trained again.
+        </div>
+    </div>
+
+
+    <div class="box">
+        <h2>7. Saving a Classification Model</h2>
+
+        <p>
+            Now let's train a Logistic Regression classification model
+            and save it.
+        </p>
+
+        <pre><code>import pandas as pd
+import joblib
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
+
+# Example dataset
+data = {
+    "hours": [1, 2, 3, 4, 5, 6, 7, 8],
+    "attendance": [50, 55, 60, 65, 70, 75, 85, 90],
+    "passed": [0, 0, 0, 1, 1, 1, 1, 1]
+}
+
+df = pd.DataFrame(data)
+
+
+# Features
+X = df[["hours", "attendance"]]
+
+# Target
+y = df["passed"]
+
+
+# Train/test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+
+# Create model
+model = LogisticRegression()
+
+
+# Train model
+model.fit(X_train, y_train)
+
+
+# Make predictions
+predictions = model.predict(X_test)
+
+
+# Evaluate model
+print("Accuracy:",
+      accuracy_score(y_test, predictions))
+
+print(
+    classification_report(
+        y_test,
+        predictions
+    )
+)
+
+
+# Save model
+joblib.dump(
+    model,
+    "classification_model.pkl"
+)
+
+print("Classification model saved!")</code></pre>
+
+        <div class="success">
+            <strong>Output file:</strong>
+            <br>
+            classification_model.pkl
+        </div>
+    </div>
+
+
+    <div class="box">
+        <h2>8. Loading the Classification Model</h2>
+
+        <p>
+            We can load the classification model later and use it
+            to classify new data.
+        </p>
+
+        <pre><code>import joblib
+
+# Load model
+model = joblib.load("classification_model.pkl")
+
+
+# New student data
+new_student = [[6, 80]]
+
+
+# Make prediction
+prediction = model.predict(new_student)
+
+
+print("Prediction:", prediction[0])
+
+
+if prediction[0] == 1:
+    print("Student Passed")
+else:
+    print("Student Failed")</code></pre>
+    </div>
+
+
+    <div class="box">
+        <h2>9. Understanding the Complete Process</h2>
+
+        <div class="step">
+            <strong>Step 1:</strong>
+            Collect the dataset.
+        </div>
+
+        <div class="step">
+            <strong>Step 2:</strong>
+            Separate features (X) and target (y).
+        </div>
+
+        <div class="step">
+            <strong>Step 3:</strong>
+            Split the data into training and testing sets.
+        </div>
+
+        <div class="step">
+            <strong>Step 4:</strong>
+            Create the Machine Learning model.
+        </div>
+
+        <div class="step">
+            <strong>Step 5:</strong>
+            Train the model using <code>model.fit()</code>.
+        </div>
+
+        <div class="step">
+            <strong>Step 6:</strong>
+            Evaluate the model.
+        </div>
+
+        <div class="step">
+            <strong>Step 7:</strong>
+            Save the trained model using <code>joblib.dump()</code>.
+        </div>
+
+        <div class="step">
+            <strong>Step 8:</strong>
+            Load the model later using <code>joblib.load()</code>.
+        </div>
+
+        <div class="step">
+            <strong>Step 9:</strong>
+            Give new data to the loaded model.
+        </div>
+
+        <div class="step">
+            <strong>Step 10:</strong>
+            Get the prediction.
+        </div>
+    </div>
+
+
+    <div class="box">
+        <h2>10. joblib.dump()</h2>
+
+        <p>
+            <code>joblib.dump()</code> is used to save a trained model
+            to a file.
+        </p>
+
+        <pre><code>joblib.dump(model, "model.pkl")</code></pre>
+
+        <p>
+            Here:
+        </p>
+
+        <ul>
+            <li><code>model</code> = trained Machine Learning model</li>
+            <li><code>model.pkl</code> = file where the model is saved</li>
+        </ul>
+    </div>
+
+
+    <div class="box">
+        <h2>11. joblib.load()</h2>
+
+        <p>
+            <code>joblib.load()</code> is used to load a previously saved
+            model.
+        </p>
+
+        <pre><code>model = joblib.load("model.pkl")</code></pre>
+
+        <p>
+            After loading, we can directly use the model for prediction.
+        </p>
+
+        <pre><code>prediction = model.predict(new_data)</code></pre>
+    </div>
+
+
+    <div class="box">
+        <h2>12. Why Save a Machine Learning Model?</h2>
+
+        <ul>
+            <li>We don't need to train the model again.</li>
+            <li>It saves training time.</li>
+            <li>It can be used inside applications.</li>
+            <li>It can be deployed to a server.</li>
+            <li>It can be used in Flask or Django applications.</li>
+            <li>It can be used in APIs.</li>
+            <li>It can be used for future predictions.</li>
+        </ul>
+    </div>
+
+
+    <div class="box">
+        <h2>13. Important: Preprocessing</h2>
+
+        <p>
+            In real Machine Learning projects, we often perform preprocessing
+            before training the model.
+        </p>
+
+        <p>For example:</p>
+
+        <ul>
+            <li>StandardScaler</li>
+            <li>MinMaxScaler</li>
+            <li>OneHotEncoder</li>
+            <li>Imputation</li>
+            <li>Feature transformation</li>
+        </ul>
+
+        <p>
+            If preprocessing is required, we should save the preprocessing
+            steps together with the model.
+        </p>
+    </div>
+
+
+    <div class="box">
+        <h2>14. Using a Pipeline</h2>
+
+        <p>
+            A scikit-learn Pipeline allows us to combine preprocessing
+            and the Machine Learning model.
+        </p>
+
+        <pre><code>from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+import joblib
+
+
+pipeline = Pipeline([
+    ("scaler", StandardScaler()),
+    ("model", LogisticRegression())
+])
+
+
+# Train pipeline
+pipeline.fit(X_train, y_train)
+
+
+# Save complete pipeline
+joblib.dump(
+    pipeline,
+    "complete_model.pkl"
+)
+
+print("Complete model saved!")</code></pre>
+    </div>
+
+
+    <div class="box">
+        <h2>15. Loading the Complete Pipeline</h2>
+
+        <pre><code>import joblib
+
+
+# Load pipeline
+pipeline = joblib.load(
+    "complete_model.pkl"
+)
+
+
+# New data
+new_data = [[6, 80]]
+
+
+# Prediction
+prediction = pipeline.predict(new_data)
+
+
+print("Prediction:", prediction)</code></pre>
+
+        <div class="success">
+            <strong>Recommended approach:</strong>
+            Save the preprocessing steps and trained model together
+            using a Pipeline.
+        </div>
+    </div>
+
+
+    <div class="box">
+        <h2>16. Regression vs Classification</h2>
+
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Regression</th>
+                <th>Classification</th>
+            </tr>
+
+            <tr>
+                <td>Purpose</td>
+                <td>Predict numerical values</td>
+                <td>Predict categories/classes</td>
+            </tr>
+
+            <tr>
+                <td>Example</td>
+                <td>House price</td>
+                <td>Spam / Not Spam</td>
+            </tr>
+
+            <tr>
+                <td>Output</td>
+                <td>Continuous number</td>
+                <td>Class/category</td>
+            </tr>
+
+            <tr>
+                <td>Example Algorithm</td>
+                <td>Linear Regression</td>
+                <td>Logistic Regression</td>
+            </tr>
+
+            <tr>
+                <td>Save Method</td>
+                <td>joblib.dump()</td>
+                <td>joblib.dump()</td>
+            </tr>
+
+            <tr>
+                <td>Load Method</td>
+                <td>joblib.load()</td>
+                <td>joblib.load()</td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="box">
+        <h2>17. Common File Structure</h2>
+
+        <pre><code>machine_learning_project/
+│
+├── train_regression.py
+├── train_classification.py
+│
+├── regression_model.pkl
+├── classification_model.pkl
+│
+├── predict_regression.py
+├── predict_classification.py
+│
+└── dataset.csv</code></pre>
+    </div>
+
+
+    <div class="box">
+        <h2>18. Complete Workflow</h2>
+
+        <pre><code>
+                DATASET
+                   |
+                   v
+            Data Preprocessing
+                   |
+                   v
+             Train / Test
+                Split
+                   |
+                   v
+             Train Model
+                   |
+                   v
+             Evaluate Model
+                   |
+                   v
+            Save Model
+          model.pkl
+                   |
+                   |
+             Later...
+                   |
+                   v
+             Load Model
+                   |
+                   v
+              New Data
+                   |
+                   v
+              Prediction
+        </code></pre>
+    </div>
+
+
+    <div class="box">
+        <h2>19. Key Python Commands</h2>
+
+        <h3>Save model</h3>
+
+        <pre><code>joblib.dump(model, "model.pkl")</code></pre>
+
+        <h3>Load model</h3>
+
+        <pre><code>model = joblib.load("model.pkl")</code></pre>
+
+        <h3>Train model</h3>
+
+        <pre><code>model.fit(X_train, y_train)</code></pre>
+
+        <h3>Make prediction</h3>
+
+        <pre><code>prediction = model.predict(X_new)</code></pre>
+    </div>
+
+
+    <div class="box">
+        <h2>20. Important Note for Students</h2>
+
+        <div class="important">
+            <p>
+                A saved model should generally be loaded in an environment
+                with compatible versions of Python and the libraries used
+                to train it.
+            </p>
+
+            <p>
+                Also, never load untrusted <code>.pkl</code> or
+                <code>joblib</code> files because Python serialization can
+                execute arbitrary code when loading malicious files.
+            </p>
+        </div>
+    </div>
+
+
+    <div class="box">
+        <h2>21. Summary</h2>
+
+        <p>
+            Machine Learning models can be trained once and saved for
+            future use. The Python <strong>joblib</strong> library provides
+            a simple way to save and load scikit-learn models.
+        </p>
+
+        <p>
+            The main commands are:
+        </p>
+
+        <pre><code># Save
+joblib.dump(model, "model.pkl")
+
+# Load
+model = joblib.load("model.pkl")
+
+# Predict
+prediction = model.predict(new_data)</code></pre>
+
+        <p>
+            This technique is extremely useful when deploying Machine Learning
+            models into real-world applications such as Flask APIs, Django
+            applications, web applications, desktop applications, and
+            production ML systems.
+        </p>
+    </div>
+
+</div>
+
+
+<footer>
+    Machine Learning — Training, Saving, Loading and Using Models
+</footer>
+
+</body>
+</html>
