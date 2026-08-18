@@ -70,6 +70,8 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 27 : Confusion Matrices Precision Recall F1-Score](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/64-evaluation_matrics.html)
 
+[Lecture 27 : Evaluation Matics summary easy to under stand](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/67-matrices_easy_understand.html)
+
 [Lecture 28 : Overfitting Under Fiting](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/62-over_fitting_under_fitting.html)
 
 [Lecture 29 : Over fitting Under Fitting 2](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/63-overfitting_underfitting.html)
