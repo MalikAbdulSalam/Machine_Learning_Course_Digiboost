@@ -90,8 +90,9 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 36 : PCA LDA ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/73-PCA_LDA.html)
 
-
 [Lecture 37 : Reinforcement learning complete guide ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/74-Reinforcement_Learning.html)
+
+
 
 
 
