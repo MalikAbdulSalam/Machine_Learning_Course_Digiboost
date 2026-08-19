@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Clustering in Machine Learning</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #222;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #1f4e79;
+            border-bottom: 3px solid #1f4e79;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2e75b6;
+            margin-top: 35px;
+        }
+
+        h3 {
+            color: #444;
+        }
+
+        p {
+            font-size: 17px;
+        }
+
+        code {
+            background: #eee;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 15px;
+        }
+
+        .box {
+            background: #eef6ff;
+            border-left: 5px solid #2e75b6;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .example {
+            background: #f5f5f5;
+            border-left: 5px solid #555;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #2e75b6;
+            color: white;
+        }
+
+        ul {
+            font-size: 17px;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Clustering in Machine Learning</h1>
+
+    <h2>1. What is Clustering?</h2>
+
+    <p>
+        Clustering is an <strong>unsupervised machine learning</strong>
+        technique used to group similar data points together.
+    </p>
+
+    <p>
+        In clustering, we do not provide predefined labels to the model.
+        Instead, the algorithm automatically discovers groups or
+        <strong>clusters</strong> in the data.
+    </p>
+
+    <div class="box">
+        <strong>Simple Definition:</strong>
+        <br><br>
+        Clustering means automatically grouping similar data points together.
+    </div>
+
+
+    <h2>2. Why is Clustering Unsupervised Learning?</h2>
+
+    <p>
+        In supervised learning, we provide the model with input data and
+        known output labels.
+    </p>
+
+    <p>For example:</p>
+
+    <pre>
+Age     Income      Label
+20      20000       Low Income
+45      60000       High Income
+25      25000       Low Income
+50      70000       High Income
+    </pre>
+
+    <p>
+        In clustering, we don't provide the <strong>Label</strong> column.
+    </p>
+
+    <pre>
+Age     Income
+20      20000
+45      60000
+25      25000
+50      70000
+    </pre>
+
+    <p>
+        The algorithm discovers the groups by itself.
+    </p>
+
+
+    <h2>3. Real-World Example</h2>
+
+    <p>
+        Imagine a shopping company has information about its customers:
+    </p>
+
+    <ul>
+        <li>Age</li>
+        <li>Annual income</li>
+        <li>Spending score</li>
+    </ul>
+
+    <p>
+        A clustering algorithm can automatically divide customers into groups.
+    </p>
+
+    <div class="example">
+
+        <strong>Cluster 1:</strong>
+        <ul>
+            <li>Young customers</li>
+            <li>Low income</li>
+            <li>Low spending</li>
+        </ul>
+
+        <strong>Cluster 2:</strong>
+        <ul>
+            <li>Middle-aged customers</li>
+            <li>High income</li>
+            <li>High spending</li>
+        </ul>
+
+    </div>
+
+
+    <h2>4. Common Clustering Algorithms</h2>
+
+    <table>
+
+        <tr>
+            <th>Algorithm</th>
+            <th>Description</th>
+        </tr>
+
+        <tr>
+            <td>K-Means</td>
+            <td>Divides data into a predefined number of clusters.</td>
+        </tr>
+
+        <tr>
+            <td>Hierarchical Clustering</td>
+            <td>Creates a tree-like structure of clusters.</td>
+        </tr>
+
+        <tr>
+            <td>DBSCAN</td>
+            <td>Groups data based on density and can identify outliers.</td>
+        </tr>
+
+        <tr>
+            <td>Gaussian Mixture Model</td>
+            <td>Uses probability distributions to identify clusters.</td>
+        </tr>
+
+    </table>
+
+
+    <h2>5. K-Means Clustering</h2>
+
+    <p>
+        K-Means is one of the most popular clustering algorithms.
+    </p>
+
+    <p>
+        The letter <strong>K</strong> represents the number of clusters
+        that we want to create.
+    </p>
+
+    <p>
+        For example:
+    </p>
+
+    <pre>
+K = 2
+
+Data → Cluster 1
+     → Cluster 2
+    </pre>
+
+
+    <h2>6. Simple K-Means Python Example</h2>
+
+    <p>
+        First, install the required libraries:
+    </p>
+
+    <pre>
+pip install numpy scikit-learn matplotlib
+    </pre>
+
+    <p>Now create the dataset:</p>
+
+    <pre>
+from sklearn.cluster import KMeans
+import numpy as np
+
+# Data
+X = np.array([
+    [1, 2],
+    [2, 1],
+    [2, 3],
+    [8, 8],
+    [9, 8],
+    [8, 9]
+])
+
+# Create K-Means model
+model = KMeans(
+    n_clusters=2,
+    random_state=42,
+    n_init=10
+)
+
+# Train the model
+model.fit(X)
+
+# Get cluster labels
+labels = model.labels_
+
+print(labels)
+    </pre>
+
+
+    <h2>7. Understanding the Output</h2>
+
+    <p>
+        The output may look like:
+    </p>
+
+    <pre>
+[1 1 1 0 0 0]
+    </pre>
+
+    <p>
+        This means that the algorithm found two groups.
+    </p>
+
+    <pre>
+[1, 2] → Cluster 1
+[2, 1] → Cluster 1
+[2, 3] → Cluster 1
+
+[8, 8] → Cluster 0
+[9, 8] → Cluster 0
+[8, 9] → Cluster 0
+    </pre>
+
+    <div class="important">
+        <strong>Important:</strong>
+        Cluster numbers such as 0 and 1 do not have any special meaning.
+        Cluster 0 could just as easily be called Cluster 1.
+    </div>
+
+
+    <h2>8. Visualizing Clusters</h2>
+
+    <p>
+        We can use Matplotlib to visualize the clusters.
+    </p>
+
+    <pre>
+from sklearn.cluster import KMeans
+import numpy as np
+import matplotlib.pyplot as plt
+
+X = np.array([
+    [1, 2],
+    [2, 1],
+    [2, 3],
+    [8, 8],
+    [9, 8],
+    [8, 9]
+])
+
+model = KMeans(
+    n_clusters=2,
+    random_state=42,
+    n_init=10
+)
+
+model.fit(X)
+
+labels = model.labels_
+
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.xlabel("X")
+plt.ylabel("Y")
+
+plt.title("K-Means Clustering")
+
+plt.show()
+    </pre>
+
+
+    <h2>9. What is a Centroid?</h2>
+
+    <p>
+        A centroid is the approximate center point of a cluster.
+    </p>
+
+    <p>
+        K-Means calculates the centroid of each cluster and assigns
+        data points to the nearest centroid.
+    </p>
+
+    <pre>
+print(model.cluster_centers_)
+    </pre>
+
+    <p>
+        Example output:
+    </p>
+
+    <pre>
+[[8.33 8.33]
+ [1.67 2.00]]
+    </pre>
+
+
+    <h2>10. Customer Clustering Example</h2>
+
+    <p>
+        Now let's use a more realistic machine learning example.
+    </p>
+
+    <p>
+        Suppose we have customer information containing:
+    </p>
+
+    <ul>
+        <li>Age</li>
+        <li>Income</li>
+    </ul>
+
+    <pre>
+import pandas as pd
+from sklearn.cluster import KMeans
+
+data = {
+    "Age": [20, 22, 25, 45, 48, 50, 23, 27],
+
+    "Income": [
+        20000,
+        22000,
+        25000,
+        60000,
+        65000,
+        70000,
+        24000,
+        28000
+    ]
+}
+
+df = pd.DataFrame(data)
+
+print(df)
+    </pre>
+
+
+    <h2>11. Apply K-Means</h2>
+
+    <pre>
+model = KMeans(
+    n_clusters=2,
+    random_state=42,
+    n_init=10
+)
+
+df["Cluster"] = model.fit_predict(
+    df[["Age", "Income"]]
+)
+
+print(df)
+    </pre>
+
+
+    <h2>12. Understanding the Customer Clusters</h2>
+
+    <p>
+        The result might look like:
+    </p>
+
+    <pre>
+   Age  Income  Cluster
+0   20   20000        1
+1   22   22000        1
+2   25   25000        1
+3   45   60000        0
+4   48   65000        0
+5   50   70000        0
+6   23   24000        1
+7   27   28000        1
+    </pre>
+
+    <p>
+        We can interpret the clusters as:
+    </p>
+
+    <div class="example">
+
+        <strong>Cluster 0:</strong>
+        <ul>
+            <li>Older customers</li>
+            <li>Higher income</li>
+        </ul>
+
+        <strong>Cluster 1:</strong>
+        <ul>
+            <li>Younger customers</li>
+            <li>Lower income</li>
+        </ul>
+
+    </div>
+
+
+    <h2>13. Predict a New Customer's Cluster</h2>
+
+    <p>
+        Suppose a new customer has:
+    </p>
+
+    <pre>
+Age = 24
+Income = 26000
+    </pre>
+
+    <p>
+        We can ask the trained model which cluster this customer belongs to.
+    </p>
+
+    <pre>
+new_customer = [[24, 26000]]
+
+cluster = model.predict(new_customer)
+
+print(cluster)
+    </pre>
+
+    <p>
+        Example output:
+    </p>
+
+    <pre>
+[1]
+    </pre>
+
+    <p>
+        This means the new customer belongs to Cluster 1.
+    </p>
+
+
+    <h2>14. Classification vs Clustering</h2>
+
+    <table>
+
+        <tr>
+            <th>Classification</th>
+            <th>Clustering</th>
+        </tr>
+
+        <tr>
+            <td>Supervised learning</td>
+            <td>Unsupervised learning</td>
+        </tr>
+
+        <tr>
+            <td>Uses labeled data</td>
+            <td>Uses unlabeled data</td>
+        </tr>
+
+        <tr>
+            <td>Classes are known</td>
+            <td>Groups are discovered</td>
+        </tr>
+
+        <tr>
+            <td>Example: Spam / Not Spam</td>
+            <td>Example: Customer groups</td>
+        </tr>
+
+    </table>
+
+
+    <h2>15. Simple Difference</h2>
+
+    <h3>Classification</h3>
+
+    <pre>
+Input
+  ↓
+Machine Learning Model
+  ↓
+Known Class
+
+Example:
+
+Customer → High Income
+    </pre>
+
+
+    <h3>Clustering</h3>
+
+    <pre>
+Input
+  ↓
+Machine Learning Model
+  ↓
+Automatically Discovered Group
+
+Example:
+
+Customer → Cluster 1
+    </pre>
+
+
+    <h2>16. Applications of Clustering</h2>
+
+    <ul>
+        <li>Customer segmentation</li>
+        <li>Image segmentation</li>
+        <li>Document grouping</li>
+        <li>Market analysis</li>
+        <li>Fraud detection</li>
+        <li>Recommendation systems</li>
+        <li>Social network analysis</li>
+        <li>Medical data analysis</li>
+        <li>Gene expression analysis</li>
+        <li>Anomaly detection</li>
+    </ul>
+
+
+    <h2>17. Advantages of Clustering</h2>
+
+    <ul>
+        <li>No labeled data is required.</li>
+        <li>Can discover hidden patterns.</li>
+        <li>Useful for exploratory data analysis.</li>
+        <li>Can help divide large datasets into meaningful groups.</li>
+    </ul>
+
+
+    <h2>18. Limitations of Clustering</h2>
+
+    <ul>
+        <li>Choosing the correct number of clusters can be difficult.</li>
+        <li>Some algorithms are sensitive to outliers.</li>
+        <li>Different algorithms can produce different results.</li>
+        <li>Feature scaling may be necessary.</li>
+        <li>Clusters are not always meaningful automatically; they require interpretation.</li>
+    </ul>
+
+
+    <h2>19. Key Points to Remember</h2>
+
+    <div class="box">
+
+        <ul>
+            <li>Clustering is an <strong>unsupervised learning</strong> technique.</li>
+
+            <li>It groups similar data points together.</li>
+
+            <li>K-Means is one of the most popular clustering algorithms.</li>
+
+            <li>K represents the number of clusters.</li>
+
+            <li>K-Means uses centroids to represent clusters.</li>
+
+            <li>Clustering does not require predefined labels.</li>
+
+            <li>Cluster IDs such as 0, 1, and 2 are just identifiers.</li>
+        </ul>
+
+    </div>
+
+
+    <h2>20. Complete K-Means Example</h2>
+
+    <p>
+        Here is the complete example in one program:
+    </p>
+
+    <pre>
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+# Create data
+X = np.array([
+    [1, 2],
+    [2, 1],
+    [2, 3],
+    [8, 8],
+    [9, 8],
+    [8, 9]
+])
+
+# Create K-Means model
+model = KMeans(
+    n_clusters=2,
+    random_state=42,
+    n_init=10
+)
+
+# Train and predict
+labels = model.fit_predict(X)
+
+# Print cluster labels
+print("Cluster Labels:")
+print(labels)
+
+# Print centroids
+print("\nCluster Centers:")
+print(model.cluster_centers_)
+
+# Visualize
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+# Plot centroids
+centers = model.cluster_centers_
+
+plt.scatter(
+    centers[:, 0],
+    centers[:, 1],
+    marker="X",
+    s=200
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+
+plt.title("K-Means Clustering")
+
+plt.show()
+    </pre>
+
+
+    <h2>21. Student Practice Questions</h2>
+
+    <ol>
+        <li>What is clustering?</li>
+        <li>Why is clustering called unsupervised learning?</li>
+        <li>What is K-Means?</li>
+        <li>What does K represent in K-Means?</li>
+        <li>What is a centroid?</li>
+        <li>What is the difference between classification and clustering?</li>
+        <li>Give three real-world applications of clustering.</li>
+        <li>Create a dataset containing Age and Salary for 10 people.</li>
+        <li>Apply K-Means with K = 2.</li>
+        <li>Apply K-Means with K = 3 and compare the results.</li>
+    </ol>
+
+
+    <h2>22. Final Concept</h2>
+
+    <div class="important">
+
+        <strong>Remember:</strong>
+
+        <p>
+            Classification asks:
+            <br>
+            <strong>"Which known category does this data belong to?"</strong>
+        </p>
+
+        <p>
+            Clustering asks:
+            <br>
+            <strong>"Which data points naturally belong together?"</strong>
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

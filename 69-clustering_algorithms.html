@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Clustering Algorithms in Python</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #1f4e79;
+            border-bottom: 3px solid #1f4e79;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2e75b6;
+            margin-top: 40px;
+        }
+
+        h3 {
+            color: #444;
+        }
+
+        p, li {
+            font-size: 17px;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        code {
+            background: #eee;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        .box {
+            background: #eef6ff;
+            border-left: 5px solid #2e75b6;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2e75b6;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Clustering Algorithms in Python</h1>
+
+    <p>
+        Clustering is an unsupervised machine learning technique used to
+        automatically group similar data points together.
+    </p>
+
+    <h2>1. Types of Clustering</h2>
+
+    <table>
+
+        <tr>
+            <th>Algorithm</th>
+            <th>Description</th>
+        </tr>
+
+        <tr>
+            <td>K-Means</td>
+            <td>
+                Divides data into a predefined number of clusters.
+            </td>
+        </tr>
+
+        <tr>
+            <td>Hierarchical Clustering</td>
+            <td>
+                Creates a tree-like structure of clusters.
+            </td>
+        </tr>
+
+        <tr>
+            <td>DBSCAN</td>
+            <td>
+                Groups data based on density and can identify outliers.
+            </td>
+        </tr>
+
+        <tr>
+            <td>Gaussian Mixture Model</td>
+            <td>
+                Uses probability distributions to identify clusters.
+            </td>
+        </tr>
+
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- INSTALLATION -->
+    <!-- ===================================================== -->
+
+    <h2>2. Install Required Libraries</h2>
+
+    <p>
+        Install the required Python libraries using:
+    </p>
+
+    <pre>
+pip install numpy pandas matplotlib scikit-learn scipy
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- DATASET -->
+    <!-- ===================================================== -->
+
+    <h2>3. Create a Dataset</h2>
+
+    <p>
+        We will first create a simple dataset containing two features.
+    </p>
+
+    <pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Create dataset
+X = np.array([
+    [1, 2],
+    [2, 1],
+    [2, 3],
+    [3, 2],
+
+    [8, 8],
+    [9, 8],
+    [8, 9],
+    [9, 9],
+
+    [5, 1],
+    [6, 2],
+    [5, 2],
+    [6, 1]
+])
+
+print(X)
+    </pre>
+
+    <p>
+        Our dataset contains three natural groups of points.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- K MEANS -->
+    <!-- ===================================================== -->
+
+    <h2>4. K-Means Clustering</h2>
+
+    <h3>What is K-Means?</h3>
+
+    <p>
+        K-Means divides the dataset into a predefined number of clusters.
+        The value of <strong>K</strong> represents the number of clusters.
+    </p>
+
+    <div class="box">
+        Example:
+        <br><br>
+        <strong>K = 3</strong> means that we want the algorithm to create
+        three clusters.
+    </div>
+
+    <h3>Python Implementation</h3>
+
+    <pre>
+from sklearn.cluster import KMeans
+
+# Create K-Means model
+model = KMeans(
+    n_clusters=3,
+    random_state=42,
+    n_init=10
+)
+
+# Train the model and get cluster labels
+labels = model.fit_predict(X)
+
+# Print labels
+print("Cluster Labels:")
+print(labels)
+
+# Print cluster centers
+print("\nCluster Centers:")
+print(model.cluster_centers_)
+    </pre>
+
+
+    <h3>Visualize K-Means</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+# Get cluster centers
+centers = model.cluster_centers_
+
+# Plot centers
+plt.scatter(
+    centers[:, 0],
+    centers[:, 1],
+    marker="X",
+    s=200
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+
+plt.title("K-Means Clustering")
+
+plt.show()
+    </pre>
+
+
+    <h3>Complete K-Means Code</h3>
+
+    <pre>
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+# Dataset
+X = np.array([
+    [1, 2],
+    [2, 1],
+    [2, 3],
+    [3, 2],
+
+    [8, 8],
+    [9, 8],
+    [8, 9],
+    [9, 9],
+
+    [5, 1],
+    [6, 2],
+    [5, 2],
+    [6, 1]
+])
+
+# Model
+model = KMeans(
+    n_clusters=3,
+    random_state=42,
+    n_init=10
+)
+
+# Training
+labels = model.fit_predict(X)
+
+# Print results
+print("Labels:")
+print(labels)
+
+print("\nCenters:")
+print(model.cluster_centers_)
+
+# Visualization
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.scatter(
+    model.cluster_centers_[:, 0],
+    model.cluster_centers_[:, 1],
+    marker="X",
+    s=200
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("K-Means Clustering")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- HIERARCHICAL -->
+    <!-- ===================================================== -->
+
+    <h2>5. Hierarchical Clustering</h2>
+
+    <h3>What is Hierarchical Clustering?</h3>
+
+    <p>
+        Hierarchical clustering creates a hierarchy of groups.
+        The result can be visualized using a tree-like diagram called a
+        <strong>dendrogram</strong>.
+    </p>
+
+    <p>
+        Unlike K-Means, we do not have to directly specify the cluster
+        centers.
+    </p>
+
+    <h3>Python Implementation</h3>
+
+    <pre>
+from sklearn.cluster import AgglomerativeClustering
+
+# Create model
+model = AgglomerativeClustering(
+    n_clusters=3
+)
+
+# Train and predict
+labels = model.fit_predict(X)
+
+print("Cluster Labels:")
+print(labels)
+    </pre>
+
+
+    <h3>Visualize Hierarchical Clustering</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+
+plt.title("Hierarchical Clustering")
+
+plt.show()
+    </pre>
+
+
+    <h3>Create a Dendrogram</h3>
+
+    <pre>
+from scipy.cluster.hierarchy import dendrogram
+from scipy.cluster.hierarchy import linkage
+
+# Calculate linkage
+linked = linkage(X, method="ward")
+
+# Create dendrogram
+plt.figure(figsize=(10, 6))
+
+dendrogram(linked)
+
+plt.title("Hierarchical Clustering Dendrogram")
+plt.xlabel("Data Points")
+plt.ylabel("Distance")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- DBSCAN -->
+    <!-- ===================================================== -->
+
+    <h2>6. DBSCAN Clustering</h2>
+
+    <h3>What is DBSCAN?</h3>
+
+    <p>
+        DBSCAN stands for:
+    </p>
+
+    <div class="box">
+        <strong>Density-Based Spatial Clustering of Applications with Noise</strong>
+    </div>
+
+    <p>
+        DBSCAN groups data points based on their density.
+        It can also identify points that do not belong to any cluster.
+    </p>
+
+    <p>
+        These points are called <strong>outliers</strong> or
+        <strong>noise</strong>.
+    </p>
+
+
+    <h3>Python Implementation</h3>
+
+    <pre>
+from sklearn.cluster import DBSCAN
+
+# Create DBSCAN model
+model = DBSCAN(
+    eps=1.5,
+    min_samples=2
+)
+
+# Train and predict
+labels = model.fit_predict(X)
+
+print("Cluster Labels:")
+print(labels)
+    </pre>
+
+
+    <h3>Understanding DBSCAN Labels</h3>
+
+    <p>
+        DBSCAN uses <strong>-1</strong> to represent noise or outliers.
+    </p>
+
+    <pre>
+0 → Cluster 0
+
+1 → Cluster 1
+
+2 → Cluster 2
+
+-1 → Noise / Outlier
+    </pre>
+
+
+    <h3>Visualize DBSCAN</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+
+plt.title("DBSCAN Clustering")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- GMM -->
+    <!-- ===================================================== -->
+
+    <h2>7. Gaussian Mixture Model</h2>
+
+    <h3>What is Gaussian Mixture Model?</h3>
+
+    <p>
+        Gaussian Mixture Model, commonly called <strong>GMM</strong>,
+        assumes that the data is generated from a mixture of several
+        Gaussian probability distributions.
+    </p>
+
+    <p>
+        GMM is a probabilistic clustering algorithm.
+    </p>
+
+
+    <h3>Python Implementation</h3>
+
+    <pre>
+from sklearn.mixture import GaussianMixture
+
+# Create GMM model
+model = GaussianMixture(
+    n_components=3,
+    random_state=42
+)
+
+# Train and predict
+labels = model.fit_predict(X)
+
+print("Cluster Labels:")
+print(labels)
+    </pre>
+
+
+    <h3>Visualize GMM</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+
+plt.title("Gaussian Mixture Model")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- COMPARISON -->
+    <!-- ===================================================== -->
+
+    <h2>8. Comparison of the Algorithms</h2>
+
+    <table>
+
+        <tr>
+            <th>Algorithm</th>
+            <th>How it works</th>
+            <th>Important Parameter</th>
+            <th>Outlier Detection</th>
+        </tr>
+
+        <tr>
+            <td>K-Means</td>
+            <td>Groups points around centroids</td>
+            <td>K</td>
+            <td>No</td>
+        </tr>
+
+        <tr>
+            <td>Hierarchical</td>
+            <td>Builds hierarchy of clusters</td>
+            <td>Number of clusters / linkage</td>
+            <td>No</td>
+        </tr>
+
+        <tr>
+            <td>DBSCAN</td>
+            <td>Uses density of points</td>
+            <td>eps, min_samples</td>
+            <td>Yes</td>
+        </tr>
+
+        <tr>
+            <td>GMM</td>
+            <td>Uses probability distributions</td>
+            <td>Number of components</td>
+            <td>Not primarily</td>
+        </tr>
+
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- COMPLETE PROGRAM -->
+    <!-- ===================================================== -->
+
+    <h2>9. Complete Program: All Four Algorithms</h2>
+
+    <p>
+        The following program runs all four clustering algorithms on
+        the same dataset.
+    </p>
+
+    <pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster import DBSCAN
+from sklearn.mixture import GaussianMixture
+
+
+# =====================================
+# Dataset
+# =====================================
+
+X = np.array([
+    [1, 2],
+    [2, 1],
+    [2, 3],
+    [3, 2],
+
+    [8, 8],
+    [9, 8],
+    [8, 9],
+    [9, 9],
+
+    [5, 1],
+    [6, 2],
+    [5, 2],
+    [6, 1]
+])
+
+
+# =====================================
+# 1. K-Means
+# =====================================
+
+kmeans = KMeans(
+    n_clusters=3,
+    random_state=42,
+    n_init=10
+)
+
+kmeans_labels = kmeans.fit_predict(X)
+
+print("K-Means:")
+print(kmeans_labels)
+
+
+# =====================================
+# 2. Hierarchical Clustering
+# =====================================
+
+hierarchical = AgglomerativeClustering(
+    n_clusters=3
+)
+
+hierarchical_labels = hierarchical.fit_predict(X)
+
+print("\nHierarchical:")
+print(hierarchical_labels)
+
+
+# =====================================
+# 3. DBSCAN
+# =====================================
+
+dbscan = DBSCAN(
+    eps=1.5,
+    min_samples=2
+)
+
+dbscan_labels = dbscan.fit_predict(X)
+
+print("\nDBSCAN:")
+print(dbscan_labels)
+
+
+# =====================================
+# 4. Gaussian Mixture Model
+# =====================================
+
+gmm = GaussianMixture(
+    n_components=3,
+    random_state=42
+)
+
+gmm_labels = gmm.fit_predict(X)
+
+print("\nGaussian Mixture Model:")
+print(gmm_labels)
+
+
+# =====================================
+# Display K-Means result
+# =====================================
+
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=kmeans_labels
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("K-Means Clustering")
+
+plt.show()
+
+
+# =====================================
+# Display Hierarchical result
+# =====================================
+
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=hierarchical_labels
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("Hierarchical Clustering")
+
+plt.show()
+
+
+# =====================================
+# Display DBSCAN result
+# =====================================
+
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=dbscan_labels
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("DBSCAN Clustering")
+
+plt.show()
+
+
+# =====================================
+# Display GMM result
+# =====================================
+
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=gmm_labels
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("Gaussian Mixture Model")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- PRACTICAL EXAMPLE -->
+    <!-- ===================================================== -->
+
+    <h2>10. Real-World Example: Customer Segmentation</h2>
+
+    <p>
+        Clustering can be used to divide customers based on their age
+        and annual income.
+    </p>
+
+    <pre>
+import pandas as pd
+from sklearn.cluster import KMeans
+
+# Customer dataset
+data = {
+    "Age": [20, 22, 25, 45, 48, 50, 23, 27],
+    "Income": [
+        20000,
+        22000,
+        25000,
+        60000,
+        65000,
+        70000,
+        24000,
+        28000
+    ]
+}
+
+df = pd.DataFrame(data)
+
+print(df)
+
+
+# Create model
+model = KMeans(
+    n_clusters=2,
+    random_state=42,
+    n_init=10
+)
+
+
+# Create clusters
+df["Cluster"] = model.fit_predict(
+    df[["Age", "Income"]]
+)
+
+
+print("\nCustomers with Clusters:")
+print(df)
+    </pre>
+
+
+    <h2>11. Predict a New Customer</h2>
+
+    <p>
+        After training the model, we can assign a new customer to
+        an existing cluster.
+    </p>
+
+    <pre>
+# New customer
+new_customer = [[24, 26000]]
+
+# Predict cluster
+cluster = model.predict(new_customer)
+
+print("New Customer Cluster:")
+print(cluster)
+    </pre>
+
+
+    <h2>12. Important Concepts</h2>
+
+    <div class="box">
+
+        <ul>
+
+            <li>
+                <strong>K-Means:</strong>
+                Best when you know approximately how many groups you want.
+            </li>
+
+            <li>
+                <strong>Hierarchical:</strong>
+                Useful when you want to study the hierarchy of groups.
+            </li>
+
+            <li>
+                <strong>DBSCAN:</strong>
+                Useful when clusters have irregular shapes and when
+                detecting outliers is important.
+            </li>
+
+            <li>
+                <strong>GMM:</strong>
+                Useful when clusters overlap and a probabilistic
+                assignment is useful.
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <h2>13. Student Practice</h2>
+
+    <ol>
+
+        <li>
+            Create a dataset containing the age and salary of 20 people.
+        </li>
+
+        <li>
+            Apply K-Means clustering with K = 2.
+        </li>
+
+        <li>
+            Change K to 3 and compare the results.
+        </li>
+
+        <li>
+            Apply Hierarchical Clustering to the same dataset.
+        </li>
+
+        <li>
+            Apply DBSCAN and identify the noise points.
+        </li>
+
+        <li>
+            Apply Gaussian Mixture Model with 3 components.
+        </li>
+
+        <li>
+            Visualize the results using Matplotlib.
+        </li>
+
+        <li>
+            Compare the clusters produced by all four algorithms.
+        </li>
+
+    </ol>
+
+
+    <h2>14. Summary</h2>
+
+    <div class="box">
+
+        <p>
+            <strong>K-Means</strong> → Centroid-based clustering
+        </p>
+
+        <p>
+            <strong>Hierarchical Clustering</strong> → Tree-based clustering
+        </p>
+
+        <p>
+            <strong>DBSCAN</strong> → Density-based clustering
+        </p>
+
+        <p>
+            <strong>Gaussian Mixture Model</strong> → Probability-based clustering
+        </p>
+
+        <p>
+            All four methods can be used for
+            <strong>unsupervised machine learning</strong>.
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>10 More Clustering Algorithms in Python</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #1f4e79;
+            border-bottom: 3px solid #1f4e79;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2e75b6;
+            margin-top: 45px;
+        }
+
+        h3 {
+            color: #444;
+        }
+
+        p, li {
+            font-size: 17px;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        .box {
+            background: #eef6ff;
+            border-left: 5px solid #2e75b6;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #2e75b6;
+            color: white;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>10 More Clustering Algorithms in Python</h1>
+
+    <p>
+        This lesson covers ten additional clustering algorithms
+        that can be implemented using Python.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- INSTALLATION -->
+    <!-- ===================================================== -->
+
+    <h2>1. Install Required Libraries</h2>
+
+    <pre>
+pip install numpy pandas matplotlib scikit-learn scipy
+    </pre>
+
+    <p>
+        Some algorithms require additional libraries.
+    </p>
+
+    <pre>
+pip install scikit-fuzzy
+pip install scikit-learn-extra
+pip install hdbscan
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- DATASET -->
+    <!-- ===================================================== -->
+
+    <h2>2. Create a Dataset</h2>
+
+    <pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import make_blobs
+
+# Create artificial dataset
+
+X, y = make_blobs(
+    n_samples=500,
+    centers=4,
+    cluster_std=1.2,
+    random_state=42
+)
+
+print(X.shape)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 1 MEAN SHIFT -->
+    <!-- ===================================================== -->
+
+    <h2>3. Mean Shift Clustering</h2>
+
+    <p>
+        Mean Shift identifies dense regions in the dataset and
+        moves points toward the centers of those dense regions.
+    </p>
+
+    <div class="box">
+
+        <strong>Main advantage:</strong>
+
+        <p>
+            You do not need to specify the number of clusters
+            beforehand.
+        </p>
+
+    </div>
+
+    <pre>
+from sklearn.cluster import MeanShift
+
+# Create model
+
+model = MeanShift()
+
+# Train and predict
+
+labels = model.fit_predict(X)
+
+print("Cluster Labels:")
+print(labels)
+
+print("Number of clusters:")
+print(len(np.unique(labels)))
+    </pre>
+
+
+    <h3>Visualization</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.title("Mean Shift Clustering")
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 2 SPECTRAL -->
+    <!-- ===================================================== -->
+
+    <h2>4. Spectral Clustering</h2>
+
+    <p>
+        Spectral Clustering uses relationships and similarities
+        between data points.
+    </p>
+
+    <pre>
+from sklearn.cluster import SpectralClustering
+
+model = SpectralClustering(
+    n_clusters=4,
+    affinity="nearest_neighbors",
+    random_state=42
+)
+
+labels = model.fit_predict(X)
+
+print(labels)
+    </pre>
+
+    <h3>Visualization</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.title("Spectral Clustering")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 3 BIRCH -->
+    <!-- ===================================================== -->
+
+    <h2>5. BIRCH Clustering</h2>
+
+    <p>
+        BIRCH stands for
+        <strong>Balanced Iterative Reducing and Clustering using Hierarchies</strong>.
+    </p>
+
+    <p>
+        It is designed to work efficiently with large datasets.
+    </p>
+
+    <pre>
+from sklearn.cluster import Birch
+
+model = Birch(
+    n_clusters=4
+)
+
+labels = model.fit_predict(X)
+
+print(labels)
+    </pre>
+
+    <h3>Visualization</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.title("BIRCH Clustering")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 4 AFFINITY PROPAGATION -->
+    <!-- ===================================================== -->
+
+    <h2>6. Affinity Propagation</h2>
+
+    <p>
+        Affinity Propagation identifies representative data points
+        called exemplars.
+    </p>
+
+    <p>
+        You do not have to directly specify the number of clusters.
+    </p>
+
+    <pre>
+from sklearn.cluster import AffinityPropagation
+
+model = AffinityPropagation(
+    random_state=42
+)
+
+labels = model.fit_predict(X)
+
+print(labels)
+
+print(
+    "Number of clusters:",
+    len(np.unique(labels))
+)
+    </pre>
+
+    <h3>Visualization</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.title("Affinity Propagation")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 5 OPTICS -->
+    <!-- ===================================================== -->
+
+    <h2>7. OPTICS</h2>
+
+    <p>
+        OPTICS stands for
+        <strong>Ordering Points To Identify the Clustering Structure</strong>.
+    </p>
+
+    <p>
+        It is a density-based algorithm related to DBSCAN.
+        It can handle clusters with different densities.
+    </p>
+
+    <pre>
+from sklearn.cluster import OPTICS
+
+model = OPTICS(
+    min_samples=10,
+    xi=0.05,
+    min_cluster_size=0.05
+)
+
+labels = model.fit_predict(X)
+
+print(labels)
+    </pre>
+
+    <h3>Visualization</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.title("OPTICS Clustering")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 6 MINI BATCH -->
+    <!-- ===================================================== -->
+
+    <h2>8. Mini-Batch K-Means</h2>
+
+    <p>
+        Mini-Batch K-Means is a faster variation of K-Means.
+    </p>
+
+    <p>
+        Instead of processing the entire dataset during every
+        iteration, it uses small batches of data.
+    </p>
+
+    <pre>
+from sklearn.cluster import MiniBatchKMeans
+
+model = MiniBatchKMeans(
+    n_clusters=4,
+    batch_size=50,
+    random_state=42,
+    n_init=10
+)
+
+labels = model.fit_predict(X)
+
+print(labels)
+    </pre>
+
+    <h3>Visualization</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.title("Mini-Batch K-Means")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 7 FUZZY C MEANS -->
+    <!-- ===================================================== -->
+
+    <h2>9. Fuzzy C-Means</h2>
+
+    <p>
+        Fuzzy C-Means is different from traditional clustering.
+    </p>
+
+    <p>
+        A data point can partially belong to multiple clusters.
+    </p>
+
+    <p>
+        For example:
+    </p>
+
+    <pre>
+Customer A
+
+Cluster 1 → 0.80
+Cluster 2 → 0.15
+Cluster 3 → 0.05
+    </pre>
+
+    <p>
+        This means the customer has an 80% membership in Cluster 1.
+    </p>
+
+    <h3>Python Implementation</h3>
+
+    <pre>
+import skfuzzy as fuzz
+
+# Transpose data
+data = X.T
+
+# Apply Fuzzy C-Means
+
+centers, membership, _, _, _, _, _ = fuzz.cluster.cmeans(
+    data,
+    c=4,
+    m=2,
+    error=0.005,
+    maxiter=1000,
+    init=None
+)
+
+# Get cluster with highest membership
+
+labels = np.argmax(
+    membership,
+    axis=0
+)
+
+print(labels)
+    </pre>
+
+    <h3>Visualization</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.title("Fuzzy C-Means")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 8 K MEDOIDS -->
+    <!-- ===================================================== -->
+
+    <h2>10. K-Medoids</h2>
+
+    <p>
+        K-Medoids is similar to K-Means.
+    </p>
+
+    <p>
+        However, instead of using the mathematical mean as the
+        center, it uses an actual data point as the center.
+    </p>
+
+    <div class="box">
+
+        <strong>K-Means:</strong>
+
+        <p>
+            Cluster center = calculated average
+        </p>
+
+        <strong>K-Medoids:</strong>
+
+        <p>
+            Cluster center = actual data point
+        </p>
+
+    </div>
+
+    <pre>
+from sklearn_extra.cluster import KMedoids
+
+model = KMedoids(
+    n_clusters=4,
+    random_state=42
+)
+
+labels = model.fit_predict(X)
+
+print(labels)
+    </pre>
+
+    <h3>Visualization</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+# Plot medoids
+
+medoids = model.cluster_centers_
+
+plt.scatter(
+    medoids[:, 0],
+    medoids[:, 1],
+    marker="X",
+    s=200
+)
+
+plt.title("K-Medoids")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 9 HDBSCAN -->
+    <!-- ===================================================== -->
+
+    <h2>11. HDBSCAN</h2>
+
+    <p>
+        HDBSCAN is an advanced density-based clustering algorithm.
+    </p>
+
+    <p>
+        It is related to DBSCAN but can handle clusters with
+        different densities more effectively.
+    </p>
+
+    <pre>
+import hdbscan
+
+model = hdbscan.HDBSCAN(
+    min_cluster_size=15
+)
+
+labels = model.fit_predict(X)
+
+print(labels)
+    </pre>
+
+    <h3>Visualization</h3>
+
+    <pre>
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=labels
+)
+
+plt.title("HDBSCAN Clustering")
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- 10 SOM -->
+    <!-- ===================================================== -->
+
+    <h2>12. Self-Organizing Map (SOM)</h2>
+
+    <p>
+        A Self-Organizing Map is a neural-network-based technique
+        that can be used for clustering and dimensionality reduction.
+    </p>
+
+    <p>
+        SOM is not included directly in scikit-learn, so we can
+        use the <strong>MiniSom</strong> library.
+    </p>
+
+    <h3>Install MiniSom</h3>
+
+    <pre>
+pip install minisom
+    </pre>
+
+    <h3>Python Implementation</h3>
+
+    <pre>
+from minisom import MiniSom
+
+# Create SOM
+
+som = MiniSom(
+    5,
+    5,
+    X.shape[1],
+    sigma=1.0,
+    learning_rate=0.5,
+    random_seed=42
+)
+
+# Initialize weights
+
+som.random_weights_init(X)
+
+# Train SOM
+
+som.train_random(
+    X,
+    1000
+)
+
+print("SOM training completed.")
+    </pre>
+
+
+    <h3>Find the Winning Neuron</h3>
+
+    <pre>
+for point in X:
+
+    winner = som.winner(point)
+
+    print(
+        "Data point:",
+        point,
+        "Winner:",
+        winner
+    )
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- COMPARISON -->
+    <!-- ===================================================== -->
+
+    <h2>13. Comparison of All 10 Algorithms</h2>
+
+    <table>
+
+        <tr>
+
+            <th>Algorithm</th>
+
+            <th>Type</th>
+
+            <th>Need Number of Clusters?</th>
+
+        </tr>
+
+        <tr>
+            <td>Mean Shift</td>
+            <td>Density-based</td>
+            <td>No</td>
+        </tr>
+
+        <tr>
+            <td>Spectral Clustering</td>
+            <td>Graph-based</td>
+            <td>Yes</td>
+        </tr>
+
+        <tr>
+            <td>BIRCH</td>
+            <td>Hierarchical</td>
+            <td>Usually</td>
+        </tr>
+
+        <tr>
+            <td>Affinity Propagation</td>
+            <td>Exemplar-based</td>
+            <td>No</td>
+        </tr>
+
+        <tr>
+            <td>OPTICS</td>
+            <td>Density-based</td>
+            <td>No</td>
+        </tr>
+
+        <tr>
+            <td>Mini-Batch K-Means</td>
+            <td>Centroid-based</td>
+            <td>Yes</td>
+        </tr>
+
+        <tr>
+            <td>Fuzzy C-Means</td>
+            <td>Fuzzy clustering</td>
+            <td>Yes</td>
+        </tr>
+
+        <tr>
+            <td>K-Medoids</td>
+            <td>Medoid-based</td>
+            <td>Yes</td>
+        </tr>
+
+        <tr>
+            <td>HDBSCAN</td>
+            <td>Density-based</td>
+            <td>No</td>
+        </tr>
+
+        <tr>
+            <td>SOM</td>
+            <td>Neural-network-based</td>
+            <td>Grid-based</td>
+        </tr>
+
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- SUMMARY -->
+    <!-- ===================================================== -->
+
+    <h2>14. Summary</h2>
+
+    <div class="box">
+
+        <p>
+            <strong>Mean Shift</strong>
+            → Finds dense regions automatically.
+        </p>
+
+        <p>
+            <strong>Spectral Clustering</strong>
+            → Uses relationships between data points.
+        </p>
+
+        <p>
+            <strong>BIRCH</strong>
+            → Efficient for large datasets.
+        </p>
+
+        <p>
+            <strong>Affinity Propagation</strong>
+            → Finds representative examples.
+        </p>
+
+        <p>
+            <strong>OPTICS</strong>
+            → Density-based clustering with varying density.
+        </p>
+
+        <p>
+            <strong>Mini-Batch K-Means</strong>
+            → Faster K-Means for large datasets.
+        </p>
+
+        <p>
+            <strong>Fuzzy C-Means</strong>
+            → Points can partially belong to multiple clusters.
+        </p>
+
+        <p>
+            <strong>K-Medoids</strong>
+            → Uses actual data points as cluster centers.
+        </p>
+
+        <p>
+            <strong>HDBSCAN</strong>
+            → Advanced density-based clustering.
+        </p>
+
+        <p>
+            <strong>SOM</strong>
+            → Neural-network-based clustering and visualization.
+        </p>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- PRACTICE -->
+    <!-- ===================================================== -->
+
+    <h2>15. Student Practice</h2>
+
+    <ol>
+
+        <li>
+            Create a dataset containing 100 customer records.
+        </li>
+
+        <li>
+            Apply Mean Shift clustering.
+        </li>
+
+        <li>
+            Apply Spectral Clustering.
+        </li>
+
+        <li>
+            Apply BIRCH.
+        </li>
+
+        <li>
+            Apply Affinity Propagation.
+        </li>
+
+        <li>
+            Apply OPTICS.
+        </li>
+
+        <li>
+            Apply Mini-Batch K-Means.
+        </li>
+
+        <li>
+            Apply Fuzzy C-Means.
+        </li>
+
+        <li>
+            Apply K-Medoids.
+        </li>
+
+        <li>
+            Apply HDBSCAN.
+        </li>
+
+        <li>
+            Compare the results of all algorithms.
+        </li>
+
+    </ol>
+
+</div>
+
+</body>
+
+</html>
