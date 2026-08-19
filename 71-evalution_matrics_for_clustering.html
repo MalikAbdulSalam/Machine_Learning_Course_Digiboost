@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Clustering - Complete Practical Guide</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+            line-height: 1.7;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #1f4e79;
+            border-bottom: 3px solid #1f4e79;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2e75b6;
+            margin-top: 45px;
+        }
+
+        h3 {
+            color: #444;
+            margin-top: 30px;
+        }
+
+        p, li {
+            font-size: 17px;
+        }
+
+        pre {
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        code {
+            background-color: #eee;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        .box {
+            background-color: #eef6ff;
+            border-left: 5px solid #2e75b6;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .success {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2e75b6;
+            color: white;
+        }
+
+        .flow {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>Clustering - Complete Practical Guide</h1>
+
+    <p>
+        This lesson covers the important steps that should be performed
+        after learning clustering algorithms.
+    </p>
+
+    <div class="box">
+
+        <strong>Learning Path:</strong>
+
+        <div class="flow">
+
+            Data Preprocessing
+            ↓
+            Feature Scaling
+            ↓
+            Choose Number of Clusters
+            ↓
+            Train Clustering Model
+            ↓
+            Evaluate Clusters
+            ↓
+            PCA Visualization
+            ↓
+            Compare Algorithms
+            ↓
+            Real-World Project
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 1 -->
+    <!-- ===================================================== -->
+
+    <h2>1. Data Preprocessing for Clustering</h2>
+
+    <p>
+        Before applying clustering algorithms, we usually need to
+        prepare the dataset.
+    </p>
+
+    <h3>Important preprocessing steps</h3>
+
+    <ul>
+
+        <li>Handle missing values</li>
+
+        <li>Remove duplicate records</li>
+
+        <li>Handle outliers</li>
+
+        <li>Convert categorical data into numerical data</li>
+
+        <li>Select useful features</li>
+
+        <li>Scale numerical features</li>
+
+    </ul>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 2 -->
+    <!-- ===================================================== -->
+
+    <h2>2. Create a Sample Dataset</h2>
+
+    <pre>
+import pandas as pd
+
+data = {
+
+    "Age": [
+        20, 22, 25, 27, 30,
+        45, 48, 50, 52, 55
+    ],
+
+    "Income": [
+        20000,
+        22000,
+        25000,
+        27000,
+        30000,
+        60000,
+        65000,
+        70000,
+        72000,
+        75000
+    ],
+
+    "SpendingScore": [
+        80,
+        75,
+        85,
+        70,
+        78,
+        40,
+        35,
+        30,
+        25,
+        20
+    ]
+}
+
+df = pd.DataFrame(data)
+
+print(df)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 3 -->
+    <!-- ===================================================== -->
+
+    <h2>3. Check Missing Values</h2>
+
+    <pre>
+print(df.isnull().sum())
+    </pre>
+
+    <p>
+        If there are missing values, we can fill them using the mean,
+        median, or another appropriate method.
+    </p>
+
+    <pre>
+df["Income"] = df["Income"].fillna(
+    df["Income"].median()
+)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 4 -->
+    <!-- ===================================================== -->
+
+    <h2>4. Remove Duplicate Records</h2>
+
+    <pre>
+print("Duplicates:")
+
+print(df.duplicated().sum())
+
+df = df.drop_duplicates()
+
+print(df)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 5 -->
+    <!-- ===================================================== -->
+
+    <h2>5. Feature Selection</h2>
+
+    <p>
+        Select the features that will be used for clustering.
+    </p>
+
+    <pre>
+X = df[
+    [
+        "Age",
+        "Income",
+        "SpendingScore"
+    ]
+]
+
+print(X)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 6 -->
+    <!-- ===================================================== -->
+
+    <h2>6. Why Feature Scaling is Important</h2>
+
+    <p>
+        Clustering algorithms such as K-Means use distances between
+        data points.
+    </p>
+
+    <p>
+        If one feature has a much larger numerical range than another,
+        it can dominate the distance calculation.
+    </p>
+
+    <div class="important">
+
+        Example:
+
+        <pre>
+Age             → 20 - 60
+
+Income          → 20,000 - 80,000
+
+Spending Score  → 0 - 100
+        </pre>
+
+        Income has a much larger numerical range.
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 7 -->
+    <!-- ===================================================== -->
+
+    <h2>7. StandardScaler</h2>
+
+    <p>
+        StandardScaler transforms the features so that they have
+        approximately a mean of 0 and a standard deviation of 1.
+    </p>
+
+    <pre>
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+
+print(X_scaled)
+    </pre>
+
+
+    <div class="box">
+
+        <strong>Important:</strong>
+
+        <p>
+            Scaling is especially important for distance-based
+            algorithms such as K-Means, DBSCAN, and K-Medoids.
+        </p>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 8 -->
+    <!-- ===================================================== -->
+
+    <h2>8. MinMaxScaler</h2>
+
+    <p>
+        Another common scaling technique is MinMaxScaler.
+    </p>
+
+    <p>
+        It normally converts values to a range between 0 and 1.
+    </p>
+
+    <pre>
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()
+
+X_scaled = scaler.fit_transform(X)
+
+print(X_scaled)
+    </pre>
+
+
+    <h3>StandardScaler vs MinMaxScaler</h3>
+
+    <table>
+
+        <tr>
+            <th>StandardScaler</th>
+            <th>MinMaxScaler</th>
+        </tr>
+
+        <tr>
+            <td>Mean approximately 0</td>
+            <td>Values usually between 0 and 1</td>
+        </tr>
+
+        <tr>
+            <td>Standard deviation approximately 1</td>
+            <td>Preserves relative range</td>
+        </tr>
+
+        <tr>
+            <td>Useful for many ML algorithms</td>
+            <td>Useful when a fixed range is desirable</td>
+        </tr>
+
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 9 -->
+    <!-- ===================================================== -->
+
+    <h2>9. K-Means with Scaled Data</h2>
+
+    <pre>
+from sklearn.cluster import KMeans
+
+model = KMeans(
+    n_clusters=3,
+    random_state=42,
+    n_init=10
+)
+
+labels = model.fit_predict(X_scaled)
+
+print(labels)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 10 -->
+    <!-- ===================================================== -->
+
+    <h2>10. Choosing the Number of Clusters</h2>
+
+    <p>
+        One of the most important questions in K-Means is:
+    </p>
+
+    <div class="important">
+
+        <strong>
+            How many clusters should we create?
+        </strong>
+
+    </div>
+
+    <p>
+        Two commonly used techniques are:
+    </p>
+
+    <ul>
+
+        <li>Elbow Method</li>
+
+        <li>Silhouette Score</li>
+
+    </ul>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 11 -->
+    <!-- ===================================================== -->
+
+    <h2>11. Elbow Method</h2>
+
+    <p>
+        The Elbow Method calculates the K-Means inertia for different
+        numbers of clusters.
+    </p>
+
+    <pre>
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+inertias = []
+
+for k in range(2, 11):
+
+    model = KMeans(
+        n_clusters=k,
+        random_state=42,
+        n_init=10
+    )
+
+    model.fit(X_scaled)
+
+    inertias.append(
+        model.inertia_
+    )
+
+
+plt.plot(
+    range(2, 11),
+    inertias,
+    marker="o"
+)
+
+plt.xlabel("Number of Clusters")
+plt.ylabel("Inertia")
+
+plt.title("Elbow Method")
+
+plt.show()
+    </pre>
+
+    <p>
+        Look for the point where the decrease in inertia begins
+        to slow down significantly. This is called the
+        <strong>elbow</strong>.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 12 -->
+    <!-- ===================================================== -->
+
+    <h2>12. Silhouette Score</h2>
+
+    <p>
+        The Silhouette Score measures how well data points fit within
+        their assigned clusters.
+    </p>
+
+    <p>
+        Its value generally ranges from -1 to 1.
+    </p>
+
+    <table>
+
+        <tr>
+            <th>Score</th>
+            <th>Interpretation</th>
+        </tr>
+
+        <tr>
+            <td>Close to 1</td>
+            <td>Very good separation</td>
+        </tr>
+
+        <tr>
+            <td>Close to 0</td>
+            <td>Clusters overlap</td>
+        </tr>
+
+        <tr>
+            <td>Below 0</td>
+            <td>Possible incorrect assignments</td>
+        </tr>
+
+    </table>
+
+
+    <h3>Python Implementation</h3>
+
+    <pre>
+from sklearn.metrics import silhouette_score
+
+score = silhouette_score(
+    X_scaled,
+    labels
+)
+
+print("Silhouette Score:", score)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 13 -->
+    <!-- ===================================================== -->
+
+    <h2>13. Find the Best K Using Silhouette Score</h2>
+
+    <pre>
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+scores = []
+
+for k in range(2, 11):
+
+    model = KMeans(
+        n_clusters=k,
+        random_state=42,
+        n_init=10
+    )
+
+    labels = model.fit_predict(
+        X_scaled
+    )
+
+    score = silhouette_score(
+        X_scaled,
+        labels
+    )
+
+    scores.append(score)
+
+
+for k, score in zip(
+    range(2, 11),
+    scores
+):
+
+    print(
+        "K:",
+        k,
+        "Score:",
+        score
+    )
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 14 -->
+    <!-- ===================================================== -->
+
+    <h2>14. Calinski-Harabasz Score</h2>
+
+    <p>
+        The Calinski-Harabasz score evaluates the separation and
+        compactness of clusters.
+    </p>
+
+    <pre>
+from sklearn.metrics import calinski_harabasz_score
+
+score = calinski_harabasz_score(
+    X_scaled,
+    labels
+)
+
+print(
+    "Calinski-Harabasz Score:",
+    score
+)
+    </pre>
+
+    <div class="box">
+
+        <strong>Higher is generally better.</strong>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 15 -->
+    <!-- ===================================================== -->
+
+    <h2>15. Davies-Bouldin Score</h2>
+
+    <p>
+        The Davies-Bouldin score measures similarity between
+        clusters.
+    </p>
+
+    <pre>
+from sklearn.metrics import davies_bouldin_score
+
+score = davies_bouldin_score(
+    X_scaled,
+    labels
+)
+
+print(
+    "Davies-Bouldin Score:",
+    score
+)
+    </pre>
+
+    <div class="box">
+
+        <strong>Lower is generally better.</strong>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 16 -->
+    <!-- ===================================================== -->
+
+    <h2>16. PCA for Clustering Visualization</h2>
+
+    <p>
+        Real datasets can contain many features.
+        We cannot easily visualize 10, 20, or 100 dimensions.
+    </p>
+
+    <p>
+        PCA can reduce the data to two dimensions for visualization.
+    </p>
+
+    <pre>
+from sklearn.decomposition import PCA
+
+pca = PCA(
+    n_components=2
+)
+
+X_pca = pca.fit_transform(
+    X_scaled
+)
+
+print(X_pca)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 17 -->
+    <!-- ===================================================== -->
+
+    <h2>17. Visualize Clusters Using PCA</h2>
+
+    <pre>
+plt.scatter(
+    X_pca[:, 0],
+    X_pca[:, 1],
+    c=labels
+)
+
+plt.xlabel("Principal Component 1")
+
+plt.ylabel("Principal Component 2")
+
+plt.title(
+    "Clusters Visualized Using PCA"
+)
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 18 -->
+    <!-- ===================================================== -->
+
+    <h2>18. Iris Dataset Clustering</h2>
+
+    <p>
+        The Iris dataset is a popular dataset containing measurements
+        of flowers.
+    </p>
+
+    <pre>
+from sklearn.datasets import load_iris
+
+iris = load_iris()
+
+X = iris.data
+
+print(X.shape)
+    </pre>
+
+
+    <h3>Scale the Dataset</h3>
+
+    <pre>
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+    </pre>
+
+
+    <h3>Apply K-Means</h3>
+
+    <pre>
+from sklearn.cluster import KMeans
+
+model = KMeans(
+    n_clusters=3,
+    random_state=42,
+    n_init=10
+)
+
+labels = model.fit_predict(
+    X_scaled
+)
+
+print(labels)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 19 -->
+    <!-- ===================================================== -->
+
+    <h2>19. PCA on Iris Dataset</h2>
+
+    <pre>
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
+pca = PCA(
+    n_components=2
+)
+
+X_pca = pca.fit_transform(
+    X_scaled
+)
+
+plt.scatter(
+    X_pca[:, 0],
+    X_pca[:, 1],
+    c=labels
+)
+
+plt.xlabel("PC1")
+
+plt.ylabel("PC2")
+
+plt.title(
+    "Iris Dataset Clustering"
+)
+
+plt.show()
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 20 -->
+    <!-- ===================================================== -->
+
+    <h2>20. Compare Multiple Clustering Algorithms</h2>
+
+    <p>
+        We can apply several algorithms to the same dataset.
+    </p>
+
+    <pre>
+from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster import DBSCAN
+from sklearn.mixture import GaussianMixture
+
+# K-Means
+
+kmeans = KMeans(
+    n_clusters=3,
+    random_state=42,
+    n_init=10
+)
+
+kmeans_labels = kmeans.fit_predict(
+    X_scaled
+)
+
+
+# Hierarchical
+
+hierarchical = AgglomerativeClustering(
+    n_clusters=3
+)
+
+hierarchical_labels = hierarchical.fit_predict(
+    X_scaled
+)
+
+
+# DBSCAN
+
+dbscan = DBSCAN(
+    eps=0.8,
+    min_samples=5
+)
+
+dbscan_labels = dbscan.fit_predict(
+    X_scaled
+)
+
+
+# GMM
+
+gmm = GaussianMixture(
+    n_components=3,
+    random_state=42
+)
+
+gmm_labels = gmm.fit_predict(
+    X_scaled
+)
+
+
+print("K-Means:")
+print(kmeans_labels)
+
+print("\nHierarchical:")
+print(hierarchical_labels)
+
+print("\nDBSCAN:")
+print(dbscan_labels)
+
+print("\nGMM:")
+print(gmm_labels)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 21 -->
+    <!-- ===================================================== -->
+
+    <h2>21. Evaluate Different Algorithms</h2>
+
+    <pre>
+from sklearn.metrics import silhouette_score
+
+algorithms = {
+
+    "K-Means":
+        kmeans_labels,
+
+    "Hierarchical":
+        hierarchical_labels,
+
+    "DBSCAN":
+        dbscan_labels,
+
+    "GMM":
+        gmm_labels
+}
+
+
+for name, labels in algorithms.items():
+
+    # Ignore DBSCAN if it creates only one cluster
+
+    unique_labels = set(labels)
+
+    if len(unique_labels) > 1:
+
+        score = silhouette_score(
+            X_scaled,
+            labels
+        )
+
+        print(
+            name,
+            ":",
+            score
+        )
+
+    else:
+
+        print(
+            name,
+            ": Cannot calculate"
+        )
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 22 -->
+    <!-- ===================================================== -->
+
+    <h2>22. Customer Segmentation Project</h2>
+
+    <p>
+        Now we can combine everything into a complete machine learning
+        project.
+    </p>
+
+    <div class="flow">
+
+        Customer Dataset
+        ↓
+        Data Cleaning
+        ↓
+        Feature Selection
+        ↓
+        Feature Scaling
+        ↓
+        Elbow Method
+        ↓
+        K-Means
+        ↓
+        Silhouette Score
+        ↓
+        PCA
+        ↓
+        Visualization
+        ↓
+        Customer Interpretation
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 23 -->
+    <!-- ===================================================== -->
+
+    <h2>23. Complete Customer Segmentation Code</h2>
+
+    <pre>
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.cluster import KMeans
+
+from sklearn.metrics import silhouette_score
+
+from sklearn.decomposition import PCA
+
+
+# =====================================
+# 1. Create Dataset
+# =====================================
+
+data = {
+
+    "Age": [
+        20, 22, 25, 27, 30,
+        45, 48, 50, 52, 55,
+        23, 26, 28, 31, 33
+    ],
+
+    "Income": [
+        20000,
+        22000,
+        25000,
+        27000,
+        30000,
+        60000,
+        65000,
+        70000,
+        72000,
+        75000,
+        28000,
+        32000,
+        35000,
+        40000,
+        45000
+    ],
+
+    "SpendingScore": [
+        80,
+        75,
+        85,
+        70,
+        78,
+        40,
+        35,
+        30,
+        25,
+        20,
+        90,
+        85,
+        75,
+        65,
+        55
+    ]
+}
+
+
+df = pd.DataFrame(data)
+
+
+# =====================================
+# 2. Display Dataset
+# =====================================
+
+print(df)
+
+
+# =====================================
+# 3. Select Features
+# =====================================
+
+X = df[
+    [
+        "Age",
+        "Income",
+        "SpendingScore"
+    ]
+]
+
+
+# =====================================
+# 4. Scale Features
+# =====================================
+
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+
+
+# =====================================
+# 5. Elbow Method
+# =====================================
+
+inertias = []
+
+for k in range(2, 8):
+
+    model = KMeans(
+        n_clusters=k,
+        random_state=42,
+        n_init=10
+    )
+
+    model.fit(X_scaled)
+
+    inertias.append(
+        model.inertia_
+    )
+
+
+plt.plot(
+    range(2, 8),
+    inertias,
+    marker="o"
+)
+
+plt.xlabel(
+    "Number of Clusters"
+)
+
+plt.ylabel(
+    "Inertia"
+)
+
+plt.title(
+    "Elbow Method"
+)
+
+plt.show()
+
+
+# =====================================
+# 6. Create Final Model
+# =====================================
+
+model = KMeans(
+    n_clusters=3,
+    random_state=42,
+    n_init=10
+)
+
+
+# =====================================
+# 7. Generate Clusters
+# =====================================
+
+labels = model.fit_predict(
+    X_scaled
+)
+
+
+# =====================================
+# 8. Add Cluster to Dataset
+# =====================================
+
+df["Cluster"] = labels
+
+
+print("\nCustomer Groups:")
+
+print(df)
+
+
+# =====================================
+# 9. Silhouette Score
+# =====================================
+
+score = silhouette_score(
+    X_scaled,
+    labels
+)
+
+print(
+    "\nSilhouette Score:",
+    score
+)
+
+
+# =====================================
+# 10. PCA
+# =====================================
+
+pca = PCA(
+    n_components=2
+)
+
+X_pca = pca.fit_transform(
+    X_scaled
+)
+
+
+# =====================================
+# 11. Visualize
+# =====================================
+
+plt.scatter(
+    X_pca[:, 0],
+    X_pca[:, 1],
+    c=labels
+)
+
+plt.xlabel(
+    "Principal Component 1"
+)
+
+plt.ylabel(
+    "Principal Component 2"
+)
+
+plt.title(
+    "Customer Segmentation"
+)
+
+plt.show()
+
+
+# =====================================
+# 12. Cluster Analysis
+# =====================================
+
+print("\nCluster Analysis:")
+
+print(
+    df.groupby("Cluster").mean(
+        numeric_only=True
+    )
+)
+    </pre>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 24 -->
+    <!-- ===================================================== -->
+
+    <h2>24. Understanding the Final Result</h2>
+
+    <p>
+        The final cluster analysis might produce groups such as:
+    </p>
+
+    <table>
+
+        <tr>
+
+            <th>Cluster</th>
+
+            <th>Possible Customer Type</th>
+
+        </tr>
+
+        <tr>
+
+            <td>Cluster 0</td>
+
+            <td>
+                Young customers with lower income
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>Cluster 1</td>
+
+            <td>
+                Older customers with high income
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>Cluster 2</td>
+
+            <td>
+                Medium-income customers with high spending
+            </td>
+
+        </tr>
+
+    </table>
+
+    <div class="important">
+
+        <strong>
+            Important:
+        </strong>
+
+        <p>
+            The algorithm only creates numerical cluster IDs.
+            The human analyst must examine the characteristics
+            of each cluster and give them meaningful names.
+        </p>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 25 -->
+    <!-- ===================================================== -->
+
+    <h2>25. How to Choose a Clustering Algorithm</h2>
+
+    <table>
+
+        <tr>
+
+            <th>Situation</th>
+
+            <th>Possible Algorithm</th>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Simple, well-separated clusters
+            </td>
+
+            <td>
+                K-Means
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Unknown number of clusters
+            </td>
+
+            <td>
+                Mean Shift / DBSCAN / HDBSCAN
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Outlier detection
+            </td>
+
+            <td>
+                DBSCAN / HDBSCAN / OPTICS
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Large dataset
+            </td>
+
+            <td>
+                Mini-Batch K-Means / BIRCH
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Overlapping clusters
+            </td>
+
+            <td>
+                Gaussian Mixture Model
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Hierarchical relationships
+            </td>
+
+            <td>
+                Hierarchical Clustering
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Partial membership
+            </td>
+
+            <td>
+                Fuzzy C-Means
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 26 -->
+    <!-- ===================================================== -->
+
+    <h2>26. Complete Clustering Workflow</h2>
+
+    <div class="success">
+
+        <div class="flow">
+
+            1. Load Dataset
+
+            <br>↓
+
+            2. Explore Dataset
+
+            <br>↓
+
+            3. Clean Dataset
+
+            <br>↓
+
+            4. Handle Missing Values
+
+            <br>↓
+
+            5. Handle Outliers
+
+            <br>↓
+
+            6. Select Features
+
+            <br>↓
+
+            7. Scale Features
+
+            <br>↓
+
+            8. Choose Algorithm
+
+            <br>↓
+
+            9. Choose Number of Clusters
+
+            <br>↓
+
+            10. Train Model
+
+            <br>↓
+
+            11. Evaluate Clusters
+
+            <br>↓
+
+            12. Visualize Using PCA
+
+            <br>↓
+
+            13. Interpret Clusters
+
+            <br>↓
+
+            14. Make Business/Scientific Conclusions
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 27 -->
+    <!-- ===================================================== -->
+
+    <h2>27. Student Exercises</h2>
+
+    <ol>
+
+        <li>
+            Create a customer dataset with at least 50 records.
+        </li>
+
+        <li>
+            Include Age, Income, and Spending Score.
+        </li>
+
+        <li>
+            Check for missing values.
+        </li>
+
+        <li>
+            Remove duplicate records.
+        </li>
+
+        <li>
+            Apply StandardScaler.
+        </li>
+
+        <li>
+            Find the best K using the Elbow Method.
+        </li>
+
+        <li>
+            Find the best K using Silhouette Score.
+        </li>
+
+        <li>
+            Apply K-Means.
+        </li>
+
+        <li>
+            Apply Hierarchical Clustering.
+        </li>
+
+        <li>
+            Apply DBSCAN.
+        </li>
+
+        <li>
+            Apply Gaussian Mixture Model.
+        </li>
+
+        <li>
+            Compare the algorithms.
+        </li>
+
+        <li>
+            Apply PCA.
+        </li>
+
+        <li>
+            Visualize the final clusters.
+        </li>
+
+        <li>
+            Give each cluster a meaningful business name.
+        </li>
+
+    </ol>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION 28 -->
+    <!-- ===================================================== -->
+
+    <h2>28. Final Project</h2>
+
+    <div class="box">
+
+        <h3>
+            Customer Segmentation Using Unsupervised Machine Learning
+        </h3>
+
+        <p>
+            Build a complete machine learning system that automatically
+            groups customers according to their characteristics.
+        </p>
+
+        <strong>Requirements:</strong>
+
+        <ul>
+
+            <li>Load or create a dataset.</li>
+
+            <li>Perform data cleaning.</li>
+
+            <li>Perform exploratory data analysis.</li>
+
+            <li>Select useful features.</li>
+
+            <li>Scale the features.</li>
+
+            <li>Use the Elbow Method.</li>
+
+            <li>Calculate Silhouette Score.</li>
+
+            <li>Train K-Means.</li>
+
+            <li>Compare at least three clustering algorithms.</li>
+
+            <li>Use PCA for visualization.</li>
+
+            <li>Analyze each cluster.</li>
+
+            <li>Give meaningful names to the clusters.</li>
+
+            <li>Write final conclusions.</li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- FINAL -->
+    <!-- ===================================================== -->
+
+    <h2>29. What Students Should Know After This Section</h2>
+
+    <div class="success">
+
+        <ul>
+
+            <li>
+                Understand supervised vs unsupervised learning.
+            </li>
+
+            <li>
+                Understand different clustering algorithms.
+            </li>
+
+            <li>
+                Prepare data for clustering.
+            </li>
+
+            <li>
+                Understand feature scaling.
+            </li>
+
+            <li>
+                Select an appropriate number of clusters.
+            </li>
+
+            <li>
+                Evaluate clustering results.
+            </li>
+
+            <li>
+                Visualize high-dimensional clusters using PCA.
+            </li>
+
+            <li>
+                Compare different clustering algorithms.
+            </li>
+
+            <li>
+                Apply clustering to real-world datasets.
+            </li>
+
+            <li>
+                Interpret and explain the resulting clusters.
+            </li>
+
+        </ul>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>
