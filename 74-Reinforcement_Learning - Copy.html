@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reinforcement Learning Tutorials </title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #1f2937;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        header p {
+            font-size: 18px;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 35px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #1d4ed8;
+            border-bottom: 3px solid #1d4ed8;
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            color: #374151;
+            margin-top: 30px;
+        }
+
+        h4 {
+            color: #4b5563;
+        }
+
+        .concept {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .example {
+            background: #f0fdf4;
+            border-left: 5px solid #16a34a;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .important {
+            background: #fff7ed;
+            border-left: 5px solid #f97316;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .warning {
+            background: #fef2f2;
+            border-left: 5px solid #dc2626;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th {
+            background: #1f2937;
+            color: white;
+        }
+
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .grid {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 25px;
+            background: #e5e7eb;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .formula {
+            background: #f3f4f6;
+            padding: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-family: Georgia, serif;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .flow {
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        footer {
+            background: #1f2937;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Reinforcement Learning</h1>
+    <p>Tutorials: From RL Fundamentals to Q-Learning and SARSA</p>
+</header>
+
+<main>
+
+<!-- ====================================================== -->
+<!-- TUTORIAL  -->
+<!-- ====================================================== -->
+
+<section>
+
+    <h2>Tutorial : Introduction to Reinforcement Learning</h2>
+
+    <h3>1. What is Reinforcement Learning?</h3>
+
+    <p>
+        Reinforcement Learning (RL) is a type of Machine Learning where an
+        <strong>agent learns by interacting with an environment</strong>.
+    </p>
+
+    <p>
+        Instead of being given the correct answer for every example,
+        the agent receives rewards or penalties and learns which actions
+        lead to better results.
+    </p>
+
+    <div class="flow">
+        State → Agent → Action → Environment → Reward + New State → Repeat
+    </div>
+
+    <h3>2. Main Components of Reinforcement Learning</h3>
+
+    <table>
+        <tr>
+            <th>Component</th>
+            <th>Description</th>
+            <th>Example</th>
+        </tr>
+
+        <tr>
+            <td>Agent</td>
+            <td>The learner or decision maker.</td>
+            <td>Robot</td>
+        </tr>
+
+        <tr>
+            <td>Environment</td>
+            <td>The world where the agent operates.</td>
+            <td>Maze</td>
+        </tr>
+
+        <tr>
+            <td>State</td>
+            <td>The current situation.</td>
+            <td>Robot at position (2,3)</td>
+        </tr>
+
+        <tr>
+            <td>Action</td>
+            <td>A decision taken by the agent.</td>
+            <td>Move right</td>
+        </tr>
+
+        <tr>
+            <td>Reward</td>
+            <td>Feedback received after an action.</td>
+            <td>+10 for reaching the goal</td>
+        </tr>
+
+        <tr>
+            <td>Policy</td>
+            <td>A strategy for selecting actions.</td>
+            <td>Move toward the goal</td>
+        </tr>
+
+        <tr>
+            <td>Episode</td>
+            <td>One complete attempt.</td>
+            <td>Start → Goal</td>
+        </tr>
+    </table>
+
+    <h3>3. Real-World Examples</h3>
+
+    <ul>
+        <li>Robot navigation</li>
+        <li>Self-driving vehicles</li>
+        <li>Game-playing AI</li>
+        <li>Traffic signal optimization</li>
+        <li>Recommendation systems</li>
+        <li>Resource allocation</li>
+        <li>Industrial control systems</li>
+    </ul>
+
+    <h3>4. Robot Grid Example</h3>
+
+    <div class="example">
+
+        <p>Suppose a robot needs to reach the goal:</p>
+
+        <div class="grid">
+            S . . .<br>
+            . X . .<br>
+            . . . .<br>
+            . . . G
+        </div>
+
+        <p>
+            S = Start<br>
+            G = Goal<br>
+            X = Obstacle
+        </p>
+
+    </div>
+
+    <p>The robot can perform four actions:</p>
+
+    <ul>
+        <li>Up</li>
+        <li>Down</li>
+        <li>Left</li>
+        <li>Right</li>
+    </ul>
+
+    <p>Example reward system:</p>
+
+    <table>
+        <tr>
+            <th>Event</th>
+            <th>Reward</th>
+        </tr>
+        <tr>
+            <td>Reach goal</td>
+            <td>+10</td>
+        </tr>
+        <tr>
+            <td>Hit obstacle</td>
+            <td>-10</td>
+        </tr>
+        <tr>
+            <td>Normal step</td>
+            <td>-1</td>
+        </tr>
+    </table>
+
+    <h3>5. Simple Python RL Example</h3>
+
+<pre><code>import random
+
+position = 0
+goal = 4
+
+for step in range(10):
+
+    action = random.choice(["left", "right"])
+
+    if action == "right":
+        position += 1
+    else:
+        position -= 1
+
+    position = max(0, min(position, goal))
+
+    if position == goal:
+        reward = 10
+    else:
+        reward = -1
+
+    print(
+        "Action:", action,
+        "Position:", position,
+        "Reward:", reward
+    )
+
+    if position == goal:
+        print("Goal reached!")
+        break
+</code></pre>
+
+    <div class="important">
+        <strong>Important:</strong>
+        This agent is currently choosing actions randomly.
+        Reinforcement Learning algorithms will allow it to learn
+        which actions are better.
+    </div>
+
+</section>
+
+
+<!-- ====================================================== -->
+<!-- TUTORIAL  -->
+<!-- ====================================================== -->
+
+<section>
+
+    <h2>Tutorial : Markov Decision Process (MDP) vs Hidden Markov Model (HMM)</h2>
+
+    <h3>1. What is an MDP?</h3>
+
+    <p>
+        A Markov Decision Process is a mathematical framework used to
+        model sequential decision-making problems.
+    </p>
+
+    <div class="formula">
+        MDP = (S, A, P, R, γ)
+    </div>
+
+    <table>
+        <tr>
+            <th>Symbol</th>
+            <th>Meaning</th>
+        </tr>
+
+        <tr>
+            <td>S</td>
+            <td>Set of states</td>
+        </tr>
+
+        <tr>
+            <td>A</td>
+            <td>Set of actions</td>
+        </tr>
+
+        <tr>
+            <td>P</td>
+            <td>Transition probability</td>
+        </tr>
+
+        <tr>
+            <td>R</td>
+            <td>Reward</td>
+        </tr>
+
+        <tr>
+            <td>γ</td>
+            <td>Discount factor</td>
+        </tr>
+    </table>
+
+    <h3>2. Markov Property</h3>
+
+    <p>
+        The Markov property means that the future depends primarily
+        on the current state rather than the complete history.
+    </p>
+
+    <div class="formula">
+        P(S<sub>t+1</sub> | S<sub>t</sub>)
+    </div>
+
+    <h3>3. MDP Example</h3>
+
+    <p>
+        Consider a robot with three states:
+    </p>
+
+<pre><code>State 0 = Start
+State 1 = Middle
+State 2 = Goal</code></pre>
+
+    <p>Actions:</p>
+
+<pre><code>Left
+Right</code></pre>
+
+    <p>Transitions:</p>
+
+<pre><code>State 0 + Right → State 1
+State 1 + Right → State 2</code></pre>
+
+    <h3>4. Python MDP Example</h3>
+
+<pre><code>states = [0, 1, 2]
+
+actions = ["left", "right"]
+
+rewards = {
+    0: -1,
+    1: -1,
+    2: 10
+}
+
+state = 0
+
+for step in range(5):
+
+    action = "right"
+
+    if action == "right":
+        next_state = min(state + 1, 2)
+    else:
+        next_state = max(state - 1, 0)
+
+    reward = rewards[next_state]
+
+    print(
+        f"State: {state}, "
+        f"Action: {action}, "
+        f"Next State: {next_state}, "
+        f"Reward: {reward}"
+    )
+
+    state = next_state
+
+    if state == 2:
+        print("Goal reached!")
+        break
+</code></pre>
+
+
+    <h3>5. What is an HMM?</h3>
+
+    <p>
+        A Hidden Markov Model is a probabilistic model where the
+        actual state is hidden and we observe outputs generated by
+        those hidden states.
+    </p>
+
+    <div class="flow">
+        Hidden State → Observation
+    </div>
+
+    <h3>6. HMM Example: Weather</h3>
+
+    <p>Hidden states:</p>
+
+<pre><code>Sunny
+Rainy</code></pre>
+
+    <p>Observations:</p>
+
+<pre><code>Sunglasses
+Umbrella</code></pre>
+
+    <p>For example:</p>
+
+<pre><code>Rainy → Umbrella
+Sunny → Sunglasses</code></pre>
+
+    <h3>7. Python HMM Example</h3>
+
+<pre><code>states = ["Sunny", "Rainy"]
+
+observations = {
+    "Sunny": {
+        "Sunglasses": 0.8,
+        "Umbrella": 0.2
+    },
+
+    "Rainy": {
+        "Sunglasses": 0.1,
+        "Umbrella": 0.9
+    }
+}
+
+observation = "Umbrella"
+
+for state in states:
+
+    probability = observations[state][observation]
+
+    print(
+        state,
+        probability
+    )
+</code></pre>
+
+    <h3>8. MDP vs HMM</h3>
+
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>MDP</th>
+            <th>HMM</th>
+        </tr>
+
+        <tr>
+            <td>States</td>
+            <td>Usually observable</td>
+            <td>Hidden</td>
+        </tr>
+
+        <tr>
+            <td>Actions</td>
+            <td>Yes</td>
+            <td>No decision-making actions</td>
+        </tr>
+
+        <tr>
+            <td>Rewards</td>
+            <td>Yes</td>
+            <td>Usually no</td>
+        </tr>
+
+        <tr>
+            <td>Main purpose</td>
+            <td>Decision making</td>
+            <td>State estimation / sequence modeling</td>
+        </tr>
+
+        <tr>
+            <td>Example</td>
+            <td>Robot navigation</td>
+            <td>Weather prediction</td>
+        </tr>
+    </table>
+
+</section>
+
+
+<!-- ====================================================== -->
+<!-- TUTORIAL  -->
+<!-- ====================================================== -->
+
+<section>
+
+    <h2>Tutorial : MDP vs HMM Practical</h2>
+
+    <h3>1. Practical MDP Example</h3>
+
+    <p>
+        Imagine a robot moving along a road.
+    </p>
+
+    <p>The robot knows its current position:</p>
+
+<pre><code>Position = 5</code></pre>
+
+    <p>Available actions:</p>
+
+<pre><code>Left
+Right</code></pre>
+
+    <p>The objective is to reach position 10.</p>
+
+    <table>
+        <tr>
+            <th>Situation</th>
+            <th>Reward</th>
+        </tr>
+
+        <tr>
+            <td>Reach destination</td>
+            <td>+100</td>
+        </tr>
+
+        <tr>
+            <td>Normal movement</td>
+            <td>-1</td>
+        </tr>
+
+        <tr>
+            <td>Collision</td>
+            <td>-100</td>
+        </tr>
+    </table>
+
+    <h3>2. Python MDP Simulation</h3>
+
+<pre><code>import random
+
+position = 0
+goal = 10
+
+for step in range(20):
+
+    actions = ["left", "right"]
+
+    action = random.choice(actions)
+
+    if action == "right":
+        position += 1
+    else:
+        position -= 1
+
+    position = max(0, position)
+
+    if position == goal:
+        reward = 100
+    else:
+        reward = -1
+
+    print(
+        f"Step={step}, "
+        f"Position={position}, "
+        f"Action={action}, "
+        f"Reward={reward}"
+    )
+
+    if position == goal:
+        print("Destination reached!")
+        break
+</code></pre>
+
+    <h3>3. Practical HMM Example</h3>
+
+    <p>
+        Consider an industrial machine.
+        Its actual condition is hidden.
+    </p>
+
+    <p>Hidden states:</p>
+
+<pre><code>Normal
+Faulty</code></pre>
+
+    <p>Sensor observations:</p>
+
+<pre><code>Low vibration
+High vibration</code></pre>
+
+    <h3>4. Probability Model</h3>
+
+<pre><code>Normal:
+    Low vibration  = 0.9
+    High vibration = 0.1
+
+Faulty:
+    Low vibration  = 0.2
+    High vibration = 0.8
+</code></pre>
+
+    <h3>5. Python HMM Example</h3>
+
+<pre><code>probability = {
+
+    "Normal": {
+        "Low vibration": 0.9,
+        "High vibration": 0.1
+    },
+
+    "Faulty": {
+        "Low vibration": 0.2,
+        "High vibration": 0.8
+    }
+}
+
+observation = "High vibration"
+
+for state, values in probability.items():
+
+    print(
+        state,
+        "Probability:",
+        values[observation]
+    )
+</code></pre>
+
+    <div class="example">
+        <strong>Result:</strong>
+        If the sensor reports high vibration, the model considers
+        "Faulty" more likely because its probability is 0.8 compared
+        with 0.1 for "Normal".
+    </div>
+
+</section>
+
+
+<!-- ====================================================== -->
+<!-- TUTORIAL  -->
+<!-- ====================================================== -->
+
+<section>
+
+    <h2>Tutorial : Bellman Equation & Q-Learning</h2>
+
+    <h3>1. Why Future Rewards Matter</h3>
+
+    <p>
+        An RL agent should not only consider immediate rewards.
+        It should also consider future rewards.
+    </p>
+
+    <div class="example">
+
+        <p>Suppose:</p>
+
+<pre><code>Action A → +5 immediately
+
+Action B → +2 immediately → +100 later</code></pre>
+
+        <p>
+            A good RL algorithm should understand that Action B may
+            produce a larger total return.
+        </p>
+
+    </div>
+
+    <h3>2. Bellman Equation</h3>
+
+    <div class="formula">
+        V(s) = R + γV(s')
+    </div>
+
+    <table>
+        <tr>
+            <th>Symbol</th>
+            <th>Meaning</th>
+        </tr>
+
+        <tr>
+            <td>V(s)</td>
+            <td>Value of current state</td>
+        </tr>
+
+        <tr>
+            <td>R</td>
+            <td>Immediate reward</td>
+        </tr>
+
+        <tr>
+            <td>γ</td>
+            <td>Discount factor</td>
+        </tr>
+
+        <tr>
+            <td>V(s')</td>
+            <td>Future state value</td>
+        </tr>
+    </table>
+
+    <h3>3. Bellman Numerical Example</h3>
+
+<pre><code>Reward = 10
+Gamma = 0.9
+Future Value = 50
+</code></pre>
+
+    <div class="formula">
+        V(s) = 10 + (0.9 × 50) = 55
+    </div>
+
+    <h3>4. What is Q-Learning?</h3>
+
+    <p>
+        Q-Learning is an off-policy Reinforcement Learning algorithm
+        that learns the value of taking an action in a particular state.
+    </p>
+
+    <p>
+        These values are stored in a <strong>Q-table</strong>.
+    </p>
+
+    <table>
+        <tr>
+            <th>State</th>
+            <th>Left</th>
+            <th>Right</th>
+        </tr>
+
+        <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>5</td>
+        </tr>
+
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>10</td>
+        </tr>
+
+        <tr>
+            <td>2</td>
+            <td>1</td>
+            <td>20</td>
+        </tr>
+    </table>
+
+    <p>
+        At State 1:
+    </p>
+
+<pre><code>Q(1, Left)  = 2
+Q(1, Right) = 10
+</code></pre>
+
+    <p>
+        Therefore, Right is currently the best action.
+    </p>
+
+    <h3>5. Q-Learning Formula</h3>
+
+    <div class="formula">
+        Q(s,a) ← Q(s,a) + α[R + γ max Q(s',a') − Q(s,a)]
+    </div>
+
+    <h3>6. Parameters</h3>
+
+    <table>
+        <tr>
+            <th>Parameter</th>
+            <th>Meaning</th>
+        </tr>
+
+        <tr>
+            <td>α</td>
+            <td>Learning rate</td>
+        </tr>
+
+        <tr>
+            <td>γ</td>
+            <td>Discount factor</td>
+        </tr>
+
+        <tr>
+            <td>R</td>
+            <td>Reward</td>
+        </tr>
+
+        <tr>
+            <td>Q(s,a)</td>
+            <td>Current Q-value</td>
+        </tr>
+
+        <tr>
+            <td>max Q(s',a')</td>
+            <td>Best future Q-value</td>
+        </tr>
+    </table>
+
+    <h3>7. Complete Q-Learning Python Example</h3>
+
+    <p>
+        Environment:
+    </p>
+
+<pre><code>0 → 1 → 2 → 3 → 4
+                ↑
+               Goal
+</code></pre>
+
+    <p>
+        Actions:
+    </p>
+
+<pre><code>0 = Left
+1 = Right
+</code></pre>
+
+<pre><code>import numpy as np
+import random
+
+# Number of states
+num_states = 5
+
+# Number of actions
+num_actions = 2
+
+# Q-table
+q_table = np.zeros(
+    (num_states, num_actions)
+)
+
+# Hyperparameters
+learning_rate = 0.1
+discount_factor = 0.9
+epsilon = 0.2
+
+episodes = 1000
+
+
+for episode in range(episodes):
+
+    state = 0
+
+    for step in range(100):
+
+        # Epsilon-greedy action selection
+        if random.random() &lt; epsilon:
+
+            # Exploration
+            action = random.randint(0, 1)
+
+        else:
+
+            # Exploitation
+            action = np.argmax(
+                q_table[state]
+            )
+
+        # Environment
+        if action == 1:
+
+            next_state = min(
+                state + 1,
+                4
+            )
+
+        else:
+
+            next_state = max(
+                state - 1,
+                0
+            )
+
+        # Reward
+        if next_state == 4:
+            reward = 10
+        else:
+            reward = -1
+
+        # Q-Learning update
+        q_table[state, action] = (
+            q_table[state, action]
+            +
+            learning_rate *
+            (
+                reward
+                +
+                discount_factor *
+                np.max(
+                    q_table[next_state]
+                )
+                -
+                q_table[state, action]
+            )
+        )
+
+        state = next_state
+
+        if state == 4:
+            break
+
+
+print("Q-table:")
+print(q_table)
+</code></pre>
+
+    <h3>8. Display Learned Policy</h3>
+
+<pre><code>for state in range(num_states):
+
+    action = np.argmax(
+        q_table[state]
+    )
+
+    if action == 0:
+        action_name = "Left"
+    else:
+        action_name = "Right"
+
+    print(
+        f"State {state}: {action_name}"
+    )
+</code></pre>
+
+    <div class="important">
+        <strong>Expected idea:</strong>
+        The agent should learn that moving Right is useful because
+        it eventually reaches the goal.
+    </div>
+
+</section>
+
+
+<!-- ====================================================== -->
+<!-- TUTORIAL -->
+<!-- ====================================================== -->
+
+<section>
+
+    <h2>Tutorial: SARSA | On-Policy vs Off-Policy</h2>
+
+    <h3>1. What is SARSA?</h3>
+
+    <p>
+        SARSA is another Temporal Difference Reinforcement Learning
+        algorithm.
+    </p>
+
+    <p>The name SARSA represents:</p>
+
+    <div class="formula">
+        State → Action → Reward → State → Action
+    </div>
+
+    <ul>
+        <li>S = Current State</li>
+        <li>A = Current Action</li>
+        <li>R = Reward</li>
+        <li>S = Next State</li>
+        <li>A = Next Action</li>
+    </ul>
+
+    <h3>2. SARSA Formula</h3>
+
+    <div class="formula">
+        Q(s,a) ← Q(s,a) + α[R + γQ(s',a') − Q(s,a)]
+    </div>
+
+    <p>
+        The important difference is that SARSA uses the
+        <strong>actual next action</strong> selected by the agent.
+    </p>
+
+    <h3>3. SARSA Python Example</h3>
+
+<pre><code>import numpy as np
+import random
+
+num_states = 5
+num_actions = 2
+
+q_table = np.zeros(
+    (num_states, num_actions)
+)
+
+learning_rate = 0.1
+discount_factor = 0.9
+epsilon = 0.2
+
+episodes = 1000
+
+
+def choose_action(state):
+
+    if random.random() &lt; epsilon:
+
+        # Exploration
+        return random.randint(0, 1)
+
+    # Exploitation
+    return np.argmax(
+        q_table[state]
+    )
+
+
+for episode in range(episodes):
+
+    state = 0
+
+    # Select first action
+    action = choose_action(state)
+
+    for step in range(100):
+
+        # Environment
+        if action == 1:
+
+            next_state = min(
+                state + 1,
+                4
+            )
+
+        else:
+
+            next_state = max(
+                state - 1,
+                0
+            )
+
+        # Reward
+        if next_state == 4:
+            reward = 10
+        else:
+            reward = -1
+
+        # Goal reached
+        if next_state == 4:
+
+            q_table[state, action] += (
+                learning_rate *
+                (
+                    reward
+                    -
+                    q_table[state, action]
+                )
+            )
+
+            break
+
+        # Choose next action
+        next_action = choose_action(
+            next_state
+        )
+
+        # SARSA update
+        q_table[state, action] += (
+            learning_rate *
+            (
+                reward
+                +
+                discount_factor *
+                q_table[
+                    next_state,
+                    next_action
+                ]
+                -
+                q_table[state, action]
+            )
+        )
+
+        state = next_state
+        action = next_action
+
+
+print("SARSA Q-table:")
+print(q_table)
+</code></pre>
+
+    <h3>4. What is On-Policy Learning?</h3>
+
+    <p>
+        An On-Policy algorithm learns about the same policy that
+        it is using to make decisions.
+    </p>
+
+    <div class="flow">
+        Current Policy → Choose Action → Learn From That Action
+    </div>
+
+    <p>
+        SARSA is an example of an <strong>On-Policy</strong> algorithm.
+    </p>
+
+    <h3>5. What is Off-Policy Learning?</h3>
+
+    <p>
+        An Off-Policy algorithm can behave using one policy while
+        learning about another policy.
+    </p>
+
+    <p>
+        Q-Learning is an example of an <strong>Off-Policy</strong>
+        algorithm.
+    </p>
+
+    <h3>6. Q-Learning vs SARSA</h3>
+
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>Q-Learning</th>
+            <th>SARSA</th>
+        </tr>
+
+        <tr>
+            <td>Policy type</td>
+            <td>Off-Policy</td>
+            <td>On-Policy</td>
+        </tr>
+
+        <tr>
+            <td>Future action</td>
+            <td>Best possible action</td>
+            <td>Actual selected action</td>
+        </tr>
+
+        <tr>
+            <td>Formula</td>
+            <td>max Q(s',a')</td>
+            <td>Q(s',a')</td>
+        </tr>
+
+        <tr>
+            <td>Exploration</td>
+            <td>Not directly used in target</td>
+            <td>Included in actual behavior</td>
+        </tr>
+
+        <tr>
+            <td>Learning style</td>
+            <td>More aggressive</td>
+            <td>More conservative</td>
+        </tr>
+    </table>
+
+    <h3>7. Most Important Code Difference</h3>
+
+    <h4>Q-Learning</h4>
+
+<pre><code>best_future_q = np.max(
+    q_table[next_state]
+)
+
+target = (
+    reward
+    + gamma * best_future_q
+)
+</code></pre>
+
+    <h4>SARSA</h4>
+
+<pre><code>next_action = choose_action(
+    next_state
+)
+
+target = (
+    reward
+    + gamma *
+    q_table[
+        next_state,
+        next_action
+    ]
+)
+</code></pre>
+
+    <h3>8. Practical Example: Cliff Walking</h3>
+
+    <p>
+        Imagine the following environment:
+    </p>
+
+<pre><code>Start → → → → → Goal
+          X X X X
+          Cliff
+</code></pre>
+
+    <p>
+        The agent can take a safe path or move close to a dangerous
+        cliff while exploring.
+    </p>
+
+    <h4>SARSA</h4>
+
+    <p>
+        SARSA considers the actual exploratory behavior of the agent.
+        Because exploration can cause the agent to fall from the cliff,
+        SARSA often learns a safer route.
+    </p>
+
+    <h4>Q-Learning</h4>
+
+    <p>
+        Q-Learning uses the maximum future Q-value and therefore
+        focuses more directly on the optimal greedy path.
+    </p>
+
+</section>
+
+
+<!-- ====================================================== -->
+<!-- SUMMARY -->
+<!-- ====================================================== -->
+
+<section>
+
+    <h2>Complete Summary Reinforcement Learning</h2>
+
+    <table>
+        <tr>
+            <th>Tutorial</th>
+            <th>Topic</th>
+            <th>Main Concept</th>
+        </tr>
+
+        <tr>
+            <td>40</td>
+            <td>Introduction to RL</td>
+            <td>Agent, Environment, State, Action, Reward</td>
+        </tr>
+
+        <tr>
+            <td>41</td>
+            <td>MDP vs HMM</td>
+            <td>Decision-making vs hidden-state modeling</td>
+        </tr>
+
+        <tr>
+            <td>42</td>
+            <td>MDP vs HMM Practical</td>
+            <td>Robot and machine-state examples</td>
+        </tr>
+
+        <tr>
+            <td>43</td>
+            <td>Bellman Equation & Q-Learning</td>
+            <td>Q-table and optimal future reward</td>
+        </tr>
+
+        <tr>
+            <td>44</td>
+            <td>SARSA</td>
+            <td>On-Policy vs Off-Policy learning</td>
+        </tr>
+    </table>
+
+    <h3>Overall Learning Path</h3>
+
+    <div class="flow">
+
+        Reinforcement Learning
+        <br>↓<br>
+        Agent + Environment
+        <br>↓<br>
+        State + Action + Reward
+        <br>↓<br>
+        Markov Decision Process
+        <br>↓<br>
+        Bellman Equation
+        <br>↓<br>
+        Q-Learning
+        <br>↓<br>
+        SARSA
+        <br>↓<br>
+        Deep Reinforcement Learning
+        <br>↓<br>
+        DQN
+
+    </div>
+
+    <h3>Important Concepts to Remember</h3>
+
+    <div class="concept">
+
+        <p>
+            <strong>Reinforcement Learning:</strong>
+            Learn by interacting with an environment.
+        </p>
+
+        <p>
+            <strong>MDP:</strong>
+            Mathematical framework for sequential decision making.
+        </p>
+
+        <p>
+            <strong>HMM:</strong>
+            Model where the actual state is hidden.
+        </p>
+
+        <p>
+            <strong>Bellman Equation:</strong>
+            Connects current value with immediate reward and future value.
+        </p>
+
+        <p>
+            <strong>Q-Learning:</strong>
+            Off-policy algorithm using the maximum future Q-value.
+        </p>
+
+        <p>
+            <strong>SARSA:</strong>
+            On-policy algorithm using the actual next action.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ====================================================== -->
+<!-- PRACTICE -->
+<!-- ====================================================== -->
+
+<section>
+
+    <h2>Practice Exercises</h2>
+
+    <h3>Exercise 1 — Basic RL</h3>
+
+    <p>
+        Create an environment with positions 0 to 10.
+        The agent should start at position 0 and learn to reach
+        position 10.
+    </p>
+
+    <ul>
+        <li>Goal reward = +10</li>
+        <li>Every step = -1</li>
+        <li>Use random actions initially</li>
+    </ul>
+
+    <h3>Exercise 2 — MDP</h3>
+
+    <p>
+        Create an MDP representing a robot moving through five rooms.
+        Define:
+    </p>
+
+    <ul>
+        <li>States</li>
+        <li>Actions</li>
+        <li>Rewards</li>
+        <li>Transitions</li>
+    </ul>
+
+    <h3>Exercise 3 — Q-Learning</h3>
+
+    <p>
+        Modify the Q-Learning example so that the environment contains
+        an obstacle.
+    </p>
+
+    <ul>
+        <li>Goal = +10</li>
+        <li>Obstacle = -10</li>
+        <li>Normal movement = -1</li>
+    </ul>
+
+    <h3>Exercise 4 — SARSA</h3>
+
+    <p>
+        Implement the same environment using SARSA.
+        Compare the learned Q-table with Q-Learning.
+    </p>
+
+    <h3>Exercise 5 — Comparison</h3>
+
+    <p>
+        Train both algorithms for 1,000 episodes and compare:
+    </p>
+
+    <ul>
+        <li>Number of steps to reach the goal</li>
+        <li>Total reward</li>
+        <li>Learned policy</li>
+        <li>Q-values</li>
+    </ul>
+
+</section>
+
+</main>
+
+<footer>
+    <p>Reinforcement Learning Tutorials 40–44</p>
+    <p>Python + Machine Learning Course</p>
+</footer>
+
+</body>
+</html>
