@@ -78,6 +78,21 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 30 : Save the trained model weights and use them](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/68-save_model_for_inference.html)
 
+[Lecture 31 : Clustering](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/68-clustering.html)
+
+[Lecture 32 : Clustering Algos ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/69-clustering_algorithms.html)
+
+[Lecture 33 : Clustering Algos (Cont..) ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/70-clustering_.html)
+
+[Lecture 34 : Evaluation Matices for clustering ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/71-evalution_matrics_for_clustering.html)
+
+[Lecture 35 : Cross Validation ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/72-cross_validation.html)
+
+[Lecture 36 : PCA LDA ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/73-PCA_LDA.html)
+
+[Lecture 37 : PCA LDA ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/74-Reinforcement_Learning - Copy.html)
+
+
 
 
 ![Project Logo](7-Split_dataset_into_train_test_features_labels.png)
