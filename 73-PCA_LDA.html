@@ -1,0 +1,2641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dimensionality Reduction - PCA, LDA & Kernel PCA</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #17202a;
+            color: white;
+            padding: 45px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 38px;
+        }
+
+        header p {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #1f618d;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #2874a6;
+        }
+
+        .intro-box {
+            background: #eaf2f8;
+            padding: 20px;
+            border-left: 5px solid #2874a6;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .important {
+            background: #fef9e7;
+            padding: 20px;
+            border-left: 5px solid #f1c40f;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .success {
+            background: #eafaf1;
+            padding: 20px;
+            border-left: 5px solid #27ae60;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .danger {
+            background: #fdedec;
+            padding: 20px;
+            border-left: 5px solid #e74c3c;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            padding: 20px;
+            overflow-x: auto;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        code {
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        .diagram {
+            background: #f8f9f9;
+            border: 1px solid #ddd;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th {
+            background: #2874a6;
+            color: white;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9f9;
+        }
+
+        .formula {
+            background: #f4f6f7;
+            border: 1px solid #ddd;
+            padding: 18px;
+            text-align: center;
+            font-size: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .step {
+            background: #f8f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #5dade2;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #2874a6;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin-right: 8px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: #f8f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .visual-placeholder {
+            background: #fafafa;
+            border: 2px dashed #aaa;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: #d6eaf8;
+            color: #154360;
+            margin: 3px;
+        }
+
+        footer {
+            background: #17202a;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        @media(max-width: 700px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 28px;
+            }
+
+            section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Dimensionality Reduction</h1>
+    <p>PCA, LDA & Kernel PCA — Complete A to Z Tutorial</p>
+</header>
+
+<div class="container">
+
+<!-- ====================================================== -->
+<!-- INTRODUCTION -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>1. Introduction to Dimensionality Reduction</h2>
+
+<p>
+Dimensionality reduction is the process of reducing the number of
+features in a dataset while trying to preserve the most important
+information.
+</p>
+
+<div class="intro-box">
+    <strong>Example:</strong>
+    <br><br>
+    100 features → 10 important components
+    <br><br>
+    The goal is to make the dataset smaller without losing too much
+    useful information.
+</div>
+
+<div class="diagram">
+
+Original Dataset
+
+Feature 1
+Feature 2
+Feature 3
+Feature 4
+Feature 5
+Feature 6
+Feature 7
+Feature 8
+
+        ↓
+
+Dimensionality Reduction
+
+        ↓
+
+Component 1
+Component 2
+
+</div>
+
+<h3>Why do we need dimensionality reduction?</h3>
+
+<ul>
+    <li>Reduce computational cost</li>
+    <li>Remove redundant information</li>
+    <li>Reduce noise</li>
+    <li>Improve visualization</li>
+    <li>Sometimes improve model performance</li>
+    <li>Reduce the curse of dimensionality</li>
+</ul>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- CURSE OF DIMENSIONALITY -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>2. Curse of Dimensionality</h2>
+
+<p>
+As the number of features increases, machine-learning algorithms can
+become more difficult to train and interpret.
+</p>
+
+<div class="diagram">
+
+10 features
+     ↓
+100 features
+     ↓
+1,000 features
+     ↓
+10,000 features
+
+More dimensions
+      ↓
+More computation
+      ↓
+More sparse data
+      ↓
+Greater risk of overfitting
+
+</div>
+
+<div class="important">
+
+<strong>Important:</strong>
+
+Dimensionality reduction does not simply delete random columns.
+Techniques such as PCA create new features that are combinations of
+the original features.
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- THREE METHODS -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>3. Three Important Techniques</h2>
+
+<table>
+
+<tr>
+    <th>Technique</th>
+    <th>Supervised?</th>
+    <th>Linear?</th>
+    <th>Main Goal</th>
+</tr>
+
+<tr>
+    <td>PCA</td>
+    <td>No</td>
+    <td>Yes</td>
+    <td>Maximum variance</td>
+</tr>
+
+<tr>
+    <td>LDA</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Maximum class separation</td>
+</tr>
+
+<tr>
+    <td>Kernel PCA</td>
+    <td>No</td>
+    <td>Nonlinear capable</td>
+    <td>Capture nonlinear structure</td>
+</tr>
+
+</table>
+
+<div class="diagram">
+
+                    Dimensionality Reduction
+                              |
+             +----------------+----------------+
+             |                |                |
+             ↓                ↓                ↓
+            PCA              LDA             KPCA
+             |                |                |
+        Unsupervised      Supervised      Unsupervised
+             |                |                |
+           Linear            Linear         Nonlinear
+             |                |                |
+      Maximize variance  Separate classes  Nonlinear structure
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PCA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>4. PCA — Principal Component Analysis</h2>
+
+<p>
+PCA stands for <strong>Principal Component Analysis</strong>.
+It is one of the most widely used dimensionality-reduction techniques.
+</p>
+
+<div class="intro-box">
+
+<strong>Main idea:</strong>
+
+PCA finds new directions in the data that capture the maximum amount
+of variance.
+
+</div>
+
+<h3>Example</h3>
+
+<p>
+Suppose we have five student features:
+</p>
+
+<ul>
+    <li>Math</li>
+    <li>Physics</li>
+    <li>Chemistry</li>
+    <li>English</li>
+    <li>Biology</li>
+</ul>
+
+<p>
+Instead of using all five features, PCA might transform them into:
+</p>
+
+<div class="diagram">
+
+Math
+Physics
+Chemistry
+English
+Biology
+
+      ↓
+
+     PCA
+
+      ↓
+
+PC1
+PC2
+
+</div>
+
+<p>
+PC1 and PC2 are new features called principal components.
+</p>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PCA INTUITION -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>5. PCA Intuition</h2>
+
+<p>
+Imagine that the data points look approximately like this:
+</p>
+
+<div class="diagram">
+
+              •
+           •
+        •
+     •
+  •
+•
+        → Direction of maximum variation
+
+</div>
+
+<p>
+PCA tries to find the direction where the data varies the most.
+That direction becomes the first principal component.
+</p>
+
+<div class="step">
+    <span class="step-number">1</span>
+    Find the direction with maximum variance.
+</div>
+
+<div class="step">
+    <span class="step-number">2</span>
+    This becomes PC1.
+</div>
+
+<div class="step">
+    <span class="step-number">3</span>
+    Find another perpendicular direction with the next highest variance.
+</div>
+
+<div class="step">
+    <span class="step-number">4</span>
+    This becomes PC2.
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PCA MATHEMATICS -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>6. PCA Mathematical Intuition</h2>
+
+<p>
+The mathematical procedure behind PCA involves:
+</p>
+
+<ol>
+    <li>Standardizing the data when appropriate</li>
+    <li>Computing the covariance matrix</li>
+    <li>Finding eigenvalues and eigenvectors</li>
+    <li>Sorting components according to eigenvalues</li>
+    <li>Projecting the original data onto the selected components</li>
+</ol>
+
+<h3>Standardization</h3>
+
+<div class="formula">
+
+z = (x - μ) / σ
+
+</div>
+
+<p>
+where:
+</p>
+
+<ul>
+    <li>x = original value</li>
+    <li>μ = mean</li>
+    <li>σ = standard deviation</li>
+</ul>
+
+<h3>Explained Variance</h3>
+
+<p>
+Each principal component explains a certain amount of the total
+variance in the dataset.
+</p>
+
+<div class="formula">
+
+Explained Variance Ratio =
+Variance of Component / Total Variance
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PCA SIMPLE PYTHON -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>7. PCA — Simple Python Example</h2>
+
+<p>
+First create a simple dataset.
+</p>
+
+<pre><code>import numpy as np
+
+X = np.array([
+    [2, 3],
+    [3, 4],
+    [4, 5],
+    [5, 6],
+    [6, 7],
+    [7, 8]
+])
+
+print(X)</code></pre>
+
+<p>Output:</p>
+
+<pre><code>[[2 3]
+ [3 4]
+ [4 5]
+ [5 6]
+ [6 7]
+ [7 8]]</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PCA VISUALIZATION -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>8. Visualizing the Original Data</h2>
+
+<pre><code>import matplotlib.pyplot as plt
+
+plt.scatter(
+    X[:, 0],
+    X[:, 1]
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+
+plt.title("Original Data")
+
+plt.show()</code></pre>
+
+<div class="visual-placeholder">
+
+<strong>Picture generated by Python:</strong>
+
+<p>
+A scatter plot showing the original observations.
+</p>
+
+<p>
+Run the code above in Jupyter Notebook, VS Code, Google Colab,
+or another Python environment.
+</p>
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- STANDARDIZATION -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>9. Standardization Before PCA</h2>
+
+<p>
+When features have very different scales, standardization is often
+important.
+</p>
+
+<p>For example:</p>
+
+<div class="diagram">
+
+Age          → 20 – 60
+
+Experience   → 1 – 30
+
+Salary       → 20,000 – 500,000
+
+</div>
+
+<p>
+Salary has a much larger numerical scale.
+Without scaling, it could dominate the PCA calculation.
+</p>
+
+<pre><code>from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+
+print(X_scaled)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- APPLY PCA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>10. Applying PCA</h2>
+
+<pre><code>from sklearn.decomposition import PCA
+
+pca = PCA(
+    n_components=1
+)
+
+X_pca = pca.fit_transform(
+    X_scaled
+)
+
+print(X_pca)</code></pre>
+
+<p>
+We have converted:
+</p>
+
+<div class="diagram">
+
+2 dimensions
+     ↓
+    PCA
+     ↓
+1 dimension
+
+</div>
+
+<pre><code>print("Original:", X.shape)
+print("Reduced:", X_pca.shape)</code></pre>
+
+<p>Expected output:</p>
+
+<pre><code>Original: (6, 2)
+Reduced: (6, 1)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- EXPLAINED VARIANCE -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>11. Explained Variance Ratio</h2>
+
+<pre><code>print(
+    pca.explained_variance_ratio_
+)</code></pre>
+
+<p>
+Suppose the output is:
+</p>
+
+<pre><code>[0.997]</code></pre>
+
+<p>
+This means that approximately 99.7% of the variance is represented
+by the first principal component.
+</p>
+
+<div class="success">
+
+<strong>Key idea:</strong>
+
+A smaller number of dimensions can sometimes preserve most of the
+important variation in the original dataset.
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- IRIS -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>12. PCA with the Iris Dataset</h2>
+
+<p>
+Now we use the famous Iris dataset.
+</p>
+
+<p>
+The dataset contains:
+</p>
+
+<ul>
+    <li>150 samples</li>
+    <li>4 numerical features</li>
+    <li>3 classes</li>
+</ul>
+
+<p>The features are:</p>
+
+<ul>
+    <li>Sepal length</li>
+    <li>Sepal width</li>
+    <li>Petal length</li>
+    <li>Petal width</li>
+</ul>
+
+<pre><code>from sklearn.datasets import load_iris
+
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+print(X.shape)</code></pre>
+
+<p>Output:</p>
+
+<pre><code>(150, 4)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- COMPLETE PCA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>13. Complete PCA Example</h2>
+
+<pre><code>import matplotlib.pyplot as plt
+
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# Load dataset
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+# Standardize
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+
+# PCA
+pca = PCA(
+    n_components=2
+)
+
+X_pca = pca.fit_transform(
+    X_scaled
+)
+
+print("Original shape:", X.shape)
+print("Reduced shape:", X_pca.shape)
+
+print("Explained variance:")
+print(
+    pca.explained_variance_ratio_
+)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PCA PLOT -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>14. PCA Visualization</h2>
+
+<pre><code>plt.figure(figsize=(8, 6))
+
+plt.scatter(
+    X_pca[:, 0],
+    X_pca[:, 1],
+    c=y
+)
+
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
+
+plt.title(
+    "Iris Dataset After PCA"
+)
+
+plt.colorbar(
+    label="Class"
+)
+
+plt.show()</code></pre>
+
+<div class="visual-placeholder">
+
+<h3>PCA Visualization</h3>
+
+<p>
+The Python code generates a 2D scatter plot using PC1 and PC2.
+Different colors represent the three Iris classes.
+</p>
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- NUMBER OF COMPONENTS -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>15. How Many PCA Components Should We Keep?</h2>
+
+<p>
+Suppose PCA produces:
+</p>
+
+<table>
+
+<tr>
+    <th>Component</th>
+    <th>Explained Variance</th>
+    <th>Cumulative</th>
+</tr>
+
+<tr>
+    <td>PC1</td>
+    <td>72%</td>
+    <td>72%</td>
+</tr>
+
+<tr>
+    <td>PC2</td>
+    <td>23%</td>
+    <td>95%</td>
+</tr>
+
+<tr>
+    <td>PC3</td>
+    <td>4%</td>
+    <td>99%</td>
+</tr>
+
+<tr>
+    <td>PC4</td>
+    <td>1%</td>
+    <td>100%</td>
+</tr>
+
+</table>
+
+<p>
+If we want approximately 95% explained variance, we could choose
+two components.
+</p>
+
+<div class="diagram">
+
+PC1 = 72%
+
+PC1 + PC2 = 95%
+
+PC1 + PC2 + PC3 = 99%
+
+PC1 + PC2 + PC3 + PC4 = 100%
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- EXPLAINED VARIANCE PLOT -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>16. Explained Variance Plot</h2>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+pca = PCA()
+
+X_pca = pca.fit_transform(
+    X_scaled
+)
+
+cumulative_variance = np.cumsum(
+    pca.explained_variance_ratio_
+)
+
+plt.plot(
+    range(
+        1,
+        len(cumulative_variance) + 1
+    ),
+    cumulative_variance,
+    marker="o"
+)
+
+plt.xlabel(
+    "Number of Components"
+)
+
+plt.ylabel(
+    "Cumulative Explained Variance"
+)
+
+plt.title(
+    "PCA Explained Variance"
+)
+
+plt.grid()
+
+plt.show()</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- LDA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>17. LDA — Linear Discriminant Analysis</h2>
+
+<p>
+LDA stands for <strong>Linear Discriminant Analysis</strong>.
+</p>
+
+<p>
+Unlike PCA, LDA is a supervised technique.
+It uses both:
+</p>
+
+<div class="diagram">
+
+X = Features
+
+y = Class Labels
+
+        ↓
+
+       LDA
+
+        ↓
+
+Class-separating components
+
+</div>
+
+<div class="important">
+
+<strong>Main difference:</strong>
+
+PCA asks:
+
+"Where is the greatest variance?"
+
+LDA asks:
+
+"Where are the classes best separated?"
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- LDA INTUITION -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>18. LDA Intuition</h2>
+
+<p>
+Suppose we have two classes:
+</p>
+
+<div class="diagram">
+
+Class A:
+
+       ● ●
+     ● ●
+
+
+Class B:
+
+
+              ▲ ▲
+            ▲ ▲
+
+</div>
+
+<p>
+LDA tries to find a projection where the classes become clearly
+separated.
+</p>
+
+<div class="diagram">
+
+Class A       Class B
+
+● ● ●              ▲ ▲ ▲
+● ● ●              ▲ ▲ ▲
+● ● ●              ▲ ▲ ▲
+
+<-------- Separation -------->
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- LDA MATH -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>19. LDA Mathematical Intuition</h2>
+
+<p>
+LDA attempts to maximize between-class variance and minimize
+within-class variance.
+</p>
+
+<div class="formula">
+
+maximize:
+Between-Class Variance / Within-Class Variance
+
+</div>
+
+<p>
+In other words:
+</p>
+
+<ul>
+    <li>Classes should be far apart.</li>
+    <li>Samples belonging to the same class should be close together.</li>
+</ul>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- LDA IRIS -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>20. LDA with Iris</h2>
+
+<pre><code>from sklearn.datasets import load_iris
+
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+print(X.shape)
+print(y.shape)</code></pre>
+
+<p>Output:</p>
+
+<pre><code>(150, 4)
+(150,)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- LDA STANDARDIZATION -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>21. Standardize the Iris Data</h2>
+
+<pre><code>from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- APPLY LDA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>22. Apply LDA</h2>
+
+<p>
+Iris has three classes.
+The maximum number of LDA components is:
+</p>
+
+<div class="formula">
+
+Maximum components = Number of Classes - 1
+
+</div>
+
+<p>
+Therefore:
+</p>
+
+<div class="formula">
+
+3 - 1 = 2
+
+</div>
+
+<pre><code>from sklearn.discriminant_analysis import (
+    LinearDiscriminantAnalysis
+)
+
+lda = LinearDiscriminantAnalysis(
+    n_components=2
+)
+
+X_lda = lda.fit_transform(
+    X_scaled,
+    y
+)
+
+print(X_lda.shape)</code></pre>
+
+<p>Output:</p>
+
+<pre><code>(150, 2)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- LDA VISUALIZATION -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>23. LDA Visualization</h2>
+
+<pre><code>import matplotlib.pyplot as plt
+
+plt.figure(figsize=(8, 6))
+
+for class_id in range(3):
+
+    plt.scatter(
+        X_lda[y == class_id, 0],
+        X_lda[y == class_id, 1],
+        label=iris.target_names[class_id]
+    )
+
+plt.xlabel(
+    "Linear Discriminant 1"
+)
+
+plt.ylabel(
+    "Linear Discriminant 2"
+)
+
+plt.title(
+    "Iris Dataset After LDA"
+)
+
+plt.legend()
+
+plt.show()</code></pre>
+
+<div class="visual-placeholder">
+
+<h3>LDA Picture</h3>
+
+<p>
+The resulting scatter plot should show how the three Iris classes
+are projected into discriminant space.
+</p>
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- COMPLETE LDA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>24. Complete LDA Example</h2>
+
+<pre><code>import matplotlib.pyplot as plt
+
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.discriminant_analysis import (
+    LinearDiscriminantAnalysis
+)
+
+# Load dataset
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+# Standardization
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+
+# LDA
+lda = LinearDiscriminantAnalysis(
+    n_components=2
+)
+
+X_lda = lda.fit_transform(
+    X_scaled,
+    y
+)
+
+# Visualization
+plt.figure(figsize=(8, 6))
+
+for class_id in range(3):
+
+    plt.scatter(
+        X_lda[y == class_id, 0],
+        X_lda[y == class_id, 1],
+        label=iris.target_names[class_id]
+    )
+
+plt.xlabel("LD1")
+plt.ylabel("LD2")
+
+plt.title("LDA Projection")
+
+plt.legend()
+
+plt.show()</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PCA VS LDA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>25. PCA vs LDA</h2>
+
+<table>
+
+<tr>
+    <th>Feature</th>
+    <th>PCA</th>
+    <th>LDA</th>
+</tr>
+
+<tr>
+    <td>Type</td>
+    <td>Unsupervised</td>
+    <td>Supervised</td>
+</tr>
+
+<tr>
+    <td>Uses labels?</td>
+    <td>No</td>
+    <td>Yes</td>
+</tr>
+
+<tr>
+    <td>Objective</td>
+    <td>Maximum variance</td>
+    <td>Maximum class separation</td>
+</tr>
+
+<tr>
+    <td>Linear?</td>
+    <td>Yes</td>
+    <td>Yes</td>
+</tr>
+
+<tr>
+    <td>Classification-oriented?</td>
+    <td>Not directly</td>
+    <td>Yes</td>
+</tr>
+
+<tr>
+    <td>Maximum components</td>
+    <td>Usually limited by features</td>
+    <td>Classes - 1</td>
+</tr>
+
+</table>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- KERNEL PCA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>26. Kernel PCA</h2>
+
+<p>
+Kernel PCA is an extension of PCA that can capture nonlinear
+relationships.
+</p>
+
+<div class="diagram">
+
+Normal PCA
+
+Original Data
+     ↓
+Linear Transformation
+     ↓
+Principal Components
+
+
+Kernel PCA
+
+Original Data
+     ↓
+Kernel Function
+     ↓
+Higher-dimensional feature space
+     ↓
+PCA
+     ↓
+Kernel Principal Components
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- NONLINEAR DATA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>27. Why Do We Need Kernel PCA?</h2>
+
+<p>
+Consider circular data.
+</p>
+
+<div class="diagram">
+
+          ● ● ●
+       ●         ●
+     ●     ○ ○     ●
+    ●     ○   ○     ●
+     ●     ○ ○     ●
+       ●         ●
+          ● ● ●
+
+</div>
+
+<p>
+The structure is nonlinear.
+A simple linear projection may not represent the structure effectively.
+</p>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- KERNEL TRICK -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>28. Kernel Trick</h2>
+
+<p>
+Kernel PCA uses a kernel function to work with nonlinear relationships.
+</p>
+
+<p>Common kernels include:</p>
+
+<ul>
+    <li>Linear</li>
+    <li>Polynomial</li>
+    <li>RBF</li>
+    <li>Sigmoid</li>
+</ul>
+
+<p>
+The RBF kernel is especially common.
+</p>
+
+<div class="formula">
+
+K(x, x') = exp(-γ ||x - x'||²)
+
+</div>
+
+<p>
+The parameter <strong>gamma</strong> controls how local the influence
+of observations is.
+</p>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- MAKE CIRCLES -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>29. Creating Nonlinear Data</h2>
+
+<pre><code>from sklearn.datasets import make_circles
+
+X, y = make_circles(
+    n_samples=500,
+    factor=0.3,
+    noise=0.05,
+    random_state=42
+)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- CIRCLE VISUALIZATION -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>30. Visualize Circular Data</h2>
+
+<pre><code>import matplotlib.pyplot as plt
+
+plt.figure(figsize=(8, 6))
+
+plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=y
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+
+plt.title(
+    "Nonlinear Circular Dataset"
+)
+
+plt.show()</code></pre>
+
+<div class="visual-placeholder">
+
+<h3>Picture</h3>
+
+<p>
+The Python code produces two concentric circular structures.
+</p>
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- NORMAL PCA CIRCLES -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>31. Normal PCA on Circular Data</h2>
+
+<pre><code>from sklearn.decomposition import PCA
+
+pca = PCA(
+    n_components=2
+)
+
+X_pca = pca.fit_transform(X)</code></pre>
+
+<p>Visualize:</p>
+
+<pre><code>plt.figure(figsize=(8, 6))
+
+plt.scatter(
+    X_pca[:, 0],
+    X_pca[:, 1],
+    c=y
+)
+
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+
+plt.title(
+    "Normal PCA"
+)
+
+plt.show()</code></pre>
+
+<div class="danger">
+
+<strong>Important:</strong>
+
+Normal PCA is a linear transformation, so it may not capture the
+nonlinear circular structure effectively.
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- KPCA RBF -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>32. Kernel PCA with RBF</h2>
+
+<pre><code>from sklearn.decomposition import KernelPCA
+
+kpca = KernelPCA(
+    n_components=2,
+    kernel="rbf",
+    gamma=15
+)
+
+X_kpca = kpca.fit_transform(X)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- KPCA VISUALIZATION -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>33. Visualize Kernel PCA</h2>
+
+<pre><code>plt.figure(figsize=(8, 6))
+
+for class_id in [0, 1]:
+
+    plt.scatter(
+        X_kpca[y == class_id, 0],
+        X_kpca[y == class_id, 1],
+        label=f"Class {class_id}"
+    )
+
+plt.xlabel("Kernel PC1")
+plt.ylabel("Kernel PC2")
+
+plt.title(
+    "Kernel PCA with RBF Kernel"
+)
+
+plt.legend()
+
+plt.show()</code></pre>
+
+<div class="visual-placeholder">
+
+<h3>Kernel PCA Picture</h3>
+
+<p>
+Run the code to generate the nonlinear projection of the circular
+dataset.
+</p>
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- COMPLETE KPCA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>34. Complete Kernel PCA Example</h2>
+
+<pre><code>import matplotlib.pyplot as plt
+
+from sklearn.datasets import make_circles
+from sklearn.decomposition import KernelPCA
+
+# Create nonlinear dataset
+X, y = make_circles(
+    n_samples=500,
+    factor=0.3,
+    noise=0.05,
+    random_state=42
+)
+
+# Kernel PCA
+kpca = KernelPCA(
+    n_components=2,
+    kernel="rbf",
+    gamma=15
+)
+
+X_kpca = kpca.fit_transform(X)
+
+# Plot
+plt.figure(figsize=(8, 6))
+
+for class_id in [0, 1]:
+
+    plt.scatter(
+        X_kpca[y == class_id, 0],
+        X_kpca[y == class_id, 1],
+        label=f"Class {class_id}"
+    )
+
+plt.xlabel("Kernel PC1")
+plt.ylabel("Kernel PC2")
+
+plt.title(
+    "Kernel PCA"
+)
+
+plt.legend()
+
+plt.show()</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- GAMMA -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>35. Understanding Gamma in RBF Kernel PCA</h2>
+
+<p>
+Gamma is an important hyperparameter for the RBF kernel.
+</p>
+
+<table>
+
+<tr>
+    <th>Gamma</th>
+    <th>General Effect</th>
+</tr>
+
+<tr>
+    <td>Small gamma</td>
+    <td>Smoother, broader influence</td>
+</tr>
+
+<tr>
+    <td>Medium gamma</td>
+    <td>Moderate nonlinear transformation</td>
+</tr>
+
+<tr>
+    <td>Large gamma</td>
+    <td>More local influence and more complex transformation</td>
+</tr>
+
+</table>
+
+<p>
+You should usually experiment with gamma rather than assuming one
+value works for every dataset.
+</p>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- COMPARISON -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>36. PCA vs Kernel PCA</h2>
+
+<table>
+
+<tr>
+    <th>PCA</th>
+    <th>Kernel PCA</th>
+</tr>
+
+<tr>
+    <td>Linear</td>
+    <td>Can capture nonlinear structure</td>
+</tr>
+
+<tr>
+    <td>No kernel</td>
+    <td>Uses a kernel</td>
+</tr>
+
+<tr>
+    <td>Simple</td>
+    <td>More computationally expensive</td>
+</tr>
+
+<tr>
+    <td>Easy to interpret</td>
+    <td>More difficult to interpret</td>
+</tr>
+
+<tr>
+    <td>Good for linear structure</td>
+    <td>Good for nonlinear structure</td>
+</tr>
+
+</table>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- ALL THREE -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>37. PCA vs LDA vs Kernel PCA</h2>
+
+<table>
+
+<tr>
+    <th>Property</th>
+    <th>PCA</th>
+    <th>LDA</th>
+    <th>Kernel PCA</th>
+</tr>
+
+<tr>
+    <td>Supervised</td>
+    <td>No</td>
+    <td>Yes</td>
+    <td>No</td>
+</tr>
+
+<tr>
+    <td>Requires labels</td>
+    <td>No</td>
+    <td>Yes</td>
+    <td>No</td>
+</tr>
+
+<tr>
+    <td>Linear</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>No / nonlinear capable</td>
+</tr>
+
+<tr>
+    <td>Maximum variance</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>Yes in kernel space</td>
+</tr>
+
+<tr>
+    <td>Class separation</td>
+    <td>Not directly</td>
+    <td>Yes</td>
+    <td>Not directly</td>
+</tr>
+
+<tr>
+    <td>Nonlinear structure</td>
+    <td>No</td>
+    <td>No</td>
+    <td>Yes</td>
+</tr>
+
+<tr>
+    <td>Common use</td>
+    <td>Compression</td>
+    <td>Classification</td>
+    <td>Nonlinear dimensionality reduction</td>
+</tr>
+
+</table>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- WHEN TO USE -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>38. When Should You Use Each?</h2>
+
+<div class="two-column">
+
+<div class="card">
+
+<h3>PCA</h3>
+
+<ul>
+    <li>No labels</li>
+    <li>Highly correlated features</li>
+    <li>Data compression</li>
+    <li>Visualization</li>
+    <li>Reduce computational cost</li>
+</ul>
+
+</div>
+
+<div class="card">
+
+<h3>LDA</h3>
+
+<ul>
+    <li>Labels are available</li>
+    <li>Classification problem</li>
+    <li>Class separation is important</li>
+    <li>Supervised dimensionality reduction</li>
+</ul>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Kernel PCA</h3>
+
+<ul>
+    <li>Nonlinear relationships</li>
+    <li>No labels required</li>
+    <li>Normal PCA is insufficient</li>
+    <li>Complex data structures</li>
+</ul>
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PCA MACHINE LEARNING -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>39. PCA + Machine Learning</h2>
+
+<p>
+Dimensionality reduction can be performed before a machine-learning
+classifier.
+</p>
+
+<div class="diagram">
+
+Original Data
+      ↓
+StandardScaler
+      ↓
+PCA
+      ↓
+Classifier
+      ↓
+Prediction
+
+</div>
+
+<pre><code>from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled,
+    y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+
+pca = PCA(
+    n_components=2
+)
+
+X_train_pca = pca.fit_transform(
+    X_train
+)
+
+X_test_pca = pca.transform(
+    X_test
+)
+
+model = LogisticRegression()
+
+model.fit(
+    X_train_pca,
+    y_train
+)
+
+y_pred = model.predict(
+    X_test_pca
+)
+
+accuracy = accuracy_score(
+    y_test,
+    y_pred
+)
+
+print(
+    "Accuracy:",
+    accuracy
+)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- DATA LEAKAGE -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>40. Important: Avoid Data Leakage</h2>
+
+<div class="danger">
+
+Never do this:
+
+<pre><code>pca.fit_transform(X_test)</code></pre>
+
+for your test data.
+
+</div>
+
+<p>
+Instead:
+</p>
+
+<pre><code>X_train_pca = pca.fit_transform(X_train)
+
+X_test_pca = pca.transform(X_test)</code></pre>
+
+<p>
+The PCA transformation is learned only from the training data.
+</p>
+
+<div class="important">
+
+<strong>Rule:</strong>
+
+Fit preprocessing and dimensionality-reduction transformations on
+training data only. Then use <code>transform()</code> on validation
+and test data.
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PIPELINE -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>41. Better Approach: Scikit-learn Pipeline</h2>
+
+<p>
+A Pipeline keeps preprocessing and machine learning together.
+</p>
+
+<pre><code>from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegression
+
+pipeline = Pipeline([
+
+    (
+        "scaler",
+        StandardScaler()
+    ),
+
+    (
+        "pca",
+        PCA(n_components=2)
+    ),
+
+    (
+        "classifier",
+        LogisticRegression()
+    )
+])
+
+pipeline.fit(
+    X_train,
+    y_train
+)
+
+y_pred = pipeline.predict(
+    X_test
+)
+
+print(
+    "Accuracy:",
+    accuracy_score(
+        y_test,
+        y_pred
+    )
+)</code></pre>
+
+<div class="diagram">
+
+Training Data
+     ↓
+StandardScaler
+     ↓
+PCA
+     ↓
+Logistic Regression
+     ↓
+Prediction
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- COMPLETE PRACTICAL PROJECT -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>42. Complete Practical Project</h2>
+
+<h3>Project: Iris Dimensionality Reduction</h3>
+
+<p>
+We will compare PCA and LDA on the Iris dataset.
+</p>
+
+<h3>Step 1 — Import libraries</h3>
+
+<pre><code>import matplotlib.pyplot as plt
+
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import (
+    LinearDiscriminantAnalysis
+)</code></pre>
+
+<h3>Step 2 — Load data</h3>
+
+<pre><code>iris = load_iris()
+
+X = iris.data
+y = iris.target</code></pre>
+
+<h3>Step 3 — Standardize</h3>
+
+<pre><code>scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)</code></pre>
+
+<h3>Step 4 — PCA</h3>
+
+<pre><code>pca = PCA(
+    n_components=2
+)
+
+X_pca = pca.fit_transform(
+    X_scaled
+)</code></pre>
+
+<h3>Step 5 — LDA</h3>
+
+<pre><code>lda = LinearDiscriminantAnalysis(
+    n_components=2
+)
+
+X_lda = lda.fit_transform(
+    X_scaled,
+    y
+)</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- PCA PLOT PROJECT -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>43. Project — PCA Visualization</h2>
+
+<pre><code>plt.figure(figsize=(8, 6))
+
+for class_id in range(3):
+
+    plt.scatter(
+        X_pca[y == class_id, 0],
+        X_pca[y == class_id, 1],
+        label=iris.target_names[class_id]
+    )
+
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+
+plt.title(
+    "PCA - Iris Dataset"
+)
+
+plt.legend()
+
+plt.show()</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- LDA PLOT PROJECT -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>44. Project — LDA Visualization</h2>
+
+<pre><code>plt.figure(figsize=(8, 6))
+
+for class_id in range(3):
+
+    plt.scatter(
+        X_lda[y == class_id, 0],
+        X_lda[y == class_id, 1],
+        label=iris.target_names[class_id]
+    )
+
+plt.xlabel("LD1")
+plt.ylabel("LD2")
+
+plt.title(
+    "LDA - Iris Dataset"
+)
+
+plt.legend()
+
+plt.show()</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- KPCA PROJECT -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>45. Kernel PCA Practical Project</h2>
+
+<pre><code>from sklearn.datasets import make_circles
+from sklearn.decomposition import KernelPCA
+
+X, y = make_circles(
+    n_samples=500,
+    factor=0.3,
+    noise=0.05,
+    random_state=42
+)
+
+kpca = KernelPCA(
+    n_components=2,
+    kernel="rbf",
+    gamma=15
+)
+
+X_kpca = kpca.fit_transform(X)
+
+plt.figure(figsize=(8, 6))
+
+for class_id in [0, 1]:
+
+    plt.scatter(
+        X_kpca[y == class_id, 0],
+        X_kpca[y == class_id, 1],
+        label=f"Class {class_id}"
+    )
+
+plt.xlabel("Kernel PC1")
+plt.ylabel("Kernel PC2")
+
+plt.title(
+    "Kernel PCA - Circular Dataset"
+)
+
+plt.legend()
+
+plt.show()</code></pre>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- CHEAT SHEETS -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>46. PCA Cheat Sheet</h2>
+
+<div class="diagram">
+
+PCA
+ |
+ +-- Unsupervised
+ |
+ +-- Does not require y
+ |
+ +-- Linear
+ |
+ +-- Finds maximum variance
+ |
+ +-- Creates principal components
+ |
+ +-- PC1 = highest variance
+ |
+ +-- PC2 = second highest variance
+ |
+ +-- Components are orthogonal
+
+</div>
+
+</section>
+
+<section>
+
+<h2>47. LDA Cheat Sheet</h2>
+
+<div class="diagram">
+
+LDA
+ |
+ +-- Supervised
+ |
+ +-- Requires X and y
+ |
+ +-- Linear
+ |
+ +-- Maximizes class separation
+ |
+ +-- Minimizes within-class variation
+ |
+ +-- Maximum components = classes - 1
+
+</div>
+
+</section>
+
+<section>
+
+<h2>48. Kernel PCA Cheat Sheet</h2>
+
+<div class="diagram">
+
+Kernel PCA
+ |
+ +-- Unsupervised
+ |
+ +-- Does not require labels
+ |
+ +-- Can model nonlinear relationships
+ |
+ +-- Uses kernel functions
+ |
+ +-- Common kernel = RBF
+ |
+ +-- Important parameter = gamma
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- DECISION TREE -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>49. Which Technique Should I Choose?</h2>
+
+<div class="diagram">
+
+              Do you have labels?
+                     |
+             +-------+-------+
+             |               |
+            NO              YES
+             |               |
+             ↓               ↓
+          PCA/KPCA           LDA
+             |
+       Is the structure
+          nonlinear?
+             |
+        +----+----+
+        |         |
+       NO        YES
+        |         |
+        ↓         ↓
+       PCA       KPCA
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- FINAL SUMMARY -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>50. Final Summary</h2>
+
+<div class="success">
+
+<strong>PCA</strong>
+
+Finds directions of maximum variance.
+
+</div>
+
+<div class="success">
+
+<strong>LDA</strong>
+
+Finds directions that maximize class separation.
+
+</div>
+
+<div class="success">
+
+<strong>Kernel PCA</strong>
+
+Extends PCA so nonlinear structures can be represented.
+
+</div>
+
+<h3>The easiest way to remember:</h3>
+
+<div class="diagram">
+
+PCA
+↓
+"What direction contains the most variation?"
+
+LDA
+↓
+"What direction separates my classes best?"
+
+Kernel PCA
+↓
+"What if the important structure is nonlinear?"
+
+</div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- LEARNING ROADMAP -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>51. Recommended Learning Sequence</h2>
+
+<ol>
+
+<li>Introduction to Dimensionality Reduction</li>
+
+<li>Curse of Dimensionality</li>
+
+<li>PCA</li>
+
+<li>PCA Intuition</li>
+
+<li>Standardization</li>
+
+<li>Covariance Matrix</li>
+
+<li>Eigenvalues and Eigenvectors</li>
+
+<li>Principal Components</li>
+
+<li>Explained Variance</li>
+
+<li>PCA Python Implementation</li>
+
+<li>PCA Visualization</li>
+
+<li>LDA</li>
+
+<li>LDA Mathematical Intuition</li>
+
+<li>LDA Python Implementation</li>
+
+<li>PCA vs LDA</li>
+
+<li>Kernel PCA</li>
+
+<li>Kernel Trick</li>
+
+<li>RBF Kernel</li>
+
+<li>Gamma Parameter</li>
+
+<li>Kernel PCA Python Implementation</li>
+
+<li>PCA vs LDA vs Kernel PCA</li>
+
+<li>Dimensionality Reduction + Machine Learning</li>
+
+<li>Pipeline</li>
+
+<li>Practical Project</li>
+
+</ol>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- STUDENT EXERCISES -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>52. Student Exercises</h2>
+
+<h3>Exercise 1 — PCA</h3>
+
+<p>
+Use the Iris dataset and reduce its four features to two principal
+components.
+</p>
+
+<h3>Exercise 2 — Explained Variance</h3>
+
+<p>
+Calculate the explained variance ratio for every principal component.
+</p>
+
+<h3>Exercise 3 — PCA Visualization</h3>
+
+<p>
+Create a scatter plot using PC1 and PC2.
+</p>
+
+<h3>Exercise 4 — LDA</h3>
+
+<p>
+Use LDA to reduce the Iris dataset to two discriminant components.
+</p>
+
+<h3>Exercise 5 — PCA vs LDA</h3>
+
+<p>
+Create two plots and compare the class separation produced by PCA
+and LDA.
+</p>
+
+<h3>Exercise 6 — Kernel PCA</h3>
+
+<p>
+Generate a circular dataset using <code>make_circles()</code> and
+apply Kernel PCA with an RBF kernel.
+</p>
+
+<h3>Exercise 7 — Gamma</h3>
+
+<p>
+Try the following values:
+</p>
+
+<pre><code>gamma = 1
+gamma = 5
+gamma = 10
+gamma = 15
+gamma = 50</code></pre>
+
+<p>
+Compare the resulting projections.
+</p>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- FINAL -->
+<!-- ====================================================== -->
+
+<section>
+
+<h2>53. Final Takeaway</h2>
+
+<div class="diagram">
+
+                    DIMENSIONALITY REDUCTION
+
+                            |
+          +-----------------+-----------------+
+          |                 |                 |
+          ↓                 ↓                 ↓
+         PCA               LDA               KPCA
+          |                 |                 |
+    Unsupervised        Supervised       Unsupervised
+          |                 |                 |
+       Linear             Linear          Nonlinear
+          |                 |                 |
+ Maximum Variance    Class Separation   Kernel Transformation
+
+</div>
+
+<p>
+The three most important ideas to remember are:
+</p>
+
+<ol>
+
+<li>
+<strong>PCA:</strong>
+Reduce dimensions while preserving as much variance as possible.
+</li>
+
+<li>
+<strong>LDA:</strong>
+Reduce dimensions while making known classes as separable as possible.
+</li>
+
+<li>
+<strong>Kernel PCA:</strong>
+Perform nonlinear dimensionality reduction using kernel methods.
+</li>
+
+</ol>
+
+</section>
+
+</div>
+
+<footer>
+
+<p>
+Dimensionality Reduction Tutorial
+</p>
+
+<p>
+PCA • LDA • Kernel PCA • Python • Scikit-learn • Matplotlib
+</p>
+
+</footer>
+
+</body>
+</html>
