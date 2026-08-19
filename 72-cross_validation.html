@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Validation in Machine Learning</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #1f4e79;
+            border-bottom: 3px solid #1f4e79;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2e75b6;
+            margin-top: 35px;
+        }
+
+        h3 {
+            color: #444;
+        }
+
+        .box {
+            background: #eef6ff;
+            border-left: 5px solid #2e75b6;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .success {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 20px;
+            overflow-x: auto;
+            border-radius: 6px;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #2e75b6;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f7f7f7;
+        }
+
+        .fold {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .train {
+            background: #d9ead3;
+        }
+
+        .test {
+            background: #f4cccc;
+        }
+
+        .formula {
+            text-align: center;
+            font-size: 20px;
+            background: #f1f1f1;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Cross-Validation in Machine Learning</h1>
+
+    <h2>1. What is Cross-Validation?</h2>
+
+    <p>
+        Cross-Validation is a technique used in Machine Learning to evaluate
+        how well a model performs on unseen data.
+    </p>
+
+    <p>
+        Instead of training and testing the model using only one train-test
+        split, Cross-Validation divides the dataset into multiple parts
+        called <strong>folds</strong>.
+    </p>
+
+    <div class="box">
+        <strong>Simple Definition:</strong><br>
+        Cross-Validation repeatedly trains and validates a model using
+        different portions of the dataset and then calculates the average
+        performance.
+    </div>
+
+    <h2>2. Why Do We Need Cross-Validation?</h2>
+
+    <p>
+        Suppose we have 1,000 records.
+    </p>
+
+    <table>
+        <tr>
+            <th>Dataset</th>
+            <th>Records</th>
+        </tr>
+        <tr>
+            <td>Training Data</td>
+            <td>800</td>
+        </tr>
+        <tr>
+            <td>Testing Data</td>
+            <td>200</td>
+        </tr>
+    </table>
+
+    <p>
+        If the model gets 95% accuracy, that accuracy depends on the particular
+        200 records selected for testing.
+    </p>
+
+    <p>
+        Cross-Validation allows us to test the model on different portions
+        of the dataset.
+    </p>
+
+    <div class="success">
+        <strong>Main Benefit:</strong>
+        Cross-Validation gives us a more reliable estimate of model performance.
+    </div>
+
+    <h2>3. K-Fold Cross-Validation</h2>
+
+    <p>
+        K-Fold Cross-Validation is one of the most commonly used
+        Cross-Validation techniques.
+    </p>
+
+    <p>
+        If we choose:
+    </p>
+
+    <pre><code>K = 5</code></pre>
+
+    <p>
+        the dataset is divided into 5 folds.
+    </p>
+
+    <h3>Example</h3>
+
+    <div class="fold test">
+        Fold 1 → Validation
+    </div>
+
+    <div class="fold train">
+        Fold 2 → Training
+    </div>
+
+    <div class="fold train">
+        Fold 3 → Training
+    </div>
+
+    <div class="fold train">
+        Fold 4 → Training
+    </div>
+
+    <div class="fold train">
+        Fold 5 → Training
+    </div>
+
+    <p>
+        In the first round, Fold 1 is used for validation and the remaining
+        four folds are used for training.
+    </p>
+
+    <h2>4. Five-Fold Cross-Validation Process</h2>
+
+    <table>
+        <tr>
+            <th>Round</th>
+            <th>Training Folds</th>
+            <th>Validation Fold</th>
+        </tr>
+
+        <tr>
+            <td>1</td>
+            <td>2, 3, 4, 5</td>
+            <td>1</td>
+        </tr>
+
+        <tr>
+            <td>2</td>
+            <td>1, 3, 4, 5</td>
+            <td>2</td>
+        </tr>
+
+        <tr>
+            <td>3</td>
+            <td>1, 2, 4, 5</td>
+            <td>3</td>
+        </tr>
+
+        <tr>
+            <td>4</td>
+            <td>1, 2, 3, 5</td>
+            <td>4</td>
+        </tr>
+
+        <tr>
+            <td>5</td>
+            <td>1, 2, 3, 4</td>
+            <td>5</td>
+        </tr>
+    </table>
+
+    <h2>5. Calculating the Average Score</h2>
+
+    <p>
+        Suppose the model produces the following accuracy scores:
+    </p>
+
+    <pre><code>
+Fold 1 = 91%
+Fold 2 = 94%
+Fold 3 = 90%
+Fold 4 = 93%
+Fold 5 = 92%
+    </code></pre>
+
+    <div class="formula">
+        Average Accuracy =
+        (91 + 94 + 90 + 93 + 92) / 5
+        = 92%
+    </div>
+
+    <p>
+        Therefore, the estimated model performance is approximately
+        <strong>92%</strong>.
+    </p>
+
+    <h2>6. Python Implementation</h2>
+
+    <p>
+        We can implement Cross-Validation using
+        <strong>scikit-learn</strong>.
+    </p>
+
+    <h3>Step 1: Import Libraries</h3>
+
+    <pre><code>
+from sklearn.datasets import load_iris
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+    </code></pre>
+
+    <h3>Step 2: Load Dataset</h3>
+
+    <pre><code>
+X, y = load_iris(return_X_y=True)
+    </code></pre>
+
+    <p>
+        Here:
+    </p>
+
+    <ul>
+        <li><strong>X</strong> = input features</li>
+        <li><strong>y</strong> = target variable</li>
+    </ul>
+
+    <h3>Step 3: Create Machine Learning Model</h3>
+
+    <pre><code>
+model = LogisticRegression(max_iter=200)
+    </code></pre>
+
+    <h3>Step 4: Create K-Fold Object</h3>
+
+    <pre><code>
+kf = KFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=42
+)
+    </code></pre>
+
+    <p>
+        Here:
+    </p>
+
+    <ul>
+        <li><strong>n_splits=5</strong> → use 5 folds</li>
+        <li><strong>shuffle=True</strong> → shuffle the dataset</li>
+        <li><strong>random_state=42</strong> → make the split reproducible</li>
+    </ul>
+
+    <h3>Step 5: Perform Cross-Validation</h3>
+
+    <pre><code>
+scores = cross_val_score(
+    model,
+    X,
+    y,
+    cv=kf,
+    scoring="accuracy"
+)
+    </code></pre>
+
+    <h3>Step 6: Display Results</h3>
+
+    <pre><code>
+print("Scores:", scores)
+print("Average Accuracy:", scores.mean())
+    </code></pre>
+
+    <h3>Complete Python Program</h3>
+
+    <pre><code>
+from sklearn.datasets import load_iris
+from sklearn.model_selection import KFold, cross_val_score
+from sklearn.linear_model import LogisticRegression
+
+# Load dataset
+X, y = load_iris(return_X_y=True)
+
+# Create model
+model = LogisticRegression(max_iter=200)
+
+# Create 5-Fold Cross-Validation
+kf = KFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=42
+)
+
+# Perform Cross-Validation
+scores = cross_val_score(
+    model,
+    X,
+    y,
+    cv=kf,
+    scoring="accuracy"
+)
+
+# Display results
+print("Fold Scores:", scores)
+print("Average Accuracy:", scores.mean())
+    </code></pre>
+
+    <h2>7. Example Output</h2>
+
+    <pre><code>
+Fold Scores: [0.9667 0.9667 0.9333 0.9667 0.9333]
+
+Average Accuracy: 0.9533
+    </code></pre>
+
+    <p>
+        The average accuracy is approximately:
+    </p>
+
+    <div class="success">
+        <strong>95.33%</strong>
+    </div>
+
+    <h2>8. Stratified K-Fold Cross-Validation</h2>
+
+    <p>
+        For classification problems, <strong>StratifiedKFold</strong>
+        is often preferred.
+    </p>
+
+    <p>
+        Stratified K-Fold tries to maintain approximately the same class
+        distribution in every fold.
+    </p>
+
+    <h3>Example</h3>
+
+    <pre><code>
+from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import cross_val_score
+
+skf = StratifiedKFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=42
+)
+
+scores = cross_val_score(
+    model,
+    X,
+    y,
+    cv=skf,
+    scoring="accuracy"
+)
+
+print("Scores:", scores)
+print("Mean Accuracy:", scores.mean())
+    </code></pre>
+
+    <h2>9. KFold vs StratifiedKFold</h2>
+
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>KFold</th>
+            <th>StratifiedKFold</th>
+        </tr>
+
+        <tr>
+            <td>Purpose</td>
+            <td>General Cross-Validation</td>
+            <td>Classification</td>
+        </tr>
+
+        <tr>
+            <td>Maintains class distribution</td>
+            <td>No</td>
+            <td>Yes</td>
+        </tr>
+
+        <tr>
+            <td>Common use</td>
+            <td>General datasets</td>
+            <td>Classification datasets</td>
+        </tr>
+    </table>
+
+    <h2>10. Leave-One-Out Cross-Validation</h2>
+
+    <p>
+        Leave-One-Out Cross-Validation (LOOCV) uses one observation as
+        validation data and all remaining observations as training data.
+    </p>
+
+    <p>
+        For example, if we have 5 records:
+    </p>
+
+    <pre><code>
+Round 1 → Test Record 1
+Round 2 → Test Record 2
+Round 3 → Test Record 3
+Round 4 → Test Record 4
+Round 5 → Test Record 5
+    </code></pre>
+
+    <p>
+        The model is therefore trained and tested once for every observation.
+    </p>
+
+    <h2>11. Leave-One-Out Python Example</h2>
+
+    <pre><code>
+from sklearn.model_selection import LeaveOneOut
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+
+loo = LeaveOneOut()
+
+model = LogisticRegression(max_iter=200)
+
+scores = cross_val_score(
+    model,
+    X,
+    y,
+    cv=loo,
+    scoring="accuracy"
+)
+
+print("Average Accuracy:", scores.mean())
+    </code></pre>
+
+    <div class="warning">
+        <strong>Note:</strong>
+        LOOCV can become computationally expensive for large datasets
+        because the model may need to be trained many times.
+    </div>
+
+    <h2>12. Repeated K-Fold Cross-Validation</h2>
+
+    <p>
+        Repeated K-Fold performs K-Fold Cross-Validation multiple times
+        using different random splits.
+    </p>
+
+    <pre><code>
+from sklearn.model_selection import RepeatedKFold
+from sklearn.model_selection import cross_val_score
+
+rkf = RepeatedKFold(
+    n_splits=5,
+    n_repeats=3,
+    random_state=42
+)
+
+scores = cross_val_score(
+    model,
+    X,
+    y,
+    cv=rkf,
+    scoring="accuracy"
+)
+
+print("Number of scores:", len(scores))
+print("Average Accuracy:", scores.mean())
+    </code></pre>
+
+    <h2>13. Cross-Validation for Regression</h2>
+
+    <p>
+        Cross-Validation can also be used with regression models.
+    </p>
+
+    <pre><code>
+from sklearn.datasets import load_diabetes
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+
+# Load regression dataset
+X, y = load_diabetes(return_X_y=True)
+
+# Create model
+model = LinearRegression()
+
+# Create KFold
+kf = KFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=42
+)
+
+# Perform Cross-Validation
+scores = cross_val_score(
+    model,
+    X,
+    y,
+    cv=kf,
+    scoring="r2"
+)
+
+print("R2 Scores:", scores)
+print("Average R2:", scores.mean())
+    </code></pre>
+
+    <h2>14. Different Evaluation Metrics</h2>
+
+    <p>
+        The <code>scoring</code> parameter determines which metric
+        Cross-Validation calculates.
+    </p>
+
+    <table>
+        <tr>
+            <th>Problem</th>
+            <th>Common Metric</th>
+            <th>scoring value</th>
+        </tr>
+
+        <tr>
+            <td>Classification</td>
+            <td>Accuracy</td>
+            <td>accuracy</td>
+        </tr>
+
+        <tr>
+            <td>Classification</td>
+            <td>Precision</td>
+            <td>precision</td>
+        </tr>
+
+        <tr>
+            <td>Classification</td>
+            <td>Recall</td>
+            <td>recall</td>
+        </tr>
+
+        <tr>
+            <td>Classification</td>
+            <td>F1 Score</td>
+            <td>f1</td>
+        </tr>
+
+        <tr>
+            <td>Regression</td>
+            <td>R²</td>
+            <td>r2</td>
+        </tr>
+
+        <tr>
+            <td>Regression</td>
+            <td>Mean Absolute Error</td>
+            <td>neg_mean_absolute_error</td>
+        </tr>
+
+        <tr>
+            <td>Regression</td>
+            <td>Mean Squared Error</td>
+            <td>neg_mean_squared_error</td>
+        </tr>
+    </table>
+
+    <h2>15. Cross-Validation and Overfitting</h2>
+
+    <p>
+        Cross-Validation is useful for detecting whether a model is
+        overfitting.
+    </p>
+
+    <p>
+        Suppose we get:
+    </p>
+
+    <pre><code>
+Training Accuracy = 99%
+Cross-Validation Accuracy = 72%
+    </code></pre>
+
+    <p>
+        This large difference may indicate that the model is
+        <strong>overfitting</strong>.
+    </p>
+
+    <div class="warning">
+        The model performs extremely well on training data but performs
+        considerably worse on unseen data.
+    </div>
+
+    <h2>16. Cross-Validation for Model Comparison</h2>
+
+    <p>
+        Cross-Validation can be used to compare different models.
+    </p>
+
+    <pre><code>
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+
+models = {
+    "Logistic Regression": LogisticRegression(max_iter=200),
+    "Decision Tree": DecisionTreeClassifier(random_state=42),
+    "KNN": KNeighborsClassifier()
+}
+
+for name, model in models.items():
+
+    scores = cross_val_score(
+        model,
+        X,
+        y,
+        cv=5,
+        scoring="accuracy"
+    )
+
+    print(name)
+    print("Scores:", scores)
+    print("Average:", scores.mean())
+    print()
+    </code></pre>
+
+    <p>
+        The model with the best average Cross-Validation score may be
+        selected for further evaluation.
+    </p>
+
+    <h2>17. Important: Cross-Validation vs Test Set</h2>
+
+    <p>
+        Cross-Validation does not mean that we should completely eliminate
+        a final test set.
+    </p>
+
+    <p>
+        A common workflow is:
+    </p>
+
+    <pre><code>
+Complete Dataset
+       |
+       v
++----------------------+
+| Training Data        |
+|                      |
+| Cross-Validation     |
++----------------------+
+       |
+       v
+Select / Tune Model
+       |
+       v
+Final Test Set
+       |
+       v
+Final Performance
+    </code></pre>
+
+    <p>
+        The final test set should ideally remain untouched until the
+        final evaluation.
+    </p>
+
+    <h2>18. Common Cross-Validation Techniques</h2>
+
+    <table>
+        <tr>
+            <th>Technique</th>
+            <th>Description</th>
+        </tr>
+
+        <tr>
+            <td>K-Fold</td>
+            <td>Divides data into K folds.</td>
+        </tr>
+
+        <tr>
+            <td>Stratified K-Fold</td>
+            <td>Maintains class distribution.</td>
+        </tr>
+
+        <tr>
+            <td>Leave-One-Out</td>
+            <td>Uses one sample for validation at a time.</td>
+        </tr>
+
+        <tr>
+            <td>Repeated K-Fold</td>
+            <td>Repeats K-Fold multiple times.</td>
+        </tr>
+
+        <tr>
+            <td>Time Series Split</td>
+            <td>Designed for time-dependent data.</td>
+        </tr>
+    </table>
+
+    <h2>19. Key Points to Remember</h2>
+
+    <ul>
+        <li>Cross-Validation evaluates model generalization.</li>
+        <li>K-Fold is one of the most commonly used techniques.</li>
+        <li>In 5-Fold CV, the model is trained 5 times.</li>
+        <li>Each fold becomes validation data once.</li>
+        <li>The scores are usually averaged.</li>
+        <li>StratifiedKFold is useful for classification.</li>
+        <li>LOOCV uses one observation for validation at a time.</li>
+        <li>Cross-Validation can help identify overfitting.</li>
+        <li>Cross-Validation can help compare different models.</li>
+        <li>A separate final test set is still useful for unbiased final evaluation.</li>
+    </ul>
+
+    <h2>20. Simple Definition for Students</h2>
+
+    <div class="success">
+        <strong>
+            Cross-Validation is a technique where the dataset is divided
+            into multiple parts, the model is trained and validated multiple
+            times using different parts, and the results are averaged to
+            estimate how well the model will perform on unseen data.
+        </strong>
+    </div>
+
+</div>
+
+</body>
+</html>
