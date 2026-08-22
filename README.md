@@ -111,4 +111,41 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 ## Confusion Matrics
 ![Confusion Matrics](65-confusion_matrics.png)
 
+## Wigly Data
+!Wigly Data](wigly_data.png)
 
+
+## Underfitting Overfitting
+![Underfitting Overfitting](under_fitting_over_fitting2.png)
+
+
+## Underfitting Overfitting
+![Underfitting Overfitting](under_fit_over_fit_3.png)
+
+
+## Residuals
+![Residuals](residuals.png)
+
+
+## Polynomial
+![Polynomial](polynomials.png)
+
+
+## Polynomial VS Liear Regression
+![Polynomial VS Liear Regression](polynomial_regression_vs Linear.png)
+
+
+## Outliers
+![Outliers](outlier.png)
+
+
+## Dependent and independet variables
+![Dependent and independet variables](dependent_independent_linear_nonlinear.png)
+
+
+## Classification Models
+![Classification Models](classificatin Models.png)
+
+
+## API
+![API](API.png)
