@@ -116,7 +116,7 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 
 ## Underfitting Overfitting
-![Underfitting Overfitting](under_fitting_over_fitting2.png)
+![Underfitting Overfitting](under_fitting_over_fitting2.PNG)
 
 
 ## Underfitting Overfitting
