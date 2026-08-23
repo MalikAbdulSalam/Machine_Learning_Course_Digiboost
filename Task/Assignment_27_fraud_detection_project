@@ -1,0 +1,39 @@
+https://chatgpt.com/share/6a8aa7e5-0908-83e9-8e7c-392aa6318802
+
+see this chatGPT for solutoion
+
+============================================================================
+Project Details
+$1,500.00 – 3,000.00 USD
+
+ Bidding ends in 5 days, 5 hours
+We are looking for an experienced *AI/ML developer* to build a prototype of an AI-powered fraud prevention platform for banks and financial institutions.
+
+The system should detect multiple types of fraud, including:
+
+* *Phishing and social engineering* where customers are tricked into giving away passwords or OTPs.
+* *Account takeover* involving new devices, unusual logins and suspicious behaviour.
+* *Online card fraud / card-not-present transactions.*
+* *Unauthorized bank transfers* and unusual transaction patterns.
+* *Suspicious beneficiaries and mule/ghost accounts.*
+* Fraudulent transaction networks where funds move through multiple accounts.
+
+The AI should analyse multiple signals together and produce a *fraud risk score (0–100)*, explain why an activity is suspicious, and generate an alert for the bank.
+
+For example:
+
+*New device → suspicious login → OTP requested → new beneficiary → unusual large transfer → suspicious recipient*
+
+The system should recognise the combination of events and flag it as high risk.
+
+### Prototype First
+
+We specifically want to build a *working prototype first*, using simulated or publicly available data. It will not connect to real bank accounts at this stage.
+
+The prototype should demonstrate how the AI could eventually integrate through APIs with a bank's existing systems without replacing the bank's existing app, core banking system or payment infrastructure.
+
+The prototype should include a *simple fraud investigation dashboard* showing transactions, risk scores, alerts, suspicious accounts and the reasons for each alert.
+
+Experience with *AI/ML, fraud detection, fintech, cybersecurity, transaction monitoring, anomaly detection and behavioural analytics* is highly preferred.
+
+Please provide examples of similar projects, your proposed technology stack and your estimated timeline to complete the prototype.
