@@ -1,0 +1,3 @@
+Create a dataset containing Age and Salary for 100 people.
+Apply K-Means with K = 2.
+Apply K-Means with K = 3 and compare the results.
