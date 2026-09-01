@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Feature Engineering in Machine Learning</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            background-color: #f5f7fa;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #1e3a8a;
+            border-bottom: 3px solid #1e3a8a;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2563eb;
+            margin-top: 35px;
+        }
+
+        h3 {
+            color: #374151;
+            margin-top: 25px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        code {
+            background-color: #eef2ff;
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: #b91c1c;
+        }
+
+        pre {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e5e7eb;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        .definition {
+            background-color: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .important {
+            background-color: #fff7ed;
+            border-left: 5px solid #f97316;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .success {
+            background-color: #ecfdf5;
+            border-left: 5px solid #10b981;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .workflow {
+            background-color: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            text-align: center;
+            white-space: pre-line;
+        }
+
+        .formula {
+            background-color: #f8fafc;
+            border: 1px solid #d1d5db;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+        }
+
+        .toc {
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .toc a {
+            text-decoration: none;
+            color: #2563eb;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Feature Engineering in Machine Learning</h1>
+
+    <div class="definition">
+        <strong>Definition:</strong>
+        Feature Engineering is the process of creating, transforming, selecting,
+        and representing features from raw data so that machine learning models
+        can learn patterns more effectively.
+    </div>
+
+    <h2>1. What is a Feature?</h2>
+
+    <p>
+        A <strong>feature</strong> is an individual measurable property or input
+        variable used by a machine learning model.
+    </p>
+
+    <p>For example, suppose we want to predict house prices:</p>
+
+    <table>
+        <tr>
+            <th>Area</th>
+            <th>Bedrooms</th>
+            <th>Bathrooms</th>
+            <th>Age</th>
+            <th>Price</th>
+        </tr>
+        <tr>
+            <td>1200</td>
+            <td>2</td>
+            <td>1</td>
+            <td>10</td>
+            <td>8,000,000</td>
+        </tr>
+        <tr>
+            <td>1800</td>
+            <td>3</td>
+            <td>2</td>
+            <td>5</td>
+            <td>12,000,000</td>
+        </tr>
+        <tr>
+            <td>2500</td>
+            <td>4</td>
+            <td>3</td>
+            <td>2</td>
+            <td>20,000,000</td>
+        </tr>
+    </table>
+
+    <p>Here:</p>
+
+    <ul>
+        <li>Area → Feature</li>
+        <li>Bedrooms → Feature</li>
+        <li>Bathrooms → Feature</li>
+        <li>Age → Feature</li>
+        <li>Price → Target / Label</li>
+    </ul>
+
+    <h2>2. Why Do We Need Feature Engineering?</h2>
+
+    <p>
+        Real-world data is usually not directly suitable for machine learning.
+        It may contain missing values, categorical data, dates, text, different
+        numerical scales, irrelevant information, and noisy data.
+    </p>
+
+    <p>For example:</p>
+
+    <pre>
+Name: Ali
+Date of Birth: 2001-05-15
+City: Islamabad
+Salary: 150000
+Experience: 3 years
+    </pre>
+
+    <p>We can transform it into:</p>
+
+    <pre>
+Age = 25
+City_Islamabad = 1
+Salary = 150000
+Experience = 3
+    </pre>
+
+    <p>
+        This transformation makes the information more useful for machine learning.
+    </p>
+
+    <h2>3. Main Feature Engineering Techniques</h2>
+
+    <ol>
+        <li>Handling Missing Values</li>
+        <li>Categorical Encoding</li>
+        <li>Feature Scaling</li>
+        <li>Feature Transformation</li>
+        <li>Feature Creation</li>
+        <li>Feature Extraction</li>
+        <li>Feature Selection</li>
+        <li>Feature Interaction</li>
+        <li>Binning</li>
+        <li>Date and Time Feature Engineering</li>
+        <li>Text Feature Engineering</li>
+        <li>Dimensionality Reduction</li>
+    </ol>
+
+    <h2>4. Handling Missing Values</h2>
+
+    <p>
+        Real-world datasets frequently contain missing values.
+    </p>
+
+    <table>
+        <tr>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Experience</th>
+        </tr>
+        <tr>
+            <td>25</td>
+            <td>50000</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>30</td>
+            <td>70000</td>
+            <td>NaN</td>
+        </tr>
+        <tr>
+            <td>NaN</td>
+            <td>60000</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>40</td>
+            <td>NaN</td>
+            <td>10</td>
+        </tr>
+    </table>
+
+    <h3>4.1 Mean Imputation</h3>
+
+    <p>
+        Replace missing numerical values with the mean.
+    </p>
+
+    <pre>
+df["Age"] = df["Age"].fillna(df["Age"].mean())
+    </pre>
+
+    <h3>4.2 Median Imputation</h3>
+
+    <p>
+        Median is often useful when the data contains outliers.
+    </p>
+
+    <pre>
+df["Age"] = df["Age"].fillna(df["Age"].median())
+    </pre>
+
+    <h3>4.3 Mode Imputation</h3>
+
+    <p>
+        Mode is commonly used for categorical variables.
+    </p>
+
+    <pre>
+df["City"] = df["City"].fillna(df["City"].mode()[0])
+    </pre>
+
+    <h2>5. Categorical Encoding</h2>
+
+    <p>
+        Machine learning algorithms generally require numerical input.
+        Categorical values therefore need to be converted into numerical
+        representations.
+    </p>
+
+    <h3>5.1 Label Encoding</h3>
+
+    <p>Example:</p>
+
+    <pre>
+School     → 0
+Bachelor   → 1
+Master     → 2
+PhD        → 3
+    </pre>
+
+    <p>Python:</p>
+
+    <pre>
+from sklearn.preprocessing import LabelEncoder
+
+encoder = LabelEncoder()
+
+df["Education"] = encoder.fit_transform(df["Education"])
+    </pre>
+
+    <div class="important">
+        <strong>Important:</strong>
+        Label encoding may incorrectly introduce an order between categories.
+        Therefore, it should be used carefully for nominal categories.
+    </div>
+
+    <h3>5.2 One-Hot Encoding</h3>
+
+    <p>Original data:</p>
+
+    <table>
+        <tr>
+            <th>City</th>
+        </tr>
+        <tr><td>Islamabad</td></tr>
+        <tr><td>Lahore</td></tr>
+        <tr><td>Karachi</td></tr>
+    </table>
+
+    <p>After one-hot encoding:</p>
+
+    <table>
+        <tr>
+            <th>Islamabad</th>
+            <th>Lahore</th>
+            <th>Karachi</th>
+        </tr>
+        <tr><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>0</td><td>0</td><td>1</td></tr>
+    </table>
+
+    <pre>
+import pandas as pd
+
+df = pd.get_dummies(
+    df,
+    columns=["City"]
+)
+    </pre>
+
+    <h3>5.3 Ordinal Encoding</h3>
+
+    <p>
+        Ordinal encoding is suitable when categories have a natural order.
+    </p>
+
+    <pre>
+School     → 1
+Bachelor   → 2
+Master     → 3
+PhD        → 4
+    </pre>
+
+    <h2>6. Feature Scaling</h2>
+
+    <p>
+        Features can have very different numerical ranges.
+    </p>
+
+    <table>
+        <tr>
+            <th>Age</th>
+            <th>Salary</th>
+        </tr>
+        <tr>
+            <td>25</td>
+            <td>50000</td>
+        </tr>
+        <tr>
+            <td>30</td>
+            <td>70000</td>
+        </tr>
+        <tr>
+            <td>40</td>
+            <td>120000</td>
+        </tr>
+    </table>
+
+    <p>
+        Algorithms such as KNN, K-Means, SVM, Logistic Regression and neural
+        networks can benefit significantly from appropriate feature scaling.
+    </p>
+
+    <h3>6.1 Standardization</h3>
+
+    <div class="formula">
+        z = (x - μ) / σ
+    </div>
+
+    <p>Where:</p>
+
+    <ul>
+        <li>x = original value</li>
+        <li>μ = mean</li>
+        <li>σ = standard deviation</li>
+    </ul>
+
+    <pre>
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_scaled = scaler.fit_transform(X)
+    </pre>
+
+    <h3>6.2 Normalization</h3>
+
+    <p>
+        Min-Max normalization commonly converts values into the range 0 to 1.
+    </p>
+
+    <div class="formula">
+        x' = (x - xmin) / (xmax - xmin)
+    </div>
+
+    <pre>
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()
+
+X_scaled = scaler.fit_transform(X)
+    </pre>
+
+    <h2>7. Feature Transformation</h2>
+
+    <p>
+        Feature transformation changes the mathematical representation of
+        existing features.
+    </p>
+
+    <h3>7.1 Log Transformation</h3>
+
+    <p>
+        Log transformation can reduce the effect of strong right-skewness.
+    </p>
+
+    <pre>
+import numpy as np
+
+df["Income_Log"] = np.log1p(df["Income"])
+    </pre>
+
+    <p>Other transformations include:</p>
+
+    <ul>
+        <li>Log transformation</li>
+        <li>Square-root transformation</li>
+        <li>Polynomial transformation</li>
+        <li>Box-Cox transformation</li>
+        <li>Yeo-Johnson transformation</li>
+    </ul>
+
+    <h2>8. Feature Creation</h2>
+
+    <p>
+        Feature creation means generating new features from existing information.
+    </p>
+
+    <h3>Example: BMI</h3>
+
+    <p>Suppose:</p>
+
+    <pre>
+Height = 1.75 m
+Weight = 80 kg
+    </pre>
+
+    <div class="formula">
+        BMI = Weight / Height²
+    </div>
+
+    <pre>
+df["BMI"] = df["Weight"] / (df["Height"] ** 2)
+    </pre>
+
+    <h2>9. Date and Time Feature Engineering</h2>
+
+    <p>
+        A date can contain several useful pieces of information.
+    </p>
+
+    <pre>
+Date = 2026-09-01
+    </pre>
+
+    <p>We can extract:</p>
+
+    <ul>
+        <li>Year</li>
+        <li>Month</li>
+        <li>Day</li>
+        <li>Day of week</li>
+        <li>Quarter</li>
+        <li>Week of year</li>
+    </ul>
+
+    <pre>
+df["Date"] = pd.to_datetime(df["Date"])
+
+df["Year"] = df["Date"].dt.year
+df["Month"] = df["Date"].dt.month
+df["Day"] = df["Date"].dt.day
+df["DayOfWeek"] = df["Date"].dt.dayofweek
+    </pre>
+
+    <h2>10. Feature Interaction</h2>
+
+    <p>
+        Sometimes the relationship between two features provides useful
+        information that is not present in either feature individually.
+    </p>
+
+    <h3>Example: Area per Room</h3>
+
+    <div class="formula">
+        Area Per Room = Area / Number of Rooms
+    </div>
+
+    <pre>
+df["Area_per_Room"] = df["Area"] / df["Rooms"]
+    </pre>
+
+    <h3>Example: Price per Square Foot</h3>
+
+    <div class="formula">
+        Price Per Sq Ft = Price / Area
+    </div>
+
+    <pre>
+df["Price_per_sqft"] = df["Price"] / df["Area"]
+    </pre>
+
+    <h2>11. Polynomial Features</h2>
+
+    <p>
+        Polynomial features can help represent nonlinear relationships.
+    </p>
+
+    <p>For example:</p>
+
+    <div class="formula">
+        Y = aX² + bX + c
+    </div>
+
+    <pre>
+from sklearn.preprocessing import PolynomialFeatures
+
+poly = PolynomialFeatures(degree=2)
+
+X_poly = poly.fit_transform(X)
+    </pre>
+
+    <p>
+        With two input features, polynomial expansion can produce features such as:
+    </p>
+
+    <pre>
+X1
+X2
+X1²
+X1 × X2
+X2²
+    </pre>
+
+    <h2>12. Binning</h2>
+
+    <p>
+        Binning converts continuous numerical values into groups or categories.
+    </p>
+
+    <p>For example, age can be divided into:</p>
+
+    <pre>
+0–18    → Child
+19–35   → Young
+36–60   → Adult
+61+     → Senior
+    </pre>
+
+    <pre>
+bins = [0, 18, 35, 60, 100]
+
+labels = [
+    "Child",
+    "Young",
+    "Adult",
+    "Senior"
+]
+
+df["Age_Group"] = pd.cut(
+    df["Age"],
+    bins=bins,
+    labels=labels
+)
+    </pre>
+
+    <h2>13. Feature Selection</h2>
+
+    <p>
+        Feature selection means selecting useful features and removing
+        irrelevant or redundant features.
+    </p>
+
+    <p>For example:</p>
+
+    <pre>
+Age
+Salary
+Height
+Weight
+Name
+ID
+RandomNumber
+    </pre>
+
+    <p>We may select:</p>
+
+    <pre>
+Age
+Salary
+Weight
+    </pre>
+
+    <h3>Benefits of Feature Selection</h3>
+
+    <ul>
+        <li>Reduces overfitting</li>
+        <li>Improves training speed</li>
+        <li>Reduces memory usage</li>
+        <li>Reduces model complexity</li>
+        <li>Can improve generalization</li>
+        <li>Improves interpretability</li>
+    </ul>
+
+    <h2>14. Correlation-Based Feature Selection</h2>
+
+    <p>
+        Correlation measures the relationship between numerical variables.
+    </p>
+
+    <pre>
+df.corr(numeric_only=True)
+    </pre>
+
+    <p>Example:</p>
+
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>Correlation with Target</th>
+        </tr>
+        <tr>
+            <td>Feature A</td>
+            <td>0.90</td>
+        </tr>
+        <tr>
+            <td>Feature B</td>
+            <td>0.75</td>
+        </tr>
+        <tr>
+            <td>Feature C</td>
+            <td>0.02</td>
+        </tr>
+    </table>
+
+    <div class="important">
+        <strong>Important:</strong>
+        A low correlation does not necessarily mean that a feature is useless.
+        Pearson correlation mainly captures linear relationships, while useful
+        nonlinear relationships can have low Pearson correlation.
+    </div>
+
+    <h2>15. Feature Importance</h2>
+
+    <p>
+        Tree-based models can estimate the importance of features.
+    </p>
+
+    <pre>
+from sklearn.ensemble import RandomForestClassifier
+
+model = RandomForestClassifier()
+
+model.fit(X, y)
+
+importance = model.feature_importances_
+
+print(importance)
+    </pre>
+
+    <p>Example:</p>
+
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>Importance</th>
+        </tr>
+        <tr>
+            <td>Age</td>
+            <td>0.15</td>
+        </tr>
+        <tr>
+            <td>Income</td>
+            <td>0.40</td>
+        </tr>
+        <tr>
+            <td>Experience</td>
+            <td>0.30</td>
+        </tr>
+        <tr>
+            <td>Height</td>
+            <td>0.05</td>
+        </tr>
+    </table>
+
+    <h2>16. Recursive Feature Elimination (RFE)</h2>
+
+    <p>
+        RFE stands for <strong>Recursive Feature Elimination</strong>.
+        It repeatedly removes less important features until the desired
+        number of features remains.
+    </p>
+
+    <pre>
+from sklearn.feature_selection import RFE
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression()
+
+selector = RFE(
+    model,
+    n_features_to_select=5
+)
+
+X_selected = selector.fit_transform(X, y)
+    </pre>
+
+    <h2>17. Text Feature Engineering</h2>
+
+    <p>
+        Text data needs to be converted into numerical representations before
+        being used by traditional machine learning algorithms.
+    </p>
+
+    <p>Example:</p>
+
+    <pre>
+"I love this product"
+    </pre>
+
+    <p>Possible features include:</p>
+
+    <ul>
+        <li>Number of words</li>
+        <li>Number of characters</li>
+        <li>Word frequency</li>
+        <li>Sentiment</li>
+        <li>N-grams</li>
+        <li>TF-IDF values</li>
+        <li>Word embeddings</li>
+        <li>Sentence embeddings</li>
+    </ul>
+
+    <h3>TF-IDF</h3>
+
+    <pre>
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+vectorizer = TfidfVectorizer()
+
+X = vectorizer.fit_transform(text_data)
+    </pre>
+
+    <h2>18. Image Feature Engineering</h2>
+
+    <p>
+        Feature engineering can also be applied to images.
+    </p>
+
+    <h3>Color Features</h3>
+
+    <ul>
+        <li>RGB values</li>
+        <li>HSV values</li>
+        <li>Color histograms</li>
+    </ul>
+
+    <h3>Texture Features</h3>
+
+    <ul>
+        <li>Contrast</li>
+        <li>Entropy</li>
+        <li>LBP</li>
+        <li>GLCM</li>
+    </ul>
+
+    <h3>Shape Features</h3>
+
+    <ul>
+        <li>Area</li>
+        <li>Perimeter</li>
+        <li>Circularity</li>
+        <li>Aspect ratio</li>
+        <li>Edges</li>
+        <li>Contours</li>
+    </ul>
+
+    <h3>Example: Aspect Ratio</h3>
+
+    <div class="formula">
+        Aspect Ratio = Width / Height
+    </div>
+
+    <pre>
+aspect_ratio = width / height
+    </pre>
+
+    <div class="success">
+        <strong>Modern Computer Vision:</strong>
+        CNNs and Vision Transformers can automatically learn useful
+        representations from images, reducing the need for manually designed
+        image features.
+    </div>
+
+    <h2>19. Feature Engineering vs Feature Selection</h2>
+
+    <table>
+        <tr>
+            <th>Feature Engineering</th>
+            <th>Feature Selection</th>
+        </tr>
+        <tr>
+            <td>Create or transform features</td>
+            <td>Select useful features</td>
+        </tr>
+        <tr>
+            <td>Can increase the number of features</td>
+            <td>Usually reduces the number of features</td>
+        </tr>
+        <tr>
+            <td>Example: BMI from height and weight</td>
+            <td>Example: Remove irrelevant ID column</td>
+        </tr>
+    </table>
+
+    <h2>20. Feature Engineering Pipeline</h2>
+
+    <div class="workflow">
+Raw Dataset
+     ↓
+Data Cleaning
+     ↓
+Missing Value Handling
+     ↓
+Categorical Encoding
+     ↓
+Feature Transformation
+     ↓
+Feature Creation
+     ↓
+Feature Selection
+     ↓
+Feature Scaling
+     ↓
+Machine Learning Model
+     ↓
+Evaluation
+    </div>
+
+    <h2>21. Data Leakage</h2>
+
+    <div class="important">
+        <strong>Data leakage</strong> occurs when information from outside the
+        training data improperly influences the model during training.
+    </div>
+
+    <p>
+        For example, when scaling data, the scaler should normally be fitted
+        using the training data only.
+    </p>
+
+    <h3>Correct Approach</h3>
+
+    <pre>
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+scaler.fit(X_train)
+
+X_train_scaled = scaler.transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+    </pre>
+
+    <h3>Incorrect Approach</h3>
+
+    <pre>
+scaler.fit(X)
+    </pre>
+
+    <p>
+        Fitting preprocessing on the entire dataset before splitting can allow
+        information from the test set to influence the preprocessing process.
+    </p>
+
+    <h2>22. Complete Practical Example</h2>
+
+    <p>
+        Suppose we want to predict whether a student will pass an exam.
+    </p>
+
+    <table>
+        <tr>
+            <th>Age</th>
+            <th>Study Hours</th>
+            <th>Attendance</th>
+            <th>Gender</th>
+            <th>Exam Date</th>
+            <th>Passed</th>
+        </tr>
+        <tr>
+            <td>20</td>
+            <td>3</td>
+            <td>80</td>
+            <td>Male</td>
+            <td>2026-06-10</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>21</td>
+            <td>6</td>
+            <td>95</td>
+            <td>Female</td>
+            <td>2026-06-10</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>19</td>
+            <td>2</td>
+            <td>60</td>
+            <td>Male</td>
+            <td>2026-06-10</td>
+            <td>0</td>
+        </tr>
+    </table>
+
+    <p>We can create:</p>
+
+    <ul>
+        <li>Study × Attendance</li>
+        <li>Gender encoded features</li>
+        <li>Exam month</li>
+        <li>Exam day of week</li>
+    </ul>
+
+    <h3>Python Implementation</h3>
+
+    <pre>
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+
+# Load dataset
+df = pd.read_csv("students.csv")
+
+
+# -----------------------------
+# Feature Creation
+# -----------------------------
+
+df["Study_Attendance"] = (
+    df["Study_Hours"] * df["Attendance"]
+)
+
+
+# -----------------------------
+# Date Features
+# -----------------------------
+
+df["Exam_Date"] = pd.to_datetime(
+    df["Exam_Date"]
+)
+
+df["Exam_Month"] = (
+    df["Exam_Date"].dt.month
+)
+
+df["Exam_Day"] = (
+    df["Exam_Date"].dt.dayofweek
+)
+
+
+# -----------------------------
+# One-Hot Encoding
+# -----------------------------
+
+df = pd.get_dummies(
+    df,
+    columns=["Gender"],
+    dtype=int
+)
+
+
+# -----------------------------
+# Features and Target
+# -----------------------------
+
+X = df.drop(
+    ["Passed", "Exam_Date"],
+    axis=1
+)
+
+y = df["Passed"]
+
+
+# -----------------------------
+# Train-Test Split
+# -----------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+
+# -----------------------------
+# Feature Scaling
+# -----------------------------
+
+scaler = StandardScaler()
+
+X_train = scaler.fit_transform(X_train)
+
+X_test = scaler.transform(X_test)
+    </pre>
+
+    <h2>23. Feature Engineering for Different Algorithms</h2>
+
+    <table>
+        <tr>
+            <th>Algorithm</th>
+            <th>Importance of Feature Engineering</th>
+        </tr>
+        <tr>
+            <td>Linear Regression</td>
+            <td>High</td>
+        </tr>
+        <tr>
+            <td>Logistic Regression</td>
+            <td>High</td>
+        </tr>
+        <tr>
+            <td>KNN</td>
+            <td>High</td>
+        </tr>
+        <tr>
+            <td>K-Means</td>
+            <td>High</td>
+        </tr>
+        <tr>
+            <td>SVM</td>
+            <td>High</td>
+        </tr>
+        <tr>
+            <td>Decision Tree</td>
+            <td>Medium</td>
+        </tr>
+        <tr>
+            <td>Random Forest</td>
+            <td>Medium</td>
+        </tr>
+        <tr>
+            <td>XGBoost</td>
+            <td>Medium</td>
+        </tr>
+        <tr>
+            <td>Neural Networks</td>
+            <td>High</td>
+        </tr>
+        <tr>
+            <td>CNN</td>
+            <td>Usually learns features automatically</td>
+        </tr>
+    </table>
+
+    <h2>24. Feature Engineering vs Deep Learning</h2>
+
+    <h3>Traditional Machine Learning</h3>
+
+    <div class="workflow">
+Raw Data
+    ↓
+Manual Feature Engineering
+    ↓
+Machine Learning Algorithm
+    ↓
+Prediction
+    </div>
+
+    <h3>Deep Learning</h3>
+
+    <div class="workflow">
+Raw Data
+    ↓
+Neural Network
+    ↓
+Automatically Learned Features
+    ↓
+Prediction
+    </div>
+
+    <p>
+        For example, a CNN can learn increasingly complex representations:
+    </p>
+
+    <div class="workflow">
+Image
+  ↓
+Edges
+  ↓
+Textures
+  ↓
+Shapes
+  ↓
+Objects
+  ↓
+Classification
+    </div>
+
+    <h2>25. Summary of Feature Engineering Techniques</h2>
+
+    <table>
+        <tr>
+            <th>Technique</th>
+            <th>Purpose</th>
+        </tr>
+
+        <tr>
+            <td>Missing Value Handling</td>
+            <td>Deal with missing data</td>
+        </tr>
+
+        <tr>
+            <td>Label Encoding</td>
+            <td>Convert categories into numbers</td>
+        </tr>
+
+        <tr>
+            <td>One-Hot Encoding</td>
+            <td>Represent nominal categories</td>
+        </tr>
+
+        <tr>
+            <td>Ordinal Encoding</td>
+            <td>Represent ordered categories</td>
+        </tr>
+
+        <tr>
+            <td>Standardization</td>
+            <td>Scale features around mean 0</td>
+        </tr>
+
+        <tr>
+            <td>Normalization</td>
+            <td>Scale values to a fixed range</td>
+        </tr>
+
+        <tr>
+            <td>Log Transformation</td>
+            <td>Reduce skewness</td>
+        </tr>
+
+        <tr>
+            <td>Feature Creation</td>
+            <td>Create new meaningful features</td>
+        </tr>
+
+        <tr>
+            <td>Feature Interaction</td>
+            <td>Capture relationships between features</td>
+        </tr>
+
+        <tr>
+            <td>Binning</td>
+            <td>Convert continuous values into groups</td>
+        </tr>
+
+        <tr>
+            <td>Feature Selection</td>
+            <td>Remove irrelevant features</td>
+        </tr>
+
+        <tr>
+            <td>RFE</td>
+            <td>Recursively select important features</td>
+        </tr>
+
+        <tr>
+            <td>TF-IDF</td>
+            <td>Convert text into numerical features</td>
+        </tr>
+
+        <tr>
+            <td>PCA</td>
+            <td>Reduce dimensionality</td>
+        </tr>
+    </table>
+
+    <h2>26. Key Takeaway</h2>
+
+    <div class="success">
+
+        <p>
+            Feature Engineering is not simply about converting data into numbers.
+        </p>
+
+        <p>
+            The main goal is to transform raw information into meaningful
+            representations that make the underlying patterns easier for a
+            machine learning algorithm to learn.
+        </p>
+
+        <strong>
+            Raw Data → Create / Transform / Select Features → Better Representation → ML Model
+        </strong>
+
+    </div>
+
+    <footer>
+        <p>
+            Feature Engineering — Machine Learning Notes
+        </p>
+    </footer>
+
+</div>
+
+</body>
+</html>

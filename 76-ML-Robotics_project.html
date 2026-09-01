@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ML-Based Obstacle Avoidance Robot</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.7;
+            background-color: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 38px;
+        }
+
+        header p {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #dbeafe;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #1d4ed8;
+            border-bottom: 2px solid #dbeafe;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #374151;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .flow {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: Consolas, monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        code {
+            background: #e5e7eb;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .step {
+            border-left: 5px solid #2563eb;
+            background: #f8fafc;
+            padding: 15px 20px;
+            margin: 12px 0;
+            border-radius: 5px;
+        }
+
+        .step strong {
+            color: #1d4ed8;
+        }
+
+        .important {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        footer {
+            background: #172554;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🤖 ML-Based Obstacle Avoidance Robot</h1>
+    <p>Machine Learning + Robotics Project</p>
+</header>
+
+<div class="container">
+
+    <!-- INTRODUCTION -->
+    <section>
+
+        <h2>1. Project Introduction</h2>
+
+        <p>
+            The <strong>ML-Based Obstacle Avoidance Robot</strong> is a robotics
+            project in which Machine Learning is used to make decisions about
+            how a robot should move when obstacles are present.
+        </p>
+
+        <p>
+            Instead of using traditional rule-based programming such as:
+        </p>
+
+        <pre>
+if front_distance &lt; 20:
+    turn_left()
+        </pre>
+
+        <p>
+            we train a Machine Learning model using sensor data.
+            The trained model predicts the appropriate movement of the robot.
+        </p>
+
+        <div class="highlight">
+            <strong>Main Idea:</strong><br>
+            Sensor Data → Machine Learning Model → Action → Robot Movement
+        </div>
+
+    </section>
+
+
+    <!-- OBJECTIVE -->
+    <section>
+
+        <h2>2. Project Objective</h2>
+
+        <p>The main objectives of this project are:</p>
+
+        <ul>
+            <li>Generate or simulate robot sensor data.</li>
+            <li>Prepare and preprocess the dataset.</li>
+            <li>Train different Machine Learning classification algorithms.</li>
+            <li>Compare the performance of different models.</li>
+            <li>Use the trained model to make robot decisions.</li>
+            <li>Create a virtual robot simulation.</li>
+            <li>Implement autonomous obstacle avoidance.</li>
+            <li>Later transfer the system to a physical robot.</li>
+        </ul>
+
+    </section>
+
+
+    <!-- HARDWARE -->
+    <section>
+
+        <h2>3. Hardware Requirement</h2>
+
+        <p>
+            Initially, <strong>no physical hardware is required</strong>.
+            We will develop and test the project using a computer-based
+            simulation.
+        </p>
+
+        <p>
+            Later, the same concept can be implemented on a physical robot.
+        </p>
+
+        <h3>Future Hardware</h3>
+
+        <table>
+
+            <tr>
+                <th>Component</th>
+                <th>Purpose</th>
+            </tr>
+
+            <tr>
+                <td>Raspberry Pi / Arduino</td>
+                <td>Robot controller</td>
+            </tr>
+
+            <tr>
+                <td>Ultrasonic / ToF Sensors</td>
+                <td>Distance measurement</td>
+            </tr>
+
+            <tr>
+                <td>DC Geared Motors</td>
+                <td>Robot movement</td>
+            </tr>
+
+            <tr>
+                <td>Motor Driver</td>
+                <td>Motor control</td>
+            </tr>
+
+            <tr>
+                <td>Battery</td>
+                <td>Power supply</td>
+            </tr>
+
+        </table>
+
+    </section>
+
+
+    <!-- SIMULATION -->
+    <section>
+
+        <h2>4. Simulation Approach</h2>
+
+        <p>
+            Since we don't have hardware, we will create a
+            <strong>2D virtual robot</strong> using Python and Pygame.
+        </p>
+
+        <p>
+            The virtual environment will contain a robot, obstacles,
+            sensors and a target.
+        </p>
+
+        <pre>
++------------------------------------------+
+|                                          |
+|        ███████                           |
+|        ███████                           |
+|                                          |
+|                         ██████           |
+|                                          |
+|              ↑                           |
+|             🤖                           |
+|                                          |
+|                              🎯          |
+|                                          |
++------------------------------------------+
+        </pre>
+
+        <p>
+            The robot will move inside this environment and detect
+            obstacles using virtual distance sensors.
+        </p>
+
+    </section>
+
+
+    <!-- VIRTUAL SENSORS -->
+    <section>
+
+        <h2>5. Virtual Distance Sensors</h2>
+
+        <p>
+            The robot will initially have three virtual distance sensors:
+        </p>
+
+        <table>
+
+            <tr>
+                <th>Sensor</th>
+                <th>Feature</th>
+            </tr>
+
+            <tr>
+                <td>Left Sensor</td>
+                <td>Distance to obstacle on the left</td>
+            </tr>
+
+            <tr>
+                <td>Front Sensor</td>
+                <td>Distance to obstacle in front</td>
+            </tr>
+
+            <tr>
+                <td>Right Sensor</td>
+                <td>Distance to obstacle on the right</td>
+            </tr>
+
+        </table>
+
+        <pre>
+                 FRONT
+                    ↑
+                    |
+              \     |     /
+               \    |    /
+                \   |   /
+                 \  |  /
+                  🤖
+                 /   \
+                /     \
+             LEFT     RIGHT
+             SENSOR   SENSOR
+        </pre>
+
+        <h3>Example Sensor Reading</h3>
+
+        <pre>
+Left   = 80 cm
+Front  = 15 cm
+Right  = 60 cm
+        </pre>
+
+        <p>
+            These values become the input features of our Machine Learning model.
+        </p>
+
+        <pre>
+X = [80, 15, 60]
+        </pre>
+
+    </section>
+
+
+    <!-- ML PROBLEM -->
+    <section>
+
+        <h2>6. Machine Learning Problem</h2>
+
+        <p>
+            This project is a <strong>multiclass classification problem</strong>.
+        </p>
+
+        <h3>Input Features</h3>
+
+        <pre>
+X1 = Left Distance
+X2 = Front Distance
+X3 = Right Distance
+        </pre>
+
+        <h3>Target Classes</h3>
+
+        <pre>
+FORWARD
+LEFT
+RIGHT
+STOP
+        </pre>
+
+        <div class="flow">
+Left Distance
+      +
+Front Distance
+      +
+Right Distance
+      ↓
+Machine Learning Model
+      ↓
+Robot Action
+        </div>
+
+    </section>
+
+
+    <!-- DATASET -->
+    <section>
+
+        <h2>7. Dataset</h2>
+
+        <p>
+            Because we don't have physical sensors, we will create a
+            simulated dataset.
+        </p>
+
+        <table>
+
+            <tr>
+                <th>Left</th>
+                <th>Front</th>
+                <th>Right</th>
+                <th>Action</th>
+            </tr>
+
+            <tr>
+                <td>80</td>
+                <td>90</td>
+                <td>70</td>
+                <td>FORWARD</td>
+            </tr>
+
+            <tr>
+                <td>20</td>
+                <td>80</td>
+                <td>70</td>
+                <td>RIGHT</td>
+            </tr>
+
+            <tr>
+                <td>70</td>
+                <td>80</td>
+                <td>20</td>
+                <td>LEFT</td>
+            </tr>
+
+            <tr>
+                <td>20</td>
+                <td>10</td>
+                <td>20</td>
+                <td>STOP</td>
+            </tr>
+
+        </table>
+
+        <h3>CSV Dataset Example</h3>
+
+        <pre>
+left,front,right,action
+75,18,60,RIGHT
+80,20,25,LEFT
+50,80,60,FORWARD
+20,15,80,RIGHT
+70,10,20,LEFT
+        </pre>
+
+    </section>
+
+
+    <!-- DATA GENERATION -->
+    <section>
+
+        <h2>8. Simulating Sensor Data</h2>
+
+        <p>
+            We should not create a dataset containing only a few fixed values.
+            Instead, we will generate thousands of different sensor readings.
+        </p>
+
+        <p>
+            We will also introduce some variation to make the simulated
+            data more realistic.
+        </p>
+
+        <pre>
+Left    Front    Right
+----------------------
+22       18       75
+18       23       80
+25       15       70
+80       60       20
+70       55       15
+        </pre>
+
+        <div class="important">
+            <strong>Important:</strong>
+            The objective is to make the ML model learn patterns in the
+            sensor data rather than simply memorize a single fixed rule.
+        </div>
+
+    </section>
+
+
+    <!-- MODELS -->
+    <section>
+
+        <h2>9. Machine Learning Models</h2>
+
+        <p>
+            We will train four classification algorithms that students
+            have already learned.
+        </p>
+
+        <table>
+
+            <tr>
+                <th>Model</th>
+                <th>Scikit-learn Class</th>
+            </tr>
+
+            <tr>
+                <td>K-Nearest Neighbors</td>
+                <td>KNeighborsClassifier</td>
+            </tr>
+
+            <tr>
+                <td>Decision Tree</td>
+                <td>DecisionTreeClassifier</td>
+            </tr>
+
+            <tr>
+                <td>Support Vector Machine</td>
+                <td>SVC</td>
+            </tr>
+
+            <tr>
+                <td>Random Forest</td>
+                <td>RandomForestClassifier</td>
+            </tr>
+
+        </table>
+
+    </section>
+
+
+    <!-- KNN -->
+    <section>
+
+        <h2>10. K-Nearest Neighbors (KNN)</h2>
+
+        <p>
+            KNN predicts the robot's action based on similar examples
+            from the training dataset.
+        </p>
+
+        <pre>
+from sklearn.neighbors import KNeighborsClassifier
+
+model = KNeighborsClassifier(n_neighbors=5)
+
+model.fit(X_train, y_train)
+        </pre>
+
+        <h3>Prediction</h3>
+
+        <pre>
+sensor = [[80, 20, 70]]
+
+prediction = model.predict(sensor)
+
+print(prediction)
+        </pre>
+
+        <p>Possible output:</p>
+
+        <pre>
+['RIGHT']
+        </pre>
+
+    </section>
+
+
+    <!-- DECISION TREE -->
+    <section>
+
+        <h2>11. Decision Tree</h2>
+
+        <p>
+            The Decision Tree learns decision boundaries from the
+            sensor data.
+        </p>
+
+        <pre>
+from sklearn.tree import DecisionTreeClassifier
+
+model = DecisionTreeClassifier()
+
+model.fit(X_train, y_train)
+        </pre>
+
+    </section>
+
+
+    <!-- SVM -->
+    <section>
+
+        <h2>12. Support Vector Machine</h2>
+
+        <p>
+            SVM attempts to find boundaries that separate the different
+            robot actions.
+        </p>
+
+        <pre>
+from sklearn.svm import SVC
+
+model = SVC()
+
+model.fit(X_train, y_train)
+        </pre>
+
+    </section>
+
+
+    <!-- RANDOM FOREST -->
+    <section>
+
+        <h2>13. Random Forest</h2>
+
+        <p>
+            Random Forest combines multiple decision trees to produce
+            the final prediction.
+        </p>
+
+        <pre>
+from sklearn.ensemble import RandomForestClassifier
+
+model = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+        </pre>
+
+    </section>
+
+
+    <!-- EVALUATION -->
+    <section>
+
+        <h2>14. Model Evaluation</h2>
+
+        <p>
+            After training the models, we will compare their performance.
+        </p>
+
+        <ul>
+            <li>Accuracy</li>
+            <li>Precision</li>
+            <li>Recall</li>
+            <li>F1 Score</li>
+            <li>Confusion Matrix</li>
+        </ul>
+
+        <table>
+
+            <tr>
+                <th>Model</th>
+                <th>Accuracy</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1 Score</th>
+            </tr>
+
+            <tr>
+                <td>KNN</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+            </tr>
+
+            <tr>
+                <td>Decision Tree</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+            </tr>
+
+            <tr>
+                <td>SVM</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+            </tr>
+
+            <tr>
+                <td>Random Forest</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+                <td>Actual Result</td>
+            </tr>
+
+        </table>
+
+    </section>
+
+
+    <!-- ROBOT DECISION -->
+    <section>
+
+        <h2>15. ML Model as the Robot Brain</h2>
+
+        <p>
+            Once the model is trained, it becomes the decision-making
+            component of the robot.
+        </p>
+
+        <div class="flow">
+Virtual Sensors
+      ↓
+[Left, Front, Right]
+      ↓
+Machine Learning Model
+      ↓
+Prediction
+      ↓
+Robot Action
+      ↓
+Robot Movement
+        </div>
+
+        <h3>Example</h3>
+
+        <pre>
+Input:
+
+[75, 18, 60]
+
+ML Prediction:
+
+RIGHT
+        </pre>
+
+        <p>
+            The simulator then moves the robot toward the right.
+        </p>
+
+    </section>
+
+
+    <!-- SIMULATION LOOP -->
+    <section>
+
+        <h2>16. Autonomous Simulation Loop</h2>
+
+        <p>
+            The robot continuously repeats the following process:
+        </p>
+
+        <div class="step">
+            <strong>Step 1:</strong> Read virtual sensors.
+        </div>
+
+        <div class="step">
+            <strong>Step 2:</strong> Obtain Left, Front and Right distances.
+        </div>
+
+        <div class="step">
+            <strong>Step 3:</strong> Send sensor values to the ML model.
+        </div>
+
+        <div class="step">
+            <strong>Step 4:</strong> Predict the robot's action.
+        </div>
+
+        <div class="step">
+            <strong>Step 5:</strong> Move the robot.
+        </div>
+
+        <div class="step">
+            <strong>Step 6:</strong> Update the robot position.
+        </div>
+
+        <div class="step">
+            <strong>Step 7:</strong> Read the sensors again.
+        </div>
+
+        <div class="step">
+            <strong>Step 8:</strong> Repeat.
+        </div>
+
+        <pre>
+while robot_is_running:
+
+    sensors = get_sensor_data()
+
+    action = model.predict([sensors])
+
+    move_robot(action)
+        </pre>
+
+    </section>
+
+
+    <!-- PROJECT PIPELINE -->
+    <section>
+
+        <h2>17. Complete Project Pipeline</h2>
+
+        <div class="flow">
+                ROBOT ENVIRONMENT
+                       ↓
+              VIRTUAL SENSORS
+                       ↓
+                 SENSOR DATA
+                       ↓
+              DATA PREPROCESSING
+                       ↓
+              TRAIN ML MODELS
+                       ↓
+        ┌────────┬────────┬────────┐
+        ↓        ↓        ↓        ↓
+       KNN     TREE      SVM      RF
+        └────────┴────────┴────────┘
+                       ↓
+                MODEL EVALUATION
+                       ↓
+                  BEST MODEL
+                       ↓
+                ROBOT DECISION
+                       ↓
+                ROBOT MOVEMENT
+                       ↓
+             OBSTACLE AVOIDANCE
+        </div>
+
+    </section>
+
+
+    <!-- REAL ROBOT -->
+    <section>
+
+        <h2>18. From Simulation to Real Robot</h2>
+
+        <p>
+            After the simulation works successfully, we can replace the
+            virtual components with real hardware.
+        </p>
+
+        <table>
+
+            <tr>
+                <th>Simulation</th>
+                <th>Physical Robot</th>
+            </tr>
+
+            <tr>
+                <td>Virtual obstacle</td>
+                <td>Real obstacle</td>
+            </tr>
+
+            <tr>
+                <td>Virtual distance sensor</td>
+                <td>Ultrasonic / ToF sensor</td>
+            </tr>
+
+            <tr>
+                <td>Computer</td>
+                <td>Raspberry Pi</td>
+            </tr>
+
+            <tr>
+                <td>Virtual movement</td>
+                <td>Motor driver</td>
+            </tr>
+
+            <tr>
+                <td>Pygame</td>
+                <td>Physical robot</td>
+            </tr>
+
+        </table>
+
+        <div class="highlight">
+            The ML decision-making logic can remain almost the same.
+            We mainly replace simulated sensor readings with real sensor
+            readings and virtual movement with motor-control commands.
+        </div>
+
+    </section>
+
+
+    <!-- SOFTWARE -->
+    <section>
+
+        <h2>19. Required Software</h2>
+
+        <p>
+            The initial project can be completed entirely on a computer.
+        </p>
+
+        <pre>
+pip install numpy pandas matplotlib scikit-learn joblib pygame
+        </pre>
+
+        <h3>Libraries</h3>
+
+        <ul>
+            <li><strong>NumPy:</strong> Numerical operations</li>
+            <li><strong>Pandas:</strong> Dataset handling</li>
+            <li><strong>Matplotlib:</strong> Visualization</li>
+            <li><strong>Scikit-learn:</strong> Machine Learning</li>
+            <li><strong>Joblib:</strong> Saving and loading ML models</li>
+            <li><strong>Pygame:</strong> Robot simulation</li>
+        </ul>
+
+    </section>
+
+
+    <!-- PROJECT STRUCTURE -->
+    <section>
+
+        <h2>20. Project Structure</h2>
+
+        <pre>
+ml_obstacle_avoidance/
+│
+├── data/
+│   └── robot_sensor_data.csv
+│
+├── models/
+│   ├── knn.pkl
+│   ├── decision_tree.pkl
+│   ├── svm.pkl
+│   └── random_forest.pkl
+│
+├── 01_generate_dataset.py
+├── 02_visualize_data.py
+├── 03_train_models.py
+├── 04_evaluate_models.py
+├── 05_test_prediction.py
+├── 06_robot_simulation.py
+│
+└── requirements.txt
+        </pre>
+
+    </section>
+
+
+    <!-- TEACHING PLAN -->
+    <section>
+
+        <h2>21. Student Learning Plan</h2>
+
+        <div class="step">
+            <strong>Step 1:</strong>
+            Understand the robot and sensor concept.
+        </div>
+
+        <div class="step">
+            <strong>Step 2:</strong>
+            Generate simulated sensor data.
+        </div>
+
+        <div class="step">
+            <strong>Step 3:</strong>
+            Perform EDA on the dataset.
+        </div>
+
+        <div class="step">
+            <strong>Step 4:</strong>
+            Preprocess the data.
+        </div>
+
+        <div class="step">
+            <strong>Step 5:</strong>
+            Train KNN.
+        </div>
+
+        <div class="step">
+            <strong>Step 6:</strong>
+            Train Decision Tree.
+        </div>
+
+        <div class="step">
+            <strong>Step 7:</strong>
+            Train SVM.
+        </div>
+
+        <div class="step">
+            <strong>Step 8:</strong>
+            Train Random Forest.
+        </div>
+
+        <div class="step">
+            <strong>Step 9:</strong>
+            Compare all models.
+        </div>
+
+        <div class="step">
+            <strong>Step 10:</strong>
+            Create the 2D robot simulator.
+        </div>
+
+        <div class="step">
+            <strong>Step 11:</strong>
+            Connect the ML model to the virtual robot.
+        </div>
+
+        <div class="step">
+            <strong>Step 12:</strong>
+            Test autonomous obstacle avoidance.
+        </div>
+
+        <div class="step">
+            <strong>Step 13:</strong>
+            Deploy the system on a real robot later.
+        </div>
+
+    </section>
+
+
+    <!-- EVALUATION -->
+    <section>
+
+        <h2>22. Robotics Evaluation</h2>
+
+        <p>
+            In robotics, ML accuracy alone is not enough. We should also
+            evaluate how well the robot actually behaves.
+        </p>
+
+        <table>
+
+            <tr>
+                <th>Metric</th>
+                <th>Purpose</th>
+            </tr>
+
+            <tr>
+                <td>Accuracy</td>
+                <td>How often the model predicts the correct action</td>
+            </tr>
+
+            <tr>
+                <td>F1 Score</td>
+                <td>Balance between precision and recall</td>
+            </tr>
+
+            <tr>
+                <td>Collision Count</td>
+                <td>Number of times robot hits an obstacle</td>
+            </tr>
+
+            <tr>
+                <td>Completion Time</td>
+                <td>Time required to reach the target</td>
+            </tr>
+
+            <tr>
+                <td>Inference Time</td>
+                <td>Time required to make a prediction</td>
+            </tr>
+
+            <tr>
+                <td>Successful Runs</td>
+                <td>Percentage of runs completed without collision</td>
+            </tr>
+
+        </table>
+
+        <div class="important">
+            <strong>Important:</strong>
+            The model with the highest classification accuracy is not
+            necessarily the best model for robotics. Speed, stability,
+            collision rate and real-world performance are also important.
+        </div>
+
+    </section>
+
+
+    <!-- STUDENT CHALLENGES -->
+    <section>
+
+        <h2>23. Student Challenges</h2>
+
+        <h3>Challenge 1 — Add More Sensors</h3>
+
+        <p>
+            Instead of three sensors, use five:
+        </p>
+
+        <pre>
+L2   L1   FRONT   R1   R2
+        </pre>
+
+        <h3>Challenge 2 — Add More Classes</h3>
+
+        <p>
+            Add additional robot behaviors:
+        </p>
+
+        <pre>
+FORWARD
+LEFT
+RIGHT
+STOP
+BACKWARD
+        </pre>
+
+        <h3>Challenge 3 — Add Sensor Noise</h3>
+
+        <p>
+            Simulate imperfect sensors and test which ML model is
+            most robust.
+        </p>
+
+        <h3>Challenge 4 — Compare Algorithms</h3>
+
+        <p>
+            Compare KNN, Decision Tree, SVM and Random Forest using
+            both ML metrics and robotics metrics.
+        </p>
+
+        <h3>Challenge 5 — Unknown Environment</h3>
+
+        <p>
+            Train the model in one environment and test it in a
+            different environment.
+        </p>
+
+    </section>
+
+
+    <!-- FINAL CONCEPT -->
+    <section>
+
+        <h2>24. Final Concept</h2>
+
+        <div class="highlight">
+
+            <strong>
+                The purpose of this project is not simply to make a robot move.
+                The purpose is to demonstrate how Machine Learning can be used
+                as the decision-making system of an autonomous robot.
+            </strong>
+
+        </div>
+
+        <div class="flow">
+             SENSOR DATA
+                  ↓
+          DATA PREPROCESSING
+                  ↓
+          MACHINE LEARNING
+                  ↓
+       ┌────┬────┬────┬────┐
+       ↓    ↓    ↓    ↓
+      KNN TREE SVM RANDOM FOREST
+       └────┴────┴────┴────┘
+                  ↓
+             BEST MODEL
+                  ↓
+          ROBOT DECISION
+                  ↓
+          ROBOT MOVEMENT
+                  ↓
+       OBSTACLE AVOIDANCE
+        </div>
+
+    </section>
+
+</div>
+
+
+<footer>
+
+    <p>
+        ML-Based Obstacle Avoidance Robot
+    </p>
+
+    <p>
+        Machine Learning + Robotics
+    </p>
+
+</footer>
+
+</body>
+</html>
