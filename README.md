@@ -92,9 +92,9 @@ https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/2-Data_prepr
 
 [Lecture 37 : Reinforcement learning complete guide ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/74-Reinforcement_Learning.html)
 
+[Lecture 38 : Feature Engineering (on Haseeb Request) ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/75-Feature_engineering.html)
 
-
-
+[Lecture 40 : ML in Robotics (mini project) ](https://malikabdulsalam.github.io/Machine_Learning_Course_Digiboost/76-ML-Robotics_project.html)
 
 
 
