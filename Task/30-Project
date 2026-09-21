@@ -1,0 +1,23 @@
+Project Details
+$10.00 – 30.00 USD
+
+ Bidding ends in 6 days, 23 hours
+Create a concise, well-structured Python script that ingests a sales CSV, cleans it, summarises the figures, and writes the results back out. The script must:
+
+• Read a user-supplied CSV using standard libraries or pandas.
+• Remove duplicate rows.
+• Flag and drop or correct missing, non-numeric, or otherwise invalid sales values.
+• Calculate the overall sales total and separate subtotals grouped by product (choose an intuitive column such as product name or ID; the code should allow easy adjustment).
+• Write the cleaned dataset to a new CSV while logging any discarded rows.
+• Gracefully handle errors like a missing input file or malformed data, returning clear console messages and non-zero exit codes where appropriate.
+
+Deliverables
+• Fully working .py file with clear inline comments.
+• A short README that explains prerequisites, setup, and one-line run instructions.
+• At least three basic automated tests (pytest or unittest) proving the core functions work.
+• Any auxiliary files needed to demonstrate the script, all in a tidy repository or zipped folder.
+
+Acceptance criteria
+Running “python sales_cleaner.py input.csv” (or equivalent) produces an output CSV and prints the totals; all supplied tests pass without modification.
+
+This is a small paid test focused on code quality, problem-solving, and attention to detail, so clarity and neat organisation count as much as functionality.
