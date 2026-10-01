@@ -1,0 +1,115 @@
+# Assignment: Multi-Website Best-Selling Product Intelligence Bot
+
+## Objective
+
+Develop a Python-based web automation system using **Playwright** that collects publicly available product information from multiple e-commerce websites and generates a structured product research report.
+
+## Task
+
+Build a **Multi-Website Best-Selling Product Intelligence Bot** that automatically visits selected e-commerce websites and collects information about popular/best-selling products.
+
+The system should support multiple websites such as **Walmart, Etsy, Best Buy, and Daraz**, using separate scraping logic for each website.
+
+## Required Information
+
+For every product, collect as many of the following fields as are publicly available:
+
+* Website/Source
+* Product Rank
+* Product Name
+* Category
+* Price
+* Currency
+* Rating
+* Number of Reviews
+* Seller
+* Product URL
+* Date and Time of Collection
+
+## Functional Requirements
+
+1. Use **Python and Playwright** for browser automation.
+2. Automate navigation to the selected websites.
+3. Extract product information from publicly accessible pages.
+4. Handle missing fields without crashing the application.
+5. Implement pagination or load-more functionality where practical.
+6. Store all collected products in a structured format.
+7. Remove duplicate products where appropriate.
+8. Export the final dataset to:
+
+   * CSV
+   * Excel
+9. Display a summary showing:
+
+   * Total products collected
+   * Products collected per website
+   * Products per category
+   * Average product price where available
+   * Average rating where available
+10. Add proper error handling and logging.
+
+## Expected Output
+
+The final system should produce a dataset similar to:
+
+| Source  | Rank | Product   | Category    |     Price | Rating | Reviews | URL |
+| ------- | ---: | --------- | ----------- | --------: | -----: | ------: | --- |
+| Walmart |    1 | Product A | Electronics |    $29.99 |    4.7 |  12,543 | URL |
+| Daraz   |    1 | Product B | Beauty      | Rs. 1,999 |    4.6 |   2,340 | URL |
+| Etsy    |    1 | Product C | Home        |    $18.50 |    4.8 |   5,120 | URL |
+
+## Technical Requirements
+
+Recommended project structure:
+
+```text
+product_intelligence_bot/
+│
+├── main.py
+├── config.py
+│
+├── scrapers/
+│   ├── walmart.py
+│   ├── daraz.py
+│   ├── etsy.py
+│   └── bestbuy.py
+│
+├── output/
+│   ├── products.csv
+│   └── products.xlsx
+│
+├── logs/
+│
+└── README.md
+```
+
+## Bonus Features
+
+Students who want to extend the project can implement:
+
+* Scheduled automatic scraping
+* SQLite database
+* Flask dashboard
+* Product price-change detection
+* Historical product tracking
+* Email/Telegram notifications
+* Product trend analysis
+* Charts using Matplotlib
+* Automatic category detection
+* AI-based product summarization
+
+## Deliverables
+
+Submit:
+
+1. Complete Python source code
+2. `requirements.txt`
+3. CSV output
+4. Excel output
+5. Sample screenshots
+6. README containing installation and usage instructions
+7. Short explanation of the system architecture
+
+### Important
+
+Only collect information from pages that are publicly accessible and permitted for automated access. Do not attempt to bypass CAPTCHA, authentication controls, rate limits, or other anti-bot/security mechanisms.
